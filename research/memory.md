@@ -17,3 +17,9 @@
 - **Finding**: *Conquest of Skyrim* v0.3.9 encompasses 51 individually tracked features across 18 strategic domains (`FEAT-FACT` through `FEAT-UI`). The core gameplay loop links Faction Creation -> Territory -> Outposts/Resources -> Military Recruitment/Armies -> War Declaration -> City Sieges -> Hold Jarl Appointments -> The Moot Coronation.
 - **Evidence**: `research/findings/feature-inventory.md`
 - **Related**: M03, M09-M24, M29
+
+## Critical Stability Failure Modes & Incompatibilities
+- **Status**: CONFIRMED
+- **Finding**: *Conquest of Skyrim* has severe conflicts with vanilla Civil War quests (`CW01`/`CW02`/`Season Unending`), *Open Civil War*, and external follower frameworks (NFF/AFT). Major v0.3.9 defects include an internal hold-count mismatch blocking The Moot (`ISSUE-QST-01`), proximity trigger failures at Fort Amol (`ISSUE-QST-02`), and naked troop outfit evaluation delays (`ISSUE-GAME-01`).
+- **Evidence**: `research/findings/known-issues.md`
+- **Related**: M04, M08, M27, M28
