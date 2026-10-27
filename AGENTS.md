@@ -13,16 +13,24 @@ The project's purpose is to systematically investigate and understand the mod's 
 ├── README.md               # Project overview and status
 ├── guardrails.md           # Research boundaries and rules (placeholder)
 ├── .gitignore              # Git ignore rules
-├── research/
-│   ├── findings/           # Consolidated, evidence-backed conclusions
-│   ├── investigations/     # Technical research topics and questions
-│   └── playtesting/        # Human gameplay observations and bug reports
+├── scripts/                # Reusable research utilities
+│   └── README.md
+├── tests/                  # Automated validation and verification procedures
+│   └── README.md
+├── artifacts/              # Machine-generated outputs, dumps, and experiment data
+│   ├── .gitignore
+│   └── README.md
 ├── references/
 │   ├── README.md           # Overview of reference materials
 │   └── sources/            # Reserved for future reference repositories/sources
 ├── docs/
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
+│   ├── testing.md              # Testing, script, and artifact management rules
 │   └── glossary.md             # Domain and engine terminology placeholder
+└── research/
+    ├── findings/           # Consolidated, evidence-backed conclusions
+    ├── investigations/     # Technical research topics and questions
+    └── playtesting/        # Human gameplay observations and bug reports
 ```
 
 ## Organization of Research Material
@@ -43,6 +51,21 @@ All agents must follow the full workflow defined in [`docs/execution-discipline.
 - **Delegation & Concurrency**: Maintain explicit task boundaries and strict file ownership per worker.
 - **Validation & Review**: Every finding requires concrete evidence. Use `@adversary` for independent review or explicitly labeled structured self-review (never impersonate independent review).
 - **Definition of Done**: A task is complete only after validation passes, review is conducted, and changes are committed via Conventional Commits.
+
+## Testing and Artifacts
+
+Agents must adhere to the testing, script, and artifact rules in [`docs/testing.md`](./docs/testing.md). Specifically:
+
+1. **Read `docs/testing.md`** before beginning any technical investigations or experiments.
+2. **Use `scripts/`** for all persistent research utilities.
+3. **Use `tests/`** for automated validation procedures.
+4. **Use `artifacts/`** for all machine-generated outputs and dumps.
+5. **Avoid competing output directories** (e.g., `output/`, `results/`, `dumps/`, `temp/`).
+6. **Prefer existing tools** over authoring new scripts.
+7. **Keep disposable experiments isolated** and clean up scratch files immediately.
+8. **Preserve evidence provenance** by linking findings to specific artifact files and sources.
+9. **Clean temporary files** before considering any investigation complete.
+10. **Inspect Git status** before committing to ensure no unintended debris is tracked.
 
 ## Agent Guidelines & Tooling
 
