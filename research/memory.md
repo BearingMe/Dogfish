@@ -11,3 +11,9 @@
 - **Finding**: Documentation is decentralized across Nexus #65628, Reddit, Patreon, and Discord. In v0.3.x, the author moved operational management away from early MCM menus into native Papyrus dialogue trees with recruited officers (Steward for civil/diplomatic, Commander for military). Upgrading across major versions (0.1 -> 0.2 -> 0.3) strictly broke save game compatibility.
 - **Evidence**: `research/findings/documentation-inventory.md`
 - **Related**: M02, M03, M08, M12
+
+## Comprehensive Feature Architecture
+- **Status**: CONFIRMED
+- **Finding**: *Conquest of Skyrim* v0.3.9 encompasses 51 individually tracked features across 18 strategic domains (`FEAT-FACT` through `FEAT-UI`). The core gameplay loop links Faction Creation -> Territory -> Outposts/Resources -> Military Recruitment/Armies -> War Declaration -> City Sieges -> Hold Jarl Appointments -> The Moot Coronation.
+- **Evidence**: `research/findings/feature-inventory.md`
+- **Related**: M03, M09-M24, M29
