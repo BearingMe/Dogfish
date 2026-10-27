@@ -26,6 +26,7 @@ The project's purpose is to systematically investigate and understand the mod's 
 ├── docs/
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
 │   ├── testing.md              # Testing, script, and artifact management rules
+│   ├── logging.md              # Logging standards, formats, and evidence capture
 │   └── glossary.md             # Domain and engine terminology placeholder
 └── research/
     ├── findings/           # Consolidated, evidence-backed conclusions
@@ -66,6 +67,17 @@ Agents must adhere to the testing, script, and artifact rules in [`docs/testing.
 8. **Preserve evidence provenance** by linking findings to specific artifact files and sources.
 9. **Clean temporary files** before considering any investigation complete.
 10. **Inspect Git status** before committing to ensure no unintended debris is tracked.
+
+## Logging Discipline
+
+Agents and scripts must adhere to [`docs/logging.md`](./docs/logging.md):
+
+- **Standard Format**: Use `[TIMESTAMP][LEVEL][COMPONENT][MILESTONE] Message` with ISO 8601 UTC timestamps.
+- **Severity Levels**: Use `DEBUG`, `INFO` (default), `WARN`, and `ERROR` appropriately; never silently suppress warnings.
+- **Category Separation**: Separate operational execution logs, raw research evidence, and validated research findings.
+- **Log Locations**: Direct all log files to `artifacts/` (e.g., `artifacts/M07/execution.log`); never write logs to root or `research/`.
+- **External Engine Logs**: Extract concise, relevant excerpts with provenance (mod/game version, file, line) rather than committing multi-megabyte engine dumps.
+- **Concurrency**: Assign separate log destinations to concurrent workers to avoid interleaved output.
 
 ## Agent Guidelines & Tooling
 
