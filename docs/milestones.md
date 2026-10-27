@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 32 | 0 | 0 | 0 |
+| 32 | 28 | 0 | 0 | 4 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,16 +22,16 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-All 32 milestones remain NOT STARTED. Target version is 0.3.9 (task-supplied, not independently verified); establish the documented primary-version baseline during Phase 1. Original mod files are currently MISSING and `guardrails.md` is a placeholder: implementation-dependent work must wait for both permitted boundaries and validated local availability. These are known prerequisites, not current blockers on unstarted public-documentation tasks.
+Phase 1 (External Reconnaissance) is COMPLETE (M01–M04 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Original mod files remain MISSING and `guardrails.md` is a placeholder: Phase 2 technical investigations requiring local mod files await user-supplied files in `references/local/conquest-of-skyrim/Data/` and guardrail establishment.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
 | ID | Title | Phase | Status | Dependencies | Assigned Agent | Deliverable | Validation | Blockers | Commit |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **M01** | Project Identity & History | Phase 1 | NOT STARTED | None | Unassigned | `research/findings/project-overview.md` | Pending | None | — |
-| **M02** | Documentation Recovery | Phase 1 | NOT STARTED | None | Unassigned | `research/findings/documentation-inventory.md` | Pending | None | — |
-| **M03** | Comprehensive Feature Inventory | Phase 1 | NOT STARTED | M01, M02 | Unassigned | `research/findings/feature-inventory.md` | Pending | None | — |
-| **M04** | Issues & Compatibility Inventory | Phase 1 | NOT STARTED | M01, M02 | Unassigned | `research/findings/known-issues.md` | Pending | None | — |
+| **M01** | Project Identity & History | Phase 1 | COMPLETE | None | Coordinator | `research/findings/project-overview.md` | PASS | None | `808cba1` |
+| **M02** | Documentation Recovery | Phase 1 | COMPLETE | None | Coordinator | `research/findings/documentation-inventory.md` | PASS | None | `288d005` |
+| **M03** | Comprehensive Feature Inventory | Phase 1 | COMPLETE | M01, M02 | Coordinator | `research/findings/feature-inventory.md` | PASS | None | `2670636` |
+| **M04** | Issues & Compatibility Inventory | Phase 1 | COMPLETE | M01, M02 | Coordinator | `research/findings/known-issues.md` | PASS | None | `8a5462c` |
 | **M05** | Distribution & Dependency Analysis | Phase 2 | NOT STARTED | Phase 1 Gate | Unassigned | `research/findings/file-inventory.md` | Pending | None | — |
 | **M06** | Creation Engine Integration | Phase 2 | NOT STARTED | M05 | Unassigned | `research/findings/skyrim-integration.md` | Pending | None | — |
 | **M07** | Static Structure Recovery | Phase 2 | NOT STARTED | M05, M06 | Unassigned | `research/findings/static-structure.md` | Pending | None | — |
@@ -74,7 +74,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/feature-inventory.md`
 - **M04: Issues and Compatibility Inventory** — Documented bugs, crashes, quest breakages, compatibility issues, and author warnings.
   - *Deliverable*: `research/findings/known-issues.md`
-- **Phase 1 Gate Criteria**: Primary investigation version established; documentation sources indexed; feature inventory comprehensive; known issues categorized; research gaps identified.
+- **Phase 1 Gate Criteria**: **PASSED (2026-10-27)**. Primary investigation version established (v0.3.9); documentation sources indexed; feature inventory comprehensive (51 features); known issues categorized; research gaps identified.
 
 ### Phase 2: Technical Reconnaissance
 - **M05: Distribution and Dependency Analysis** — Package layout, plugin records, scripts, assets, required/optional dependencies.
