@@ -23,3 +23,9 @@
 - **Finding**: *Conquest of Skyrim* has severe conflicts with vanilla Civil War quests (`CW01`/`CW02`/`Season Unending`), *Open Civil War*, and external follower frameworks (NFF/AFT). Major v0.3.9 defects include an internal hold-count mismatch blocking The Moot (`ISSUE-QST-01`), proximity trigger failures at Fort Amol (`ISSUE-QST-02`), and naked troop outfit evaluation delays (`ISSUE-GAME-01`).
 - **Evidence**: `research/findings/known-issues.md`
 - **Related**: M04, M08, M27, M28
+
+## Physical Package Structure & Master Dependencies
+- **Status**: CONFIRMED
+- **Finding**: *Conquest of Skyrim* v0.3.9 distributes 3,779 loose files (521.93 MB uncompressed). Plugin `conquerskyrim.esp` is a Form Version 44 database with 22,690 records, requiring all official DLC masters (`Skyrim.esm`, `Update.esm`, `Dawnguard.esm`, `HearthFires.esm`, `Dragonborn.esm`). It bundles 1,539 compiled Papyrus scripts (`.pex`), 1,539 matching sources (`.psc`), UIlib v1 Scaleform menus, and custom xWMA audio for parade/battle drums.
+- **Evidence**: `research/findings/file-inventory.md`
+- **Related**: M05, M06, M07
