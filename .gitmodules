@@ -1,0 +1,6 @@
+[submodule "references/sources/SkyUI-Community"]
+	path = references/sources/SkyUI-Community
+	url = https://github.com/doodlum/SkyUI-Community
+[submodule "references/sources/skse64"]
+	path = references/sources/skse64
+	url = https://github.com/ianpatt/skse64
