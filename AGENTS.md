@@ -24,6 +24,7 @@ The project's purpose is to systematically investigate and understand the mod's 
 │   ├── README.md           # Overview of reference materials
 │   └── sources/            # Reserved for future reference repositories/sources
 ├── docs/
+│   ├── milestones.md           # Research roadmap, milestone registry, and phase gates
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
 │   ├── testing.md              # Testing, script, and artifact management rules
 │   ├── logging.md              # Logging standards, formats, and evidence capture
@@ -48,6 +49,7 @@ Research is divided into two streams that feed into consolidated findings:
 
 All agents must follow the full workflow defined in [`docs/execution-discipline.md`](./docs/execution-discipline.md). Key requirements:
 
+- **Milestone Tracking**: Maintain all 32 milestones in [`docs/milestones.md`](./docs/milestones.md) through the `NOT STARTED`, `IN PROGRESS`, `BLOCKED`, `COMPLETE` lifecycle.
 - **Capability Fallbacks**: Probe environment before use; apply documented fallbacks if optional tools (AgentMemory, Checkpoints, Orca, `@adversary`) are absent.
 - **Separate Knowledge & Progress**: Store durable facts in knowledge storage (AgentMemory or `research/memory.md`); store operational progress in actionable checkpoints (`research/checkpoints/`).
 - **Delegation & Concurrency**: Maintain explicit task boundaries and strict file ownership per worker.
