@@ -11,34 +11,21 @@ Full reference management policy, acquisition criteria, and version pinning rule
 
 ## Active References
 
-*No external references or submodules have been acquired during the bootstrap phase.*
+| Name | Type | Purpose | Revision/Version | License | Milestones |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *(None)* | — | *No external references or submodules acquired during bootstrap* | — | — | — |
 
 ---
 
-## Inventory Schema
+## Inventory Template
 
-When references are acquired during future milestones, document each entry using the following schema:
+When references are acquired during future milestones, catalog them in the table above and record detailed provenance using the template below:
 
-| Field | Description |
-| :--- | :--- |
-| **Reference Name** | Formal project, library, or document name |
-| **Purpose** | Targeted research question or functional necessity |
-| **Upstream Location** | Canonical repository URL or web documentation address |
-| **Reference Type** | Git Submodule, Online Documentation, or Technical Excerpt |
-| **Version / Revision** | Exact commit SHA, release tag, or retrieval timestamp |
-| **License / Terms** | Upstream license (e.g., MIT, GPL, Proprietary) and restrictions |
-| **Relevant Milestones**| Associated milestones (e.g., M01, M07) |
-| **Local Location** | Local path under `references/sources/` or `references/` |
-
-### Entry Template
-
-```markdown
-### [Reference Name]
-- **Purpose**: [Brief explanation of research utility]
-- **Upstream Location**: [URL]
-- **Reference Type**: [Git Submodule | Online Documentation | Excerpt]
-- **Version / Revision**: [Commit hash or version tag]
-- **License / Terms**: [License identifier and usage terms]
-- **Relevant Milestones**: [Milestone IDs]
-- **Local Location**: `references/sources/[name]`
-```
+### `[Reference Name](<upstream-url>)`
+- **Purpose**: Targeted research question or functional necessity.
+- **Upstream Location**: Canonical URL.
+- **Reference Type**: Git Submodule | Online Documentation | Technical Excerpt.
+- **Revision / Version**: Pinned commit SHA, release tag, or retrieval date.
+- **License / Terms**: License identifier and usage restrictions.
+- **Relevant Milestones**: Target milestone identifiers (e.g., M01, M07).
+- **Local Location**: Path under `references/sources/<name>` (if applicable).

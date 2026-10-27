@@ -80,16 +80,20 @@ Agents and scripts must adhere to [`docs/logging.md`](./docs/logging.md):
 - **External Engine Logs**: Extract concise, relevant excerpts with provenance (mod/game version, file, line) rather than committing multi-megabyte engine dumps.
 - **Concurrency**: Assign separate log destinations to concurrent workers to avoid interleaved output.
 
-## Reference Management
+## Reference Discipline
 
-Agents must adhere to [`docs/references.md`](./docs/references.md) when working with external sources:
+Agents must adhere to the reference management workflow in [`docs/references.md`](./docs/references.md). Specifically:
 
-- **Consult Before Acquiring**: Check `references/README.md` and justify new references against the 7-question criteria before acquiring.
-- **Catalog in Inventory**: Record all acquired references in `references/README.md` with purpose, upstream URL, type, version, license, and milestone.
-- **Git Submodules**: Place persistent Git repositories under `references/sources/` using submodules; pin to exact commit SHAs or release tags (never floating heads).
-- **Source Isolation**: External repositories are strictly read-only. Never modify reference files or output generated artifacts into reference directories.
-- **Provenance & Licensing**: Document licenses, retrieval timestamps, and usage restrictions for all external materials.
-- **Coordinated Acquisition**: Parallel workers must coordinate reference additions through the coordinating agent to prevent checkout collisions.
+1. **Read `docs/references.md`** before acquiring external material.
+2. **Keep persistent Git references** under `references/sources/`.
+3. **Prefer pinned Git submodules** over ad-hoc clones.
+4. **Verify upstream identity** and authority before acquisition.
+5. **Document provenance and relevant licenses** for all materials.
+6. **Treat reference repositories as read-only** research material.
+7. **Avoid unnecessary downloads**, toolchains, or build dependencies.
+8. **Keep generated outputs outside references** (route to `artifacts/`).
+9. **Coordinate shared submodule modifications** through the coordinating agent.
+10. **Update the reference inventory** in `references/README.md` when references change.
 
 ## Agent Guidelines & Tooling
 
