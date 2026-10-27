@@ -1,0 +1,40 @@
+# Operating system artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and IDE temporary files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+
+# Downloaded archives and large binary artifacts
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.bin
+*.iso
