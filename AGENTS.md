@@ -20,8 +20,9 @@ The project's purpose is to systematically investigate and understand the mod's 
 ├── references/
 │   ├── README.md           # Overview of reference materials
 │   └── sources/            # Reserved for future reference repositories/sources
-└── docs/
-    └── glossary.md         # Domain and engine terminology placeholder
+├── docs/
+│   ├── execution-discipline.md # Core execution, memory, and validation discipline
+│   └── glossary.md             # Domain and engine terminology placeholder
 ```
 
 ## Organization of Research Material
@@ -33,11 +34,21 @@ Research is divided into two streams that feed into consolidated findings:
 - **Consolidated Findings (`research/findings/`)**: Synthesizes verified conclusions supported by evidence from investigations or playtesting.
 - **External References (`references/` and `references/sources/`)**: Stores source documentation, reference repositories, and external links.
 
+## Execution Discipline
+
+All agents must follow the full workflow defined in [`docs/execution-discipline.md`](./docs/execution-discipline.md). Key requirements:
+
+- **Capability Fallbacks**: Probe environment before use; apply documented fallbacks if optional tools (AgentMemory, Checkpoints, Orca, `@adversary`) are absent.
+- **Separate Knowledge & Progress**: Store durable facts in knowledge storage (AgentMemory or `research/memory.md`); store operational progress in actionable checkpoints (`research/checkpoints/`).
+- **Delegation & Concurrency**: Maintain explicit task boundaries and strict file ownership per worker.
+- **Validation & Review**: Every finding requires concrete evidence. Use `@adversary` for independent review or explicitly labeled structured self-review (never impersonate independent review).
+- **Definition of Done**: A task is complete only after validation passes, review is conducted, and changes are committed via Conventional Commits.
+
 ## Agent Guidelines & Tooling
 
-- **Commit Style**: Always use Conventional Commits (`docs:`, `chore:`, `feat:`, `fix:`, etc.) for any git commits.
+- **Commit Style**: Always use Conventional Commits (`docs:`, `chore:`, `feat:`, `fix:`, etc.) for all git commits.
 - **Reverse Engineering**: Probing with REA (Reverse Engineer Anything / reverse engineering everything) is allowed for inspecting and analyzing binaries, scripts, assets, and system behavior.
 
 ## Future Agent Instructions
 
-Operational instructions, specific workflows, and guidelines for AI agents will be maintained in this file (`AGENTS.md`) or expanded into dedicated documents under `docs/` as the project develops.
+Operational workflows and domain-specific agent instructions will be maintained in this file or added to `docs/` as the project develops.
