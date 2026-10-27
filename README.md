@@ -1,5 +1,7 @@
 # Dogfish: Skyrim Conquest Research
 
+![Dogfish — Conquest of Skyrim Research](artifacts/dogfish-og-cover.png)
+
 An exploratory research and specification recovery project centered on **Conquest of Skyrim**, a Skyrim Special Edition mod created by galvatron304 ([Nexus Mods #65628](https://www.nexusmods.com/skyrimspecialedition/mods/65628)).
 
 ---

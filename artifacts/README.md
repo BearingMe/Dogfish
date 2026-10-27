@@ -20,4 +20,8 @@ Artifacts are outputs, not source code or permanent documentation. Examples incl
 ## Organization & Git Policy
 
 - **Milestone Grouping**: Subdirectories (e.g., `artifacts/M07/`) should be created only when artifacts actually exist.
-- **Ignored by Default**: All files in `artifacts/` are ignored by `.gitignore` by default. Only small, essential, verified evidence files may be tracked when justified.
+- **Ignored by Default**: Generated files are ignored unless an exact path is explicitly approved for tracking.
+
+## Retained Project Artwork
+
+- **`dogfish-og-cover.png`**: User-approved repository cover and README banner, 1280 × 640 pixels. Generated from [`docs/dogfish-og-cover.svg`](../docs/dogfish-og-cover.svg) using installed headless Chromium; fonts use Cinzel, Inter, and JetBrains Mono with the SVG's fallbacks. Intentionally tracked through one exact ignore exception for public repository presentation, not research evidence. The SVG remains the editable source. Upload the PNG under GitHub repository Settings → General → Social preview to set the link-sharing image; committing it does not set that repository setting.
