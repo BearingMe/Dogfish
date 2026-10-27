@@ -14,7 +14,9 @@ The mod files are distributed via Nexus Mods and are not tracked in Git. Users m
 - **Release Period**: March 2023
 - **File Name**: `Conquest of Skyrim - WIP Version`
 - **Official Download URL**: [https://www.nexusmods.com/skyrimspecialedition/mods/65628](https://www.nexusmods.com/skyrimspecialedition/mods/65628)
-- **Format**: 7z archive (~547 MB uncompressed)
+- **Format**: 7z archive (~547 MB uncompressed; informative, not a validation threshold)
+
+Version/release/layout information above was supplied with the acquisition task; it is not independently verified against a local package. The user need not retain the original archive in the repository after extraction. Agents must not download or extract the mod on the user's behalf.
 
 ---
 
@@ -93,16 +95,16 @@ Before initiating any research task or milestone that depends on the original mo
 ### Verification Protocol
 1. Check whether `references/local/conquest-of-skyrim/Data/` exists.
 2. Check whether `Data/conquerskyrim.esp` exists and is non-empty.
-3. Check whether `Data/scripts/` exists and contains `.pex` script files.
-4. Check whether expected asset directories (`meshes/`, `textures/`, `SEQ/`, etc.) exist.
-5. Verify that files are readable.
-6. Verify via `git status` that all files in `Data/` are ignored by Git.
+3. Check whether `Data/scripts/` is a readable directory; report its contents/limitations without assuming a particular script extension is required for structural availability.
+4. Check all expected directories: `interface/`, `meshes/`, `music/`, `scripts/`, `SEQ/`, `sound/`, and `textures/`.
+5. Verify directory enumeration and read access without modifying files or executing supplied code. Report unreadable components; do not claim a complete integrity audit from a small availability check.
+6. Check exclusions with `git check-ignore -v --no-index -- references/local/conquest-of-skyrim/Data/conquerskyrim.esp`; inspect `git ls-files -- references/local/conquest-of-skyrim/` to ensure no originals are already tracked. Ordinary `git status` alone does not prove ignored files are protected. If originals are tracked, report them and remove only verified original paths from the index with `git rm --cached -- <path>`, preserving disk copies; never force-add originals.
 
 ### Status Classification
 
 - **`AVAILABLE`**:
-  - The `Data/` directory and required files (`conquerskyrim.esp`, `scripts/`, asset directories) are present, non-empty, readable, and properly ignored by Git.
-  - *Action*: Proceed with read-only investigation. Never modify original files.
+  - `Data/` and all expected directories are present/readable; `conquerskyrim.esp` is a nonempty readable file. Original contents are ignored and untracked. This confirms structural availability, not exact version or complete asset integrity.
+  - *Action*: Structural availability is not permission to inspect implementation. Proceed only within established guardrails; while `guardrails.md` is a placeholder, defer implementation inspection. Never modify original files.
 - **`INCOMPLETE`**:
   - Some expected folders or files are missing (e.g., `scripts/` is missing).
   - *Action*: Report the exact missing items to the user and reference the setup guide above.
@@ -122,4 +124,6 @@ Before initiating any research task or milestone that depends on the original mo
 - `Data/` is strictly read-only and immutable.
 - Never modify original mod files, scripts, or plugin records.
 - Never output generated logs, dumps, or temporary scripts into `Data/`.
-- Never commit mod files or binaries to Git.
+- Never commit, redistribute, or repackage original files; do not copy the entire mod into `artifacts/`.
+- Generated analysis/logs belong under `artifacts/`, interpreted records under `research/`, and project utilities under `scripts/`. Never execute unknown binaries just to check availability.
+- Do not automatically move, rename, delete, or reorganize user-supplied files. Any corrected extraction is performed by the user.

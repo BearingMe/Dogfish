@@ -6,28 +6,30 @@ Full reference management policy, acquisition criteria, and version pinning rule
 
 ## Directory Structure
 
-- `sources/`: External Git repositories (managed via Git submodules) and isolated reference code. Directories must follow **lowercased-with-hyphen naming** (`kebab-case`).
-- `local/`: Manually supplied, non-Git reference materials (e.g., original mod distribution). Untracked in Git.
+- `sources/`: External Git repositories (managed via Git submodules) and isolated reference code. Project-chosen reference directory names use **lowercased-with-hyphen naming** (`kebab-case`); upstream contents are not renamed.
+- `local/`: Manually supplied, non-Git reference material. Acquisition READMEs and ignore rules are tracked; original mod contents are ignored. `Data/` is currently MISSING (checked 2026-10-27); recheck before dependent work.
 - `README.md`: Authoritative catalog of all acquired references.
 
 ## Active References
 
 | Name | Type | Purpose | Revision/Version | License | Milestones |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [skyui-community](https://github.com/doodlum/SkyUI-Community) | Git Submodule | UI framework, MCM Papyrus interfaces, and menu interaction reference | `b7a24a9` (v6.11 SE) | Open Source (GPLv3 derivation) | M05, M06, M12 |
-| [skse64](https://github.com/ianpatt/skse64) | Git Submodule | Skyrim Script Extender (64-bit) core architecture, Papyrus native bindings, and engine hooks | `25b7235` (v2.3.1) | Custom Permissive / SKSE Team | M05, M06, M08 |
-| [conquest-of-skyrim](./local/conquest-of-skyrim/README.md) | Local Reference | Primary subject of investigation and specification recovery | v0.3.9 (March 2023) | Proprietary / galvatron304 | All (M01–M32) |
+| [skyui-community](https://github.com/doodlum/SkyUI-Community) | Git Submodule | UI/MCM reference; mod usage not yet verified | `b7a24a9` (`v6.11-2-gb7a24a9`) | Project-wide license unverified | M05, M06, M12 |
+| [skse64](https://github.com/ianpatt/skse64) | Git Submodule | Script Extender bindings and engine interface reference | `25b7235` (`v2.3.1-3-g25b7235`) | Restrictions documented; full reuse terms unverified | M05, M06, M08 |
+| [conquest-of-skyrim](./local/conquest-of-skyrim/README.md) | Local Reference (MISSING) | Primary research subject; user supplies original files | Target v0.3.9 (March 2023, task-supplied metadata) | Permissions unverified; no redistribution | All (M01–M32) |
 
 ---
 
 ## Catalog Details
 
 ### [skyui-community](https://github.com/doodlum/SkyUI-Community)
-- **Purpose**: Reference for SkyUI interface architecture, Mod Configuration Menu (MCM) script implementations, ActionScript/Flash bindings, and UI integration hooks used by Skyrim mods including *Conquest of Skyrim*.
+- **Purpose**: UI/MCM and ActionScript interface reference for future investigation. Its specific use by *Conquest of Skyrim* remains unverified; the reference is not proof of a dependency.
 - **Upstream Location**: `https://github.com/doodlum/SkyUI-Community`
 - **Reference Type**: Git Submodule
-- **Revision / Version**: Commit `b7a24a936647e815269e34f4899e4b09768eff29` (v6.11 SE, 2026-06-03)
-- **License / Terms**: Open Source (GPLv3 upstream derivation)
+- **Revision / Version**: Commit `b7a24a936647e815269e34f4899e4b09768eff29` (commit date 2026-06-03); `git describe` reports `v6.11-2-gb7a24a9`, not the exact v6.11 release.
+- **Acquisition**: 2026-10-27, explicitly requested upstream; the existing checkout was pinned for reference, not selected as a verified mod-compatible release.
+- **License / Terms**: Project-wide license unverified. No root license was identified; bundled tool/library licenses do not establish a license for the whole project. Do not assume GPLv3 applies to all content.
+- **Nested Reference**: Already initialized `external/BethesdaCMakeModules` at `72fb6a3d67ef8974850aea7805030caaac4a807f`, from `https://github.com/Exit-9B/BethesdaCMakeModules.git` (upstream-declared build dependency, not needed for present research). Its `LICENSE` is present but not evaluated here. Leave it unchanged; do not initialize further dependencies by default.
 - **Relevant Milestones**: M05 (Dependencies), M06 (Creation Engine Integration), M12 (Player Interaction & Configuration)
 - **Local Location**: `references/sources/skyui-community`
 
@@ -35,8 +37,9 @@ Full reference management policy, acquisition criteria, and version pinning rule
 - **Purpose**: Authoritative reference for Skyrim Script Extender (64-bit) architecture, runtime memory addresses, native hooking patterns, Papyrus function extensions, and game version compatibility.
 - **Upstream Location**: `https://github.com/ianpatt/skse64`
 - **Reference Type**: Git Submodule
-- **Revision / Version**: Commit `25b72352adb6543fa6d0bd3795780672b2e238e0` (v2.3.1, 2026-09-06)
-- **License / Terms**: Custom Permissive / SKSE Team (see `skse64_license.txt`)
+- **Revision / Version**: Commit `25b72352adb6543fa6d0bd3795780672b2e238e0` (commit date 2026-09-06); `git describe` reports `v2.3.1-3-g25b7235`, not the exact v2.3.1 release.
+- **Acquisition**: 2026-10-27, explicitly requested upstream; the existing checkout was pinned for reference, not selected as a verified mod-compatible release.
+- **License / Terms**: `skse64_license.txt` explicitly excludes the Skyrim Online/Skyrim Together team from use. This note does not establish a general permissive grant; full reuse terms remain unverified.
 - **Relevant Milestones**: M05 (Dependencies), M06 (Creation Engine Integration), M08 (Runtime Lifecycle)
 - **Local Location**: `references/sources/skse64`
 
@@ -45,9 +48,9 @@ Full reference management policy, acquisition criteria, and version pinning rule
 - **Author**: galvatron304
 - **Upstream Location**: `https://www.nexusmods.com/skyrimspecialedition/mods/65628`
 - **Reference Type**: Local Reference (User-Supplied)
-- **Revision / Version**: Version 0.3.9 ("Conquest of Skyrim - WIP Version", March 2023 release)
-- **Acquisition Method**: Manual download from Nexus Mods by user; placed into `references/local/conquest-of-skyrim/Data/`
-- **License / Terms**: Proprietary mod distribution / author permissions (Nexus Mods standard). Untracked in Git.
+- **Revision / Version**: Target version 0.3.9 ("Conquest of Skyrim - WIP Version", March 2023), supplied by the acquisition task, not independently verified against a local package.
+- **Distribution / Acquisition**: 7z archive, manually downloaded/extracted by the user only. Acquisition pending; no local `Data/` exists as of 2026-10-27. Follow the linked acquisition guide.
+- **License / Terms**: Author permissions not yet verified. Public availability is not a reuse grant; do not download, commit, or redistribute original files as an agent.
 - **Relevant Milestones**: All milestones (M01 through M32)
 - **Local Location**: `references/local/conquest-of-skyrim/Data/` (Git-ignored)
 

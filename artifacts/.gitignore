@@ -1,5 +1,5 @@
-# Ignore all generated artifacts by default
+# Ignore generated files at every depth; traverse directories for explicit evidence exceptions.
 *
-!.gitignore
-!README.md
 !*/
+!/.gitignore
+!/README.md

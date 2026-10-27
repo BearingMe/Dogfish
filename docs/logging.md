@@ -52,7 +52,7 @@ Factual, primary-source output gathered during an investigation:
 
 ### 2.3 Research Findings
 Interpreted, validated conclusions synthesized from evidence.
-- Findings belong exclusively in `research/findings/`.
+- Consolidated findings belong in `research/findings/`; investigations and playtesting retain their own records. Final synthesis belongs in the M29–M32 documents under `docs/`, with links back to supporting findings.
 - Never store findings exclusively in log files or console transcripts.
 
 ---
@@ -119,8 +119,9 @@ Use short, consistent uppercase component identifiers. Standard examples include
   - `--quiet`: Suppresses informational logs, outputting only `WARN` and `ERROR`.
 
 ### 5.2 Stream Separation
-- **`stdout`**: Standard progress messages (`INFO`), help text, and expected data output when operating in a pipeline.
-- **`stderr`**: Diagnostic warnings (`WARN`) and errors (`ERROR`).
+- **`stdout`**: Requested data/results and help text; never mix diagnostic progress with machine-readable pipeline output.
+- **`stderr`**: Operational log messages at all enabled levels, including `INFO` progress and `DEBUG`, plus `WARN` and `ERROR`. A documented log-file destination may also receive them.
+- Logging ERROR does not replace a meaningful failure exit code or the validation classification required by `docs/testing.md`.
 
 ---
 
@@ -131,7 +132,8 @@ All persistent log files must be written under `artifacts/`:
 - Group logs by milestone when applicable: `artifacts/M07/execution.log`
 - General script logs: `artifacts/logs/script_name.log`
 - Temporary experiment logs: written to isolated temporary files or `artifacts/tmp/` and cleaned up after validation.
-- **Never write log files to the repository root, `research/`, `docs/`, or `scripts/`.**
+- **Never write project-generated log files to the repository root, `research/`, `docs/`, or `scripts/`.** External tools/game logs may originate outside the repository; read them in place or preserve permitted excerpts under `artifacts/`. Do not reformat original logs to the project format.
+- Create log directories only when needed and use run-specific names to avoid overwriting prior evidence. Redact credentials and unrelated personal information before retaining excerpts; preserve relevant context and document redaction.
 
 ### 6.2 Log Retention & Git Policy
 - By default, all log files under `artifacts/` are ignored by Git via `artifacts/.gitignore`.

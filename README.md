@@ -13,7 +13,7 @@ An exploratory research and specification recovery project centered on **Conques
 
 ### Core Philosophy: Research Before Action
 This project is an **exploratory research and specification recovery effort**, not an implementation or mod-development project.
-- **Investigate first**: We do not write speculative gameplay systems, create premature architecture, or implement scripts without complete domain knowledge.
+- **Investigate first**: This project does not implement replacement gameplay systems or speculative architecture. Research utilities may be added for a demonstrated investigation need, without requiring complete domain knowledge.
 - **Evidence-driven**: Every conclusion must be grounded in verifiable empirical data, static inspection, or game engine logs.
 - **Methodical progression**: The dual-track methodology ensures theoretical analysis and hands-on gameplay validation inform each other continuously.
 
@@ -53,7 +53,7 @@ All AI agents operating in this workspace must adhere to the structured research
 
 ### Core Capabilities & Tooling
 - **Persistent Knowledge with AgentMemory**: Use **AgentMemory** (`plugin:agentmemory:agentmemory` or `research/memory.md` fallback) to store durable facts, discovered engine constraints, and verified technical characteristics. Keep progress checkpoints strictly separate (`research/checkpoints/` or execution checkpoints) as defined in [`docs/execution-discipline.md`](./docs/execution-discipline.md).
-- **Reverse Engineering with REA**: Probing with **REA** (Reverse Engineer Anything / reverse engineering everything) is explicitly authorized and encouraged. Use REA tools to inspect binaries, Papyrus scripts, Creation Engine records, and mod assets to recover technical specifications.
+- **Reverse Engineering with REA**: REA (Reverse Engineer Anything / reverse engineering everything) may be used within the boundaries in [`AGENTS.md`](./AGENTS.md). While `guardrails.md` remains a placeholder, limit research to public documentation and ordinary reference discovery; defer original-mod implementation inspection.
 
 ### Workflow & Discipline Standards
 - **Execution & Delegation**: Follow [`docs/execution-discipline.md`](./docs/execution-discipline.md). Maintain strict task boundaries and exclusive file ownership during parallel execution. When `@adversary` is unavailable, perform structured self-review without impersonation.

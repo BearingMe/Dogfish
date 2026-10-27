@@ -44,7 +44,7 @@ Research is divided into two streams that feed into consolidated findings:
 - **Technical Investigations (`research/investigations/`)**: Houses standalone technical research documents. Each investigation focuses on a specific question or subsystem (e.g., Papyrus scripting, dependencies, engine limits).
 - **Playtesting Observations (`research/playtesting/`)**: Houses observations, reproduction steps for bugs, and empirical findings reported by human researchers during playtesting.
 - **Consolidated Findings (`research/findings/`)**: Synthesizes verified conclusions supported by evidence from investigations or playtesting.
-- **External References (`references/`, `sources/`, and `local/`)**: Stores source documentation, reference inventories, pinned submodules (`skyui-community`, `skse64`), and local user-supplied references (`conquest-of-skyrim` under `references/local/`).
+- **External References (`references/`, `references/sources/`, and `references/local/`)**: Stores source documentation, reference inventories, pinned submodules (`skyui-community`, `skse64`), and local user-supplied references (`conquest-of-skyrim` under `references/local/`).
 
 ## Execution Discipline
 
@@ -52,10 +52,10 @@ All agents must follow the full workflow defined in [`docs/execution-discipline.
 
 - **Milestone Tracking**: Maintain all 32 milestones in [`docs/milestones.md`](./docs/milestones.md) through the `NOT STARTED`, `IN PROGRESS`, `BLOCKED`, `COMPLETE` lifecycle.
 - **Capability Fallbacks**: Probe environment before use; apply documented fallbacks if optional tools (AgentMemory, Checkpoints, Orca, `@adversary`) are absent.
-- **Separate Knowledge & Progress**: Store durable facts in knowledge storage (AgentMemory or `research/memory.md`); store operational progress in actionable checkpoints (`research/checkpoints/`).
+- **Separate Knowledge & Progress**: Store nonredundant durable facts in AgentMemory or `research/memory.md` when needed; keep execution state in native checkpoints or `research/checkpoints/`. The repository remains authoritative.
 - **Delegation & Concurrency**: Maintain explicit task boundaries and strict file ownership per worker.
 - **Validation & Review**: Every finding requires concrete evidence. Use `@adversary` for independent review or explicitly labeled structured self-review (never impersonate independent review).
-- **Definition of Done**: A task is complete only after validation passes, review is conducted, and changes are committed via Conventional Commits.
+- **Definition of Done**: Apply the completion rules in `docs/execution-discipline.md`: validation and review are required; commit intended changes using Conventional Commits, without empty commits or disturbing unrelated work.
 
 ## Testing and Artifacts
 
@@ -114,7 +114,7 @@ Agents working with original *Conquest of Skyrim* files must adhere to the local
 ## Agent Guidelines & Tooling
 
 - **Commit Style**: Always use Conventional Commits (`docs:`, `chore:`, `feat:`, `fix:`, etc.) for all git commits.
-- **Reverse Engineering**: Probing with REA (Reverse Engineer Anything / reverse engineering everything) is allowed for inspecting and analyzing binaries, scripts, assets, and system behavior.
+- **Reverse Engineering**: Probing with REA (Reverse Engineer Anything / reverse engineering everything) is allowed only within established research boundaries. While `guardrails.md` remains a placeholder, restrict research to public documentation and ordinary reference discovery; defer inspection or transformation of the original mod's implementation. File-availability checks do not authorize implementation inspection.
 
 ## Future Agent Instructions
 

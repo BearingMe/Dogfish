@@ -20,6 +20,12 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 ## 2. Master Milestone Registry
 
+Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
+
+All 32 milestones remain NOT STARTED. Target version is 0.3.9 (task-supplied, not independently verified); establish the documented primary-version baseline during Phase 1. Original mod files are currently MISSING and `guardrails.md` is a placeholder: implementation-dependent work must wait for both permitted boundaries and validated local availability. These are known prerequisites, not current blockers on unstarted public-documentation tasks.
+
+The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
+
 | ID | Title | Phase | Status | Dependencies | Assigned Agent | Deliverable | Validation | Blockers | Commit |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **M01** | Project Identity & History | Phase 1 | NOT STARTED | None | Unassigned | `research/findings/project-overview.md` | Pending | None | — |
@@ -88,7 +94,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
   - *Deliverable*: `research/findings/territory.md`
 - **M11: Progression and Victory** — Progression stages, unlock loops, political progression, The Moot, High King status, victory conditions.
   - *Deliverable*: `research/findings/progression.md`
-- **M12: Player Interaction and Configuration** — Menus, dialogue, commands, MCM settings, status reporting, error feedback.
+- **M12: Player Interaction and Configuration** — Menus, dialogue, commands, configuration surfaces (MCM only if established), status reporting, error feedback.
   - *Deliverable*: `research/findings/interactions.md`
 - **Phase 3 Gate Criteria**: Complete observable core loop described from faction initialization through conquest and endgame.
 
@@ -139,7 +145,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 ### Phase 8: Specification Reconstruction
 - **M29: Behavioral Specification** — Comprehensive specification of every feature, state machine, algorithm, and failure condition.
   - *Deliverable*: `docs/behavioral-specification.md`
-- **M30: Recovered System Model** — Descriptive conceptual model, architecture boundaries, entity relationships, and diagrams.
+- **M30: Recovered System Model** — Descriptive conceptual model of the investigated mod, subsystem/lifecycle boundaries, entity relationships, and useful diagrams; not replacement architecture.
   - *Deliverable*: `docs/system-model.md`
 - **M31: Completeness and Uncertainty Audit** — Cross-check feature inventory against specification; catalog unknowns and contradictions.
   - *Deliverable*: `docs/research-gaps.md`
@@ -160,4 +166,45 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 | **Group E** | M17, M18, M19, M20 | Economy & Development | Resource equations, production, and technology |
 | **Group F** | M21, M22, M23, M24 | Politics & Governance | Hold administration, diplomacy, and law |
 | **Group G** | M25, M26, M27, M28 | Integration & Failure Modes | Cross-cutting interactions, persistence, and engine risks |
-| **Group H** | M29, M30, M31, M32 | Specification Reconstruction | Sequential synthesis and comprehensive audit |
+| **Group H** | M29, M30, M31, M32 | Specification Reconstruction | Coordinated synthesis and comprehensive audit; M32 integrates reviewed predecessors |
+
+## 5. Milestone Validation Gates
+
+These gates restore the mission's per-milestone acceptance criteria; phase summaries alone do not establish completion. Apply the evidence classifications and limitations rules in `docs/execution-discipline.md`. A question may be answered as unsupported/unknown only with evidence of the investigation and an explanation; do not assume every listed feature exists.
+
+| ID | Required validation before completion |
+| :--- | :--- |
+| M01 | Verify identity; document major releases, supported environments, evidence-backed development status, version distinctions, and source references. |
+| M02 | Index significant available documentation with URLs/versions; distinguish primary/secondary sources; record conflicting descriptions and missing documentation. |
+| M03 | Represent all major documented systems with stable feature identifiers; distinguish documented/technically identified/observed/disabled/incomplete/unverified status (overlap allowed); record known dependencies and unresolved features. |
+| M04 | Categorize issues with provenance, affected versions where known, and available reproduction details; consolidate duplicates without losing sources; exclude unsupported root causes. |
+| M05 | Inventory available package components, dependencies, version requirements, unknown formats, and acquisition provenance. |
+| M06 | Identify relevant engine systems, verified integration points, external dependencies, and vanilla interaction surfaces; label inferences. |
+| M07 | Map major identifiable components and evidence-traceable relationships; document external references and unknown components; never present inferred behavior as verified. |
+| M08 | Document known lifecycle stages/entry points; investigate initialization; identify persistence boundaries and unresolved lifecycle behavior. |
+| M09 | Reconstruct faction-creation workflow, inputs/outputs, and initial state; document dependencies and investigate important edge cases. |
+| M10 | Document territory model, ownership transitions, capture prerequisites, and system effects; explicitly mark uncertainties. |
+| M11 | Reconstruct major progression paths, requirements, branches/dependencies; investigate endgame conditions and document known progression failures. |
+| M12 | Catalogue major interactions and access conditions, inputs/outcomes, configuration effects, and missing/ambiguous behavior. |
+| M13 | Document army lifecycle, recruitment behavior, capacity constraints, resource dependencies, and commander relationships. |
+| M14 | Inventory orders; document preconditions and expected effects; investigate transitions and identify known failures. |
+| M15 | Reconstruct battle lifecycle/state transitions; investigate reinforcements; identify resolution conditions and cleanup; explicitly identify unknown formulas. |
+| M16 | Reconstruct siege lifecycle/state transitions; characterize equipment effects and territorial consequences; investigate interruptions and failures. |
+| M17 | Identify resources, map flows and production/consumption relationships; recover supported calculations and explicitly mark unknown formulas. |
+| M18 | Characterize population/employment and relevant transitions; map economic dependencies and unknown calculations. |
+| M19 | Inventory infrastructure; document construction lifecycle and resource/population dependencies; recover known effects and flag broken/incomplete features. |
+| M20 | Inventory technologies and dependencies; characterize research lifecycle, unlock effects, and incomplete features. |
+| M21 | Identify government roles; document appointments, delegated behavior, political dependencies, and unknown responsibilities. |
+| M22 | Document Jarl lifecycle and hold relationships; investigate loyalty, verify rebellion availability, and identify major edge cases. |
+| M23 | Inventory diplomatic actions, preconditions, outcomes, and state transitions; distinguish unsupported features from implemented ones. |
+| M24 | Document legal interactions; investigate crime/stability relationships; characterize punishments, disabled systems, and failures. |
+| M25 | Map major subsystem relationships and shared state where possible; document ordering constraints, investigate circular dependencies, and preserve contradictions. |
+| M26 | Identify persistent-state categories; investigate relevant save/reload scenarios, known consistency failures, recovery, and remaining uncertainties. |
+| M27 | Map compatibility surfaces, known conflicts, affected vanilla systems, relevant version/load-order dependencies; distinguish suspected from verified conflicts. |
+| M28 | Document significant failure categories; separate symptoms/causes; record available reproductions, severity, known recovery, and unresolved causes. |
+| M29 | Address the entire feature inventory and significant mechanics; exclude unsupported assumptions; preserve evidence, explicit unknowns, and contradictions. |
+| M30 | Represent major domains consistently with verified findings; trace transitions/dependencies to evidence; label inferred internals; exclude speculative replacement architecture. |
+| M31 | Account for every inventoried feature; audit uncertainties, contradictions, confidence classifications, missing evidence, and limitations. |
+| M32 | Review M01–M31; verify feature/subsystem coverage, cross-system consistency, traceable technical claims, visible unknowns/contradictions, final review, Git state, and committed documentation. |
+
+A phase gate summarizes validated milestones; it does not require fabricating inaccessible internals. Missing evidence that invalidates a required conclusion keeps the milestone open/blocked. Synthesis must remain understandable without reading raw logs, preserve version distinctions, and reference subsystem findings rather than merely concatenate them.

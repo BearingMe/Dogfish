@@ -17,7 +17,7 @@ External references may include:
 
 The objective is to maintain a small, reproducible, well-documented, and strictly isolated collection of useful references.
 
-*Note: Do not acquire references or clone repositories during bootstrap. Do not begin research milestones.*
+*Infrastructure-only tasks do not authorize acquisition or research milestones. Acquire references only for an authorized, justified research task.*
 
 ---
 
@@ -46,6 +46,7 @@ Distinguish three categories of external materials:
 - **Examples**: Skyrim plugin metadata, installed mod manifests, Papyrus diagnostic logs, tool-generated reports, extracted record information.
 - **Handling**: These are not automatically Git references. Use the existing testing and artifact discipline (`docs/testing.md`) for generated material.
 - **Prohibition**: Do not place binary mod distributions, extracted archives, or diagnostic dumps inside `references/sources/`.
+- **Original mod exception**: User-supplied original files belong only in `references/local/conquest-of-skyrim/Data/`, outside Git, following the [local acquisition guide](../references/local/conquest-of-skyrim/README.md). Agents do not download/extract or redistribute the mod. Validate availability read-only; availability alone does not authorize implementation inspection while guardrails are unfinished. Generated analysis still belongs in `artifacts/`.
 
 ---
 
@@ -106,7 +107,7 @@ All persistent external Git repositories belong under:
 
 `references/sources/<repository-name>/`
 
-**Naming Rule**: Repository directories under `references/sources/` must strictly use **lowercased-with-hyphen names** (`kebab-case`, e.g., `skyui-community`, `skse64`, `commonlib-sse`). This ensures cross-platform filesystem consistency and prevents case-sensitivity defects across Windows and Linux.
+**Naming Rule**: Project-chosen reference directory names directly under `references/sources/` (and `references/local/`) use lowercase letters/digits separated by single hyphens (`kebab-case`, e.g., `skyui-community`, `skse64`, `commonlib-sse`). Do not rename upstream files or nested submodules to impose this rule; their original layout must remain intact.
 
 Do not create competing directories such as `external/`, `vendor/`, `third_party/`, `cloned/`, `github/`, `repositories/`, or `dependencies/`. Do not place Git repositories in `scripts/`, `tests/`, `docs/`, or `artifacts/`.
 
@@ -130,18 +131,22 @@ Every submodule must use a known revision. Record:
 Prefer stable releases when appropriate. Use development revisions only when they contain specifically required information. Do not automatically track the latest upstream branch. Do not update references merely because newer commits exist.
 
 ### 5.4 Reproducibility
-The repository must support restoring its pinned submodules. Standard commands:
+Restore first-level references at their recorded commits from the project root, without automatically acquiring nested dependencies:
+
+```bash
+git submodule update --init -- references/sources/skyui-community references/sources/skse64
+```
+
+For a new workspace, clone the project normally using its verified URL, then run the targeted command above. This project currently has no configured remote; `<project-url>` is a template, not an established address.
+
+Only when nested dependencies are justified and approved, the standard recursive alternatives are:
 
 ```bash
 git submodule update --init --recursive
-```
-
-And for initial workspace setup:
-```bash
 git clone --recurse-submodules <project-url>
 ```
 
-Verify that the tracked revisions are obtainable. Do not assume a repository's default branch represents the revision used during research.
+Never execute placeholder URLs. Verify pinned commits are obtainable when acquisition/restoration is authorized; otherwise report that remote availability was not tested. Tags are descriptive; the exact commit SHA is the reproducibility key, even when a checkout is ahead of a tag. Do not assume the default branch represents the researched revision.
 
 ### 5.5 Submodule Updates
 Update a submodule only when:
@@ -254,7 +259,7 @@ Before acquiring or using external material:
 
 Public availability does not imply unrestricted reuse. Do not assume every GitHub repository is open source. A repository without a license must not be treated as permissively licensed. Do not automatically copy external source code, assets, or documentation into project-owned files.
 
-The project's detailed legal and clean-room boundaries will be defined separately in `guardrails.md`. Do not populate or modify that document during this task.
+The project's detailed legal and clean-room boundaries will be defined separately in `guardrails.md`; do not invent them in a maintenance task. While it remains a placeholder, research is limited to public documentation and ordinary reference discovery; defer inspection or transformation of the original mod's implementation.
 
 ---
 
@@ -322,6 +327,6 @@ The repository uses:
 - **`docs/testing.md`**: Controls validation, scripts, generated artifacts, and cleanup.
 - **`docs/logging.md`**: Controls diagnostic output, log formatting, and retention.
 - **`docs/references.md`** (this document): Controls external source acquisition, provenance, versioning, and isolation.
-- **`guardrails.md`**: Defines legal, licensing, clean-room, and research boundaries.
+- **`guardrails.md`**: Will define legal, licensing, clean-room, and research boundaries; currently an unfinished placeholder, not established permission.
 
 Cross-reference these documents without duplicating their contents.

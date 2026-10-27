@@ -12,7 +12,7 @@ Scripts in this directory automate technical tasks, such as:
 
 ## Rules for Scripts
 
-- **Single Location**: All persistent scripts belong here in `scripts/`. Do not create secondary script folders (e.g., `tools/`, `utils/`, `scratch/`).
+- **Single Location**: Reusable research utilities belong in `scripts/`; automated validation/test entry points belong in `tests/` and may call those utilities. Do not create secondary script folders (e.g., `tools/`, `utils/`, `scratch/`).
 - **Design**: Scripts should have a single responsibility, accept explicit inputs, specify explicit output paths, avoid machine-specific paths, and operate read-only by default.
 - **One-off Experiments**: Temporary disposable scripts must run in isolated temporary locations and be cleaned up after use. Promote them here only if they become reusable.
 
