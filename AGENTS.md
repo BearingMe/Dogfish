@@ -21,8 +21,8 @@ The project's purpose is to systematically investigate and understand the mod's 
 │   ├── .gitignore
 │   └── README.md
 ├── references/
-│   ├── README.md           # Reference inventory catalog (e.g., SkyUI-Community, skse64)
-│   └── sources/            # Pinned reference repositories (e.g., SkyUI-Community, skse64)
+│   ├── README.md           # Reference inventory catalog (e.g., skyui-community, skse64)
+│   └── sources/            # Pinned reference repositories (e.g., skyui-community, skse64)
 ├── docs/
 │   ├── milestones.md           # Research roadmap, milestone registry, and phase gates
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
@@ -43,7 +43,7 @@ Research is divided into two streams that feed into consolidated findings:
 - **Technical Investigations (`research/investigations/`)**: Houses standalone technical research documents. Each investigation focuses on a specific question or subsystem (e.g., Papyrus scripting, dependencies, engine limits).
 - **Playtesting Observations (`research/playtesting/`)**: Houses observations, reproduction steps for bugs, and empirical findings reported by human researchers during playtesting.
 - **Consolidated Findings (`research/findings/`)**: Synthesizes verified conclusions supported by evidence from investigations or playtesting.
-- **External References (`references/` and `references/sources/`)**: Stores source documentation, reference inventories, and pinned submodules (such as `references/sources/SkyUI-Community` and `references/sources/skse64` for UI architecture, MCM scripting, and native engine interface analysis).
+- **External References (`references/` and `references/sources/`)**: Stores source documentation, reference inventories, and pinned submodules (such as `references/sources/skyui-community` and `references/sources/skse64` for UI architecture, MCM scripting, and native engine interface analysis).
 
 ## Execution Discipline
 
@@ -87,7 +87,7 @@ Agents and scripts must adhere to [`docs/logging.md`](./docs/logging.md):
 Agents must adhere to the reference management workflow in [`docs/references.md`](./docs/references.md). Specifically:
 
 1. **Read `docs/references.md`** before acquiring external material.
-2. **Keep persistent Git references** under `references/sources/`.
+2. **Keep persistent Git references** under `references/sources/` using **lowercased-with-hyphen names** (`kebab-case`).
 3. **Prefer pinned Git submodules** over ad-hoc clones.
 4. **Verify upstream identity** and authority before acquisition.
 5. **Document provenance and relevant licenses** for all materials.

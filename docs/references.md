@@ -106,7 +106,9 @@ All persistent external Git repositories belong under:
 
 `references/sources/<repository-name>/`
 
-Use short, descriptive directory names. Do not create competing directories such as `external/`, `vendor/`, `third_party/`, `cloned/`, `github/`, `repositories/`, or `dependencies/`. Do not place Git repositories in `scripts/`, `tests/`, `docs/`, or `artifacts/`.
+**Naming Rule**: Repository directories under `references/sources/` must strictly use **lowercased-with-hyphen names** (`kebab-case`, e.g., `skyui-community`, `skse64`, `commonlib-sse`). This ensures cross-platform filesystem consistency and prevents case-sensitivity defects across Windows and Linux.
+
+Do not create competing directories such as `external/`, `vendor/`, `third_party/`, `cloned/`, `github/`, `repositories/`, or `dependencies/`. Do not place Git repositories in `scripts/`, `tests/`, `docs/`, or `artifacts/`.
 
 ### 5.2 Adding Submodules
 Use standard Git submodule operations:
