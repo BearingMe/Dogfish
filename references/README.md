@@ -6,7 +6,8 @@ Full reference management policy, acquisition criteria, and version pinning rule
 
 ## Directory Structure
 
-- `sources/`: External Git repositories (managed via Git submodules) and isolated reference code. All directories under `sources/` must follow **lowercased-with-hyphen naming** (`kebab-case`).
+- `sources/`: External Git repositories (managed via Git submodules) and isolated reference code. Directories must follow **lowercased-with-hyphen naming** (`kebab-case`).
+- `local/`: Manually supplied, non-Git reference materials (e.g., original mod distribution). Untracked in Git.
 - `README.md`: Authoritative catalog of all acquired references.
 
 ## Active References
@@ -15,6 +16,7 @@ Full reference management policy, acquisition criteria, and version pinning rule
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | [skyui-community](https://github.com/doodlum/SkyUI-Community) | Git Submodule | UI framework, MCM Papyrus interfaces, and menu interaction reference | `b7a24a9` (v6.11 SE) | Open Source (GPLv3 derivation) | M05, M06, M12 |
 | [skse64](https://github.com/ianpatt/skse64) | Git Submodule | Skyrim Script Extender (64-bit) core architecture, Papyrus native bindings, and engine hooks | `25b7235` (v2.3.1) | Custom Permissive / SKSE Team | M05, M06, M08 |
+| [conquest-of-skyrim](./local/conquest-of-skyrim/README.md) | Local Reference | Primary subject of investigation and specification recovery | v0.3.9 (March 2023) | Proprietary / galvatron304 | All (M01–M32) |
 
 ---
 
@@ -38,6 +40,17 @@ Full reference management policy, acquisition criteria, and version pinning rule
 - **Relevant Milestones**: M05 (Dependencies), M06 (Creation Engine Integration), M08 (Runtime Lifecycle)
 - **Local Location**: `references/sources/skse64`
 
+### [conquest-of-skyrim](./local/conquest-of-skyrim/README.md)
+- **Purpose**: Primary target mod of the research program and specification recovery effort.
+- **Author**: galvatron304
+- **Upstream Location**: `https://www.nexusmods.com/skyrimspecialedition/mods/65628`
+- **Reference Type**: Local Reference (User-Supplied)
+- **Revision / Version**: Version 0.3.9 ("Conquest of Skyrim - WIP Version", March 2023 release)
+- **Acquisition Method**: Manual download from Nexus Mods by user; placed into `references/local/conquest-of-skyrim/Data/`
+- **License / Terms**: Proprietary mod distribution / author permissions (Nexus Mods standard). Untracked in Git.
+- **Relevant Milestones**: All milestones (M01 through M32)
+- **Local Location**: `references/local/conquest-of-skyrim/Data/` (Git-ignored)
+
 ---
 
 ## Inventory Template
@@ -51,4 +64,4 @@ When additional references are acquired during future milestones, catalog them i
 - **Revision / Version**: Pinned commit SHA, release tag, or retrieval date.
 - **License / Terms**: License identifier and usage restrictions.
 - **Relevant Milestones**: Target milestone identifiers (e.g., M01, M07).
-- **Local Location**: Path under `references/sources/<name>` (if applicable).
+- **Local Location**: Path under `references/sources/<name>` or `references/local/<name>` (if applicable).

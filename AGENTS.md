@@ -21,8 +21,9 @@ The project's purpose is to systematically investigate and understand the mod's 
 │   ├── .gitignore
 │   └── README.md
 ├── references/
-│   ├── README.md           # Reference inventory catalog (e.g., skyui-community, skse64)
-│   └── sources/            # Pinned reference repositories (e.g., skyui-community, skse64)
+│   ├── README.md           # Reference inventory catalog (skyui-community, skse64, conquest-of-skyrim)
+│   ├── sources/            # Pinned reference repositories (skyui-community, skse64)
+│   └── local/              # User-supplied local references (conquest-of-skyrim)
 ├── docs/
 │   ├── milestones.md           # Research roadmap, milestone registry, and phase gates
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
@@ -43,7 +44,7 @@ Research is divided into two streams that feed into consolidated findings:
 - **Technical Investigations (`research/investigations/`)**: Houses standalone technical research documents. Each investigation focuses on a specific question or subsystem (e.g., Papyrus scripting, dependencies, engine limits).
 - **Playtesting Observations (`research/playtesting/`)**: Houses observations, reproduction steps for bugs, and empirical findings reported by human researchers during playtesting.
 - **Consolidated Findings (`research/findings/`)**: Synthesizes verified conclusions supported by evidence from investigations or playtesting.
-- **External References (`references/` and `references/sources/`)**: Stores source documentation, reference inventories, and pinned submodules (such as `references/sources/skyui-community` and `references/sources/skse64` for UI architecture, MCM scripting, and native engine interface analysis).
+- **External References (`references/`, `sources/`, and `local/`)**: Stores source documentation, reference inventories, pinned submodules (`skyui-community`, `skse64`), and local user-supplied references (`conquest-of-skyrim` under `references/local/`).
 
 ## Execution Discipline
 
@@ -96,6 +97,19 @@ Agents must adhere to the reference management workflow in [`docs/references.md`
 8. **Keep generated outputs outside references** (route to `artifacts/`).
 9. **Coordinate shared submodule modifications** through the coordinating agent.
 10. **Update the reference inventory** in `references/README.md` when references change.
+
+## Local Mod Reference
+
+Agents working with original *Conquest of Skyrim* files must adhere to the local reference workflow:
+
+1. **User-Supplied Files**: The original mod files are manually provided by the user from Nexus Mods; agents must never download or redistribute them.
+2. **Canonical Location**: Files reside exclusively under `references/local/conquest-of-skyrim/Data/`.
+3. **Verify Before Inspecting**: Agents must run the detection procedure (`AVAILABLE`, `INCOMPLETE`, `MISSING`, `INVALID`) before starting dependent tasks.
+4. **User-Guided Acquisition**: When files are missing or incomplete, guide the user via [`references/local/conquest-of-skyrim/README.md`](./references/local/conquest-of-skyrim/README.md).
+5. **No Direct Downloads**: Agents must never download the mod or access unofficial mirrors directly.
+6. **Immutable & Git-Ignored**: All original files in `Data/` remain strictly read-only and ignored by Git.
+7. **Authoritative Guide**: The local README (`references/local/conquest-of-skyrim/README.md`) is the authoritative acquisition and layout specification.
+8. **Outputs Separated**: Analysis outputs belong in `artifacts/`, and research findings belong in `research/findings/`—never in `Data/`.
 
 ## Agent Guidelines & Tooling
 
