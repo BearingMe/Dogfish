@@ -27,6 +27,7 @@ The project's purpose is to systematically investigate and understand the mod's 
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
 │   ├── testing.md              # Testing, script, and artifact management rules
 │   ├── logging.md              # Logging standards, formats, and evidence capture
+│   ├── references.md           # External reference acquisition, versioning, and isolation
 │   └── glossary.md             # Domain and engine terminology placeholder
 └── research/
     ├── findings/           # Consolidated, evidence-backed conclusions
@@ -78,6 +79,17 @@ Agents and scripts must adhere to [`docs/logging.md`](./docs/logging.md):
 - **Log Locations**: Direct all log files to `artifacts/` (e.g., `artifacts/M07/execution.log`); never write logs to root or `research/`.
 - **External Engine Logs**: Extract concise, relevant excerpts with provenance (mod/game version, file, line) rather than committing multi-megabyte engine dumps.
 - **Concurrency**: Assign separate log destinations to concurrent workers to avoid interleaved output.
+
+## Reference Management
+
+Agents must adhere to [`docs/references.md`](./docs/references.md) when working with external sources:
+
+- **Consult Before Acquiring**: Check `references/README.md` and justify new references against the 7-question criteria before acquiring.
+- **Catalog in Inventory**: Record all acquired references in `references/README.md` with purpose, upstream URL, type, version, license, and milestone.
+- **Git Submodules**: Place persistent Git repositories under `references/sources/` using submodules; pin to exact commit SHAs or release tags (never floating heads).
+- **Source Isolation**: External repositories are strictly read-only. Never modify reference files or output generated artifacts into reference directories.
+- **Provenance & Licensing**: Document licenses, retrieval timestamps, and usage restrictions for all external materials.
+- **Coordinated Acquisition**: Parallel workers must coordinate reference additions through the coordinating agent to prevent checkout collisions.
 
 ## Agent Guidelines & Tooling
 
