@@ -29,3 +29,9 @@
 - **Finding**: *Conquest of Skyrim* v0.3.9 distributes 3,779 loose files (521.93 MB uncompressed). Plugin `conquerskyrim.esp` is a Form Version 44 database with 22,690 records, requiring all official DLC masters (`Skyrim.esm`, `Update.esm`, `Dawnguard.esm`, `HearthFires.esm`, `Dragonborn.esm`). It bundles 1,539 compiled Papyrus scripts (`.pex`), 1,539 matching sources (`.psc`), UIlib v1 Scaleform menus, and custom xWMA audio for parade/battle drums.
 - **Evidence**: `research/findings/file-inventory.md`
 - **Related**: M05, M06, M07
+
+## Creation Engine Integration Surfaces
+- **Status**: CONFIRMED
+- **Finding**: The mod hooks 47 Creation Engine record groups, prominently 238 quests (`QUST`), 1,275 globals (`GLOB`), 1,213 formlists (`FLST`), 1,126 actors (`NPC_`), 757 AI packages (`PACK`), and 183 factions (`FACT`). Core mechanics utilize `CS_NegotiationScript` (bilateral `WarScore` calculation engine), `CS_AttackCityScript` (`CS_BattleSize` throttling, catapults, battering rams), and `UIlib v1` Scaleform ModEvent messaging for text input and menu selection.
+- **Evidence**: `research/findings/skyrim-integration.md`
+- **Related**: M06, M07, M12, M15, M23
