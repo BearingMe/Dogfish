@@ -245,3 +245,9 @@
 - **Finding**: Human playtesting program is codified in `research/playtesting/test-plan.md` across 12 high-information experiments (`EXP-FACT-01` through `EXP-VICT-01`) targeting critical gameplay paths: Faction Founding, Outpost Banners, Army Standardization, Task Barrel Patrols, Wave Combat Throttling, Siege Breaches, 24h Economic Ticks, Throne Court Hearings, Diplomatic Truces, Mid-Siege Save Desync, Vanilla Civil War Collisions, and The Moot Convocation. Validates test plan design while maintaining zero fabrication of unexecuted test results.
 - **Evidence**: `research/playtesting/test-plan.md`
 - **Related**: M41, M09-M28, M35, M36, M42
+
+## Static and Runtime Evidence Reconciliation
+- **Status**: CONFIRMED (Static Reconciliation PASS; Empirical Runtime Execution BLOCKED/PENDING)
+- **Finding**: Reconciliation establishes a 5-tier behavioral taxonomy (Implemented, Reachable, Observed-Community, Intended, Broken) across all 18 domains. Resolves critical engine discrepancies: (1) Lingering guard aggression occurs because zeroing crime gold does not clear active actor combat target lists; (2) The Moot is fully implemented but requires 8 appointed living Jarls in `GovFaction` plus the capital; (3) Mid-siege saving is broken due to volatile Havok barricade resets and zero reload handlers; (4) Army limits support 10 divisions with 10 thread updaters; (5) Civil research exists via holding upgrades, not perks; (6) v0.4.0 Jarl loyalty is an unreleased disabled stub.
+- **Evidence**: `research/findings/behavior-reconciliation.md`
+- **Related**: M42, M28, M36, M40, M41, M43
