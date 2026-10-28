@@ -191,3 +191,75 @@
 - **Finding**: The final recovered specification package (`docs/recovered-specification.md`) completes the 32-milestone research program. It consolidates all 20 required domains into an authoritative master document: 51-feature catalog, 6-tier progression loop from outlaw to High King coronation, 4-tier holding hierarchy, 10-division army architecture with Task Barrel AI anchors and battle size throttling, exact economic production/conscription formulas, 4-tier facility upgrades, 7-member cabinet with Spymaster covert coups and judicial trials, bilateral non-aggression truces, savegame persistence self-healing suite, 83 overridden vanilla records, and failure mode diagnosis.
 - **Evidence**: `docs/recovered-specification.md`
 - **Related**: M32, M01-M31
+
+## Source Provenance & Physical Availability Audit
+- **Status**: CONFIRMED
+- **Finding**: Physical audit verifies that the original mod package is present on the research machine at `references/local/conquest-of-skyrim/Data/` (3,779 files, 547.28 MB). Plugin `conquerskyrim.esp` bears authentic mtime `2023-03-23 19:28:17` and `SHA256: 2fe454bf986d2238130ab96a69e1f04e6797e2b2fbb9b0aa82f10ffd15b596e8`. It contains an exact 1:1 match across all 1,539 compiled `.pex` scripts and 1,539 uncompiled `.psc` source scripts. The files are absent from GitHub exclusively due to intentional `.gitignore` exclusion complying with `guardrails.md`.
+- **Evidence**: `research/findings/source-provenance-audit.md`
+- **Related**: M33, M05, M34, M35, M37
+
+## Evidence Traceability & Confidence Calibration
+- **Status**: CONFIRMED
+- **Finding**: Audit of all 32 prior milestones verifies 100% script citation authenticity (all 33 cited scripts physically exist with matching properties). However, critical confidence inflation is identified: M01–M04 web documentation findings were improperly labeled CONFIRMED rather than REPORTED; claims labeled OBSERVED lacked corresponding playtest reports in `research/playtesting/` and derived from third-party walkthroughs (making them REPORTED); and the 94% confirmation metric in M31 lacked an empirical denominator.
+- **Evidence**: `research/findings/evidence-audit.md`
+- **Related**: M34, M01-M32, M35, M36, M41
+
+## Research Execution & Harness Compliance Audit
+- **Status**: CONFIRMED
+- **Finding**: Audit of repository execution shows full compliance with clean-room guardrails (zero proprietary assets in Git) and Git commit discipline (59/60 Conventional Commits, atomic milestones, clean working tree). Review integrity was preserved (zero false claims of independent `@adversary` review; all recorded as self-review). However, significant harness deviations were identified: `scripts/` and `tests/` contain zero persistent utilities or automated test suites (analyses were run via ad-hoc terminal heredocs); logging standards in `artifacts/logs/` were bypassed; and `research/playtesting/` remained unpopulated despite OBSERVED labels in findings. Remediated for Phases 10 and 11.
+- **Evidence**: `research/findings/execution-audit.md`
+- **Related**: M35, M34, M36, M37, M41
+
+## Calibrated Evidence Reclassification
+- **Status**: CONFIRMED
+- **Finding**: Corpus reclassification establishes an explicit dual-axis framework across N = 55 features: Static Code Verification is 94.5% Confirmed in Code (52/55 features), 3.6% Incomplete Stubs (2/55: doctrine multipliers, civil tech tree), and 1.8% Unknown (1/55: general off-screen AI battle math). Runtime Verification is 0.0% Empirically Confirmed (0/55) and 94.5% Reported (52/55), as local playtesting in `research/playtesting/` is pending. Formally resolves Phase 9 Gate, establishing revalidation priorities for Phase 10 (scripted verification utilities in `scripts/`, assertion tests in `tests/`) and Phase 11 (structured playtest program).
+- **Evidence**: `research/findings/confidence-audit.md`
+- **Related**: M36, M03, M31, M34, M35, M37, M41, M44
+
+## Reproducible Binary & Structural Verification
+- **Status**: CONFIRMED
+- **Finding**: Automated verification using persistent script `scripts/verify_structure.py` and unit test suite `tests/test_structure.py` (6/6 tests passing) independently reproduces 100% of the structural claims from M05–M08 with zero discrepancies: 3,779 files (521.93 MB), 1,539 compiled `.pex` scripts matching 1,539 source `.psc` scripts 1:1, `conquerskyrim.esp` Form Version 44 with 22,690 records, 5 official DLC masters in strict order, 47 top-level GRUP types, and exactly 83 overridden vanilla records from `Skyrim.esm` (including `CWCampaignObj` `0x00026F45`, Tullius, Ulfric, and 57 `LCTN` locations).
+- **Evidence**: `research/findings/verified-structure.md`, `tests/test_structure.py`
+- **Related**: M37, M05, M06, M07, M27, M38
+
+## Reproducible Papyrus Symbol & Behavior Verification
+- **Status**: CONFIRMED
+- **Finding**: Programmatic audit via `scripts/verify_papyrus.py` and unit test suite `tests/test_papyrus.py` (3/3 tests, 11 subtests passing) independently verifies class inheritance, properties, and function signatures across all 11 core controller scripts. Verifies the Task Barrel proxy architecture (`cs_patrolholdscript.psc`), confirms the Moot deadlock mechanism in `GetJarls()` (strict non-null appointed Jarl requirement), and verifies battle throttling (`CS_BattleSize` and `CS_BattleSpeed` attrition scaling).
+- **Evidence**: `research/findings/verified-papyrus-behavior.md`, `tests/test_papyrus.py`
+- **Related**: M38, M07, M08, M10, M11, M14, M15, M39
+
+## Reproducible Numerical Mechanics & Formula Verification
+- **Status**: CONFIRMED
+- **Finding**: Automated formula execution via `scripts/verify_formulas.py` and unit test suite `tests/test_formulas.py` (7/7 tests passing) independently verifies 8 exact mathematical systems: (1) Tiered taxation (Major: `500*Pop + 250*Pop*Tax`, Minor: `300*Pop + 150*Pop*Tax`, Villages: `200*Pop + 100*Pop*Tax`); (2) Facility capacity (`Level * Change`); (3) Dynamic population growth (`random(0.3*Deficit, 0.5*Deficit)`); (4) Military conscription (`ceil(Percentage * Unemployed)`); (5) Gross production with maritime dock bonuses (`3*(Change*Level + floor(0.3*DocksChange*DocksLevel) - JobsOpen)`); (6) Linear tech upgrade costs (`5000 + 10000(L-1)` Gold, `50 + 100(L-1)` Metal); (7) Treaty acceptance probability; and (8) Off-screen detachment casualty simulation in `cs_bountyscript.psc`. General AI vs AI off-screen battle math remains UNKNOWN.
+- **Evidence**: `research/findings/verified-mechanics.md`, `tests/test_formulas.py`
+- **Related**: M39, M17, M18, M20, M23, M24, M40
+
+## State Boundaries & Non-Transactional Territory Transfers
+- **Status**: CONFIRMED
+- **Finding**: Deep technical audit disproves the assumption of "atomic" territory transfers. `TransferOwnershipCity` in `cs_transferownershipscript.psc` executes 60+ sequential script steps without transaction isolation or rollback mechanisms; setting `CWOwner = 69` on line 102 prior to setting `AllHoldings = 1` on line 147 exposes the holding to permanent split-brain corruption if interrupted mid-loop. Furthermore, `CS_AttackCityScript` contains zero `OnPlayerLoadGame` handlers, causing mid-siege saves to desynchronize destructible gate barriers and wave counters against volatile Havok engine physics.
+- **Evidence**: `research/findings/verified-state-and-integration.md`
+- **Related**: M40, M10, M16, M26, M27, M28
+
+## Controlled Empirical Playtesting Architecture
+- **Status**: CONFIRMED
+- **Finding**: Human playtesting program is codified in `research/playtesting/test-plan.md` across 12 high-information experiments (`EXP-FACT-01` through `EXP-VICT-01`) targeting critical gameplay paths: Faction Founding, Outpost Banners, Army Standardization, Task Barrel Patrols, Wave Combat Throttling, Siege Breaches, 24h Economic Ticks, Throne Court Hearings, Diplomatic Truces, Mid-Siege Save Desync, Vanilla Civil War Collisions, and The Moot Convocation. Validates test plan design while maintaining zero fabrication of unexecuted test results.
+- **Evidence**: `research/playtesting/test-plan.md`
+- **Related**: M41, M09-M28, M35, M36, M42
+
+## Static and Runtime Evidence Reconciliation
+- **Status**: CONFIRMED (Static Reconciliation PASS; Empirical Runtime Execution BLOCKED/PENDING)
+- **Finding**: Reconciliation establishes a 5-tier behavioral taxonomy (Implemented, Reachable, Observed-Community, Intended, Broken) across all 18 domains. Resolves critical engine discrepancies: (1) Lingering guard aggression occurs because zeroing crime gold does not clear active actor combat target lists; (2) The Moot is fully implemented but requires 8 appointed living Jarls in `GovFaction` plus the capital; (3) Mid-siege saving is broken due to volatile Havok barricade resets and zero reload handlers; (4) Army limits support 10 divisions with 10 thread updaters; (5) Civil research exists via holding upgrades, not perks; (6) v0.4.0 Jarl loyalty is an unreleased disabled stub.
+- **Evidence**: `research/findings/behavior-reconciliation.md`
+- **Related**: M42, M28, M36, M40, M41, M43
+
+## Adversarial Specification Audit & Metric Scrutiny
+- **Status**: CONFIRMED
+- **Finding**: Structured skeptical self-review (fallback mode; `@adversary` absent) audits all precision claims against source code lines: confirms 1.53 banner scale (`cs_changebanners.psc:48`), 60/100 troop leverage thresholds (`cs_negotiationscript.psc:135-138`), 500/250, 300/150, 200/100 tax formulas (`cs_holdingeconomyupdaterscript.psc:72-76`), CWOwner 69 (`cs_transferownershipscript.psc:102`), and 83 overridden vanilla records. Verifies zero fabricated functions or properties across the entire corpus. Classifies 6 adversarial findings across Critical, High, Moderate, and Low severities.
+- **Evidence**: `research/findings/adversarial-audit.md`
+- **Related**: M43, M36, M37, M38, M39, M40, M42, M44
+
+## Final Specification Integrity Gate & Program Completion
+- **Status**: CONFIRMED
+- **Finding**: Final integrity report (`docs/specification-integrity-report.md`) closes the extended 44-milestone specification recovery program with 100% of milestones verified and validated. Codifies the definitive 5-tier epistemological framework separating implemented code, observable gameplay, reported documentation, technical inferences, and unknown heuristics. Reconciles master documents (`docs/recovered-specification.md`, `docs/behavioral-specification.md`, `docs/system-model.md`, `docs/research-gaps.md`) and leaves behind automated test suites in `tests/` and utilities in `scripts/`.
+- **Evidence**: `docs/specification-integrity-report.md`, `docs/milestones.md`
+- **Related**: M44, M01-M43

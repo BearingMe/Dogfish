@@ -16,3 +16,24 @@ Automated checks help maintain consistency across long-running research mileston
 - **Scope**: Each test should validate a specific invariant or behavior and run deterministically.
 - **Frameworks**: Do not introduce heavy testing frameworks (e.g., pytest, custom runners) unless actual tests require them. Standard library scripts or simple runners are preferred.
 - **Outputs**: Test outputs must be routed to `artifacts/` or temporary locations, never left in the source or research trees.
+
+## Test Registry
+
+### `test_structure.py`
+- **Purpose**: Programmatically asserts the 6 structural invariants of Conquest of Skyrim v0.3.9 (file count 3,779, script 1:1 match 1,539, ESP size 4.99 MB, Form Version 44, 22,690 records, 5 official DLC masters, 47 GRUP types, 83 vanilla record overrides).
+- **Invocation**: `python -I tests/test_structure.py`
+- **Dependencies**: Python standard library (`unittest`, `pathlib`), `scripts/verify_structure.py`.
+- **Relevant Milestone**: M37.
+
+### `test_papyrus.py`
+- **Purpose**: Programmatically asserts inheritance, properties, function signatures, and Task Barrel proxy structures across core Papyrus source scripts (`cs_govscriptfunctions`, `cs_transferownershipscript`, `cs_attackcityscript`, `cs_meetingscript`, `cs_coronationscript`, `cs_negotiationscript`, `cs_holdingeconomyupdaterscript`, `cs_troopupgradescript`, `cs_bountyscript`, `cs_checkversion`, `cs_patrolholdscript`).
+- **Invocation**: `python -I tests/test_papyrus.py`
+- **Dependencies**: Python standard library (`unittest`, `pathlib`), `scripts/verify_papyrus.py`.
+- **Relevant Milestone**: M38.
+
+### `test_formulas.py`
+- **Purpose**: Programmatically asserts numerical accuracy across 7 test suites covering tiered taxation, facility capacity, dynamic population growth bounds, conscription ceilings, linear technology costs, gross resource production with dock multipliers, treaty acceptance probabilities, and off-screen detachment casualties.
+- **Invocation**: `python -I tests/test_formulas.py`
+- **Dependencies**: Python standard library (`unittest`, `pathlib`, `math`), `scripts/verify_formulas.py`.
+- **Relevant Milestone**: M39.
+

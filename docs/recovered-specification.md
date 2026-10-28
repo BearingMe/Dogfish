@@ -31,9 +31,12 @@ This document represents the definitive consolidated technical and behavioral sp
 
 ## 3. Research Methodology & Clean-Room Standards
 
-Research was conducted across an autonomous 32-milestone program strictly governed by [`guardrails.md`](../guardrails.md):
+Research was conducted across an autonomous 44-milestone program across 11 phases, strictly governed by [`guardrails.md`](../guardrails.md):
 - **Descriptive, Non-Generative**: Recovers observable mechanics, data flows, and state machines without authoring replacement mod code or speculative implementations.
-- **Evidence Hierarchy**: Claims are classified as `CONFIRMED` (verified directly via source code/plugin records), `OBSERVED` (verified via gameplay testing), or `INFERRED` (deductive logic).
+- **Calibrated Dual-Axis Evidence Model**: 
+  - **Static Code Verification**: **94.5% Confirmed in Code** (52/55 features verified against uncompiled Papyrus scripts and plugin records); **3.6% Incomplete Stubs** (2/55); **1.8% Unknown** (1/55).
+  - **Runtime Gameplay Verification**: Formally classified as **`REPORTED (COMMUNITY RUNTIME)`** pending human execution of the 12 controlled playtest experiments codified in [`research/playtesting/test-plan.md`](../research/playtesting/test-plan.md) (`EXP-FACT-01` through `EXP-VICT-01`).
+- **Reproducible Automation**: Programmatic verification tools (`scripts/verify_structure.py`, `scripts/verify_papyrus.py`, `scripts/verify_formulas.py`) and automated unit test suites (`tests/test_structure.py`, `tests/test_papyrus.py`, `tests/test_formulas.py`) ensure 100% reproducible metrics.
 - **Zero Asset Redistribution**: Original 3D meshes, textures, voice recordings, and binaries remain local and Git-ignored under `references/local/conquest-of-skyrim/Data/`.
 
 ---
