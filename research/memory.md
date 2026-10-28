@@ -83,3 +83,9 @@
 - **Finding**: Military orders (Follow, Hold Patrol, Fort Garrison, City Garrison, Staging Camp, Hunt, Offensive Assault, Stand By) are dispatched via an invisible "Task Barrel" proxy pattern (`CS_PatrolHoldScript`) that alters AI package routines instantly without Papyrus re-evaluation loops. Transit duration between holds is computed via spatial distance markers (`DistanceMarker*`); off-screen arrivals automatically teleport commanders to assigned duty markers (`MoveTo`) to prevent wilderness grid stalls. Tactical 5x4 blocks and parade marches use relative offset AI packages.
 - **Evidence**: `research/findings/military-orders.md`
 - **Related**: M14, M15, M16, M27
+
+## Combat Simulation & Reinforcement Wave Engine
+- **Status**: CONFIRMED
+- **Finding**: Combat engagements throttle concurrent in-cell actor spawns via `CS_BattleSize` (default: 40) to prevent engine memory crashes, while attrition scales by `CS_BattleSpeed` on `OnDying` events. Reinforcements spawn in coordinated waves at casualty milestones (20, 40, 60, 80, 100 defender deaths) rather than continuous trickles. When defeated, surviving enemies receive `RetreatFaction` AI packages to flee, and captives are converted to POWs via `PrisonerScript.PlayerTakePrisoner()`. Off-screen non-player battle resolution formulas remain unverified.
+- **Evidence**: `research/findings/battles.md`
+- **Related**: M15, M13, M14, M16, M28
