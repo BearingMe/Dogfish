@@ -197,3 +197,9 @@
 - **Finding**: Physical audit verifies that the original mod package is present on the research machine at `references/local/conquest-of-skyrim/Data/` (3,779 files, 547.28 MB). Plugin `conquerskyrim.esp` bears authentic mtime `2023-03-23 19:28:17` and `SHA256: 2fe454bf986d2238130ab96a69e1f04e6797e2b2fbb9b0aa82f10ffd15b596e8`. It contains an exact 1:1 match across all 1,539 compiled `.pex` scripts and 1,539 uncompiled `.psc` source scripts. The files are absent from GitHub exclusively due to intentional `.gitignore` exclusion complying with `guardrails.md`.
 - **Evidence**: `research/findings/source-provenance-audit.md`
 - **Related**: M33, M05, M34, M35, M37
+
+## Evidence Traceability & Confidence Calibration
+- **Status**: CONFIRMED
+- **Finding**: Audit of all 32 prior milestones verifies 100% script citation authenticity (all 33 cited scripts physically exist with matching properties). However, critical confidence inflation is identified: M01–M04 web documentation findings were improperly labeled CONFIRMED rather than REPORTED; claims labeled OBSERVED lacked corresponding playtest reports in `research/playtesting/` and derived from third-party walkthroughs (making them REPORTED); and the 94% confirmation metric in M31 lacked an empirical denominator.
+- **Evidence**: `research/findings/evidence-audit.md`
+- **Related**: M34, M01-M32, M35, M36, M41
