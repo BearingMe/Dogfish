@@ -251,3 +251,9 @@
 - **Finding**: Reconciliation establishes a 5-tier behavioral taxonomy (Implemented, Reachable, Observed-Community, Intended, Broken) across all 18 domains. Resolves critical engine discrepancies: (1) Lingering guard aggression occurs because zeroing crime gold does not clear active actor combat target lists; (2) The Moot is fully implemented but requires 8 appointed living Jarls in `GovFaction` plus the capital; (3) Mid-siege saving is broken due to volatile Havok barricade resets and zero reload handlers; (4) Army limits support 10 divisions with 10 thread updaters; (5) Civil research exists via holding upgrades, not perks; (6) v0.4.0 Jarl loyalty is an unreleased disabled stub.
 - **Evidence**: `research/findings/behavior-reconciliation.md`
 - **Related**: M42, M28, M36, M40, M41, M43
+
+## Adversarial Specification Audit & Metric Scrutiny
+- **Status**: CONFIRMED
+- **Finding**: Structured skeptical self-review (fallback mode; `@adversary` absent) audits all precision claims against source code lines: confirms 1.53 banner scale (`cs_changebanners.psc:48`), 60/100 troop leverage thresholds (`cs_negotiationscript.psc:135-138`), 500/250, 300/150, 200/100 tax formulas (`cs_holdingeconomyupdaterscript.psc:72-76`), CWOwner 69 (`cs_transferownershipscript.psc:102`), and 83 overridden vanilla records. Verifies zero fabricated functions or properties across the entire corpus. Classifies 6 adversarial findings across Critical, High, Moderate, and Low severities.
+- **Evidence**: `research/findings/adversarial-audit.md`
+- **Related**: M43, M36, M37, M38, M39, M40, M42, M44
