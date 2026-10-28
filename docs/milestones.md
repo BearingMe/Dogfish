@@ -16,7 +16,7 @@ This document tracks all 98 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 98 | 16 | 2 | 1 | 79 |
+| 98 | 15 | 2 | 1 | 80 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -124,7 +124,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M88** | Faction Identity & Roleplay Archetypes | Phase 22 | NOT STARTED | M86, M87 | Unassigned | `research/findings/roleplay-archetypes.md` | Pending | None | — |
 | **M89** | Nexus & Forum Feedback Corpus Consolidation | Phase 23 | NOT STARTED | M88 | Unassigned | `research/findings/community-feedback-corpus.md` | Pending | None | — |
 | **M90** | Player Pain Points & Feature Wishlist Analysis | Phase 23 | NOT STARTED | M89 | Unassigned | `research/findings/pain-points-and-wishlist.md` | Pending | None | — |
-| **M91** | Integration Defect Reproduction | Phase 24 | NOT STARTED | M82, Phase 20 Gate | Unassigned | `research/investigations/native-integration-audit.md` | Pending | None | — |
+| **M91** | Integration Defect Reproduction | Phase 24 | COMPLETE | M82, Phase 20 Gate | Coordinator | `research/investigations/native-integration-audit.md` | PASS | None | Pending |
 | **M92** | Real Papyrus Native Function Registration | Phase 24 | NOT STARTED | M91 | Unassigned | `integration/` | Pending | None | — |
 | **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `research/findings/native-abi-validation.md` | Pending | None | — |
 | **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `integration/` | Pending | None | — |
