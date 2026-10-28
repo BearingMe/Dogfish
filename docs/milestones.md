@@ -15,7 +15,7 @@ The original 32-milestone program produced comprehensive documentation (M01–M3
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 44 | 12 | 0 | 0 | 32 |
+| 44 | 8 | 0 | 0 | 36 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -65,10 +65,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M30** | Recovered System Model | Phase 8 | COMPLETE | M29 | Coordinator | `docs/system-model.md` | PASS (Historical) | None | `6faf526` |
 | **M31** | Completeness & Uncertainty Audit | Phase 8 | COMPLETE | M29, M30 | Coordinator | `docs/research-gaps.md` | PASS (Historical) | None | `cda0502` |
 | **M32** | Final Recovered Specification | Phase 8 | COMPLETE | M29, M30, M31 | Coordinator | `docs/recovered-specification.md` | PASS (Historical) | None | `68a5915` |
-| **M33** | Source Availability & Provenance Audit | Phase 9 | NOT STARTED | None | Unassigned | `research/findings/source-provenance-audit.md` | Pending | None | — |
-| **M34** | Evidence Traceability Audit | Phase 9 | NOT STARTED | M33 | Unassigned | `research/findings/evidence-audit.md` | Pending | None | — |
-| **M35** | Research Execution & Harness Compliance Audit | Phase 9 | NOT STARTED | M33 | Unassigned | `research/findings/execution-audit.md` | Pending | None | — |
-| **M36** | Confidence Reclassification | Phase 9 | NOT STARTED | M33, M34, M35 | Unassigned | `research/findings/confidence-audit.md` | Pending | None | — |
+| **M33** | Source Availability & Provenance Audit | Phase 9 | COMPLETE | None | Coordinator | `research/findings/source-provenance-audit.md` | PASS | None | `f0fe35c` |
+| **M34** | Evidence Traceability Audit | Phase 9 | COMPLETE | M33 | Coordinator | `research/findings/evidence-audit.md` | PASS | None | `f426be7` |
+| **M35** | Research Execution & Harness Compliance Audit | Phase 9 | COMPLETE | M33 | Coordinator | `research/findings/execution-audit.md` | PASS | None | `2c47d30` |
+| **M36** | Confidence Reclassification | Phase 9 | COMPLETE | M33, M34, M35 | Coordinator | `research/findings/confidence-audit.md` | PASS | None | `1b2665c` |
 | **M37** | Binary & Structural Verification | Phase 10 | NOT STARTED | M33, Phase 9 Gate | Unassigned | `research/findings/verified-structure.md` | Pending | None | — |
 | **M38** | Papyrus Claim Verification | Phase 10 | NOT STARTED | M37 | Unassigned | `research/findings/verified-papyrus-behavior.md` | Pending | None | — |
 | **M39** | Numerical Mechanics & Formula Verification | Phase 10 | NOT STARTED | M38 | Unassigned | `research/findings/verified-mechanics.md` | Pending | None | — |
@@ -182,7 +182,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/execution-audit.md`
 - **M36: Confidence Reclassification** — Reassess confidence labels across all domains; eliminate ungrounded confidence percentages; establish revalidation priorities.
   - *Deliverable*: `research/findings/confidence-audit.md`
-- **Phase 9 Gate Criteria**: Complete when the project reliably distinguishes verified knowledge, reported knowledge, technical inferences, unsupported claims, contradictions, and missing evidence.
+- **Phase 9 Gate Criteria**: **PASSED (2026-10-28)**. The project reliably distinguishes verified knowledge, reported knowledge, technical inferences, incomplete stubs, and missing evidence under a calibrated dual-axis framework. Phase 10 Technical Verification unlocked.
 
 ### Phase 10: Reproducible Technical Verification
 - **Objective**: Independently verify recovered technical claims using controlled, reproducible inspection of the original mod.
