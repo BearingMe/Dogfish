@@ -233,3 +233,9 @@
 - **Finding**: Automated formula execution via `scripts/verify_formulas.py` and unit test suite `tests/test_formulas.py` (7/7 tests passing) independently verifies 8 exact mathematical systems: (1) Tiered taxation (Major: `500*Pop + 250*Pop*Tax`, Minor: `300*Pop + 150*Pop*Tax`, Villages: `200*Pop + 100*Pop*Tax`); (2) Facility capacity (`Level * Change`); (3) Dynamic population growth (`random(0.3*Deficit, 0.5*Deficit)`); (4) Military conscription (`ceil(Percentage * Unemployed)`); (5) Gross production with maritime dock bonuses (`3*(Change*Level + floor(0.3*DocksChange*DocksLevel) - JobsOpen)`); (6) Linear tech upgrade costs (`5000 + 10000(L-1)` Gold, `50 + 100(L-1)` Metal); (7) Treaty acceptance probability; and (8) Off-screen detachment casualty simulation in `cs_bountyscript.psc`. General AI vs AI off-screen battle math remains UNKNOWN.
 - **Evidence**: `research/findings/verified-mechanics.md`, `tests/test_formulas.py`
 - **Related**: M39, M17, M18, M20, M23, M24, M40
+
+## State Boundaries & Non-Transactional Territory Transfers
+- **Status**: CONFIRMED
+- **Finding**: Deep technical audit disproves the assumption of "atomic" territory transfers. `TransferOwnershipCity` in `cs_transferownershipscript.psc` executes 60+ sequential script steps without transaction isolation or rollback mechanisms; setting `CWOwner = 69` on line 102 prior to setting `AllHoldings = 1` on line 147 exposes the holding to permanent split-brain corruption if interrupted mid-loop. Furthermore, `CS_AttackCityScript` contains zero `OnPlayerLoadGame` handlers, causing mid-siege saves to desynchronize destructible gate barriers and wave counters against volatile Havok engine physics.
+- **Evidence**: `research/findings/verified-state-and-integration.md`
+- **Related**: M40, M10, M16, M26, M27, M28
