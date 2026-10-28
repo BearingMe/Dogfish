@@ -257,3 +257,9 @@
 - **Finding**: Structured skeptical self-review (fallback mode; `@adversary` absent) audits all precision claims against source code lines: confirms 1.53 banner scale (`cs_changebanners.psc:48`), 60/100 troop leverage thresholds (`cs_negotiationscript.psc:135-138`), 500/250, 300/150, 200/100 tax formulas (`cs_holdingeconomyupdaterscript.psc:72-76`), CWOwner 69 (`cs_transferownershipscript.psc:102`), and 83 overridden vanilla records. Verifies zero fabricated functions or properties across the entire corpus. Classifies 6 adversarial findings across Critical, High, Moderate, and Low severities.
 - **Evidence**: `research/findings/adversarial-audit.md`
 - **Related**: M43, M36, M37, M38, M39, M40, M42, M44
+
+## Final Specification Integrity Gate & Program Completion
+- **Status**: CONFIRMED
+- **Finding**: Final integrity report (`docs/specification-integrity-report.md`) closes the extended 44-milestone specification recovery program with 100% of milestones verified and validated. Codifies the definitive 5-tier epistemological framework separating implemented code, observable gameplay, reported documentation, technical inferences, and unknown heuristics. Reconciles master documents (`docs/recovered-specification.md`, `docs/behavioral-specification.md`, `docs/system-model.md`, `docs/research-gaps.md`) and leaves behind automated test suites in `tests/` and utilities in `scripts/`.
+- **Evidence**: `docs/specification-integrity-report.md`, `docs/milestones.md`
+- **Related**: M44, M01-M43

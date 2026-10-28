@@ -10,7 +10,13 @@
 
 ## 1. Architectural Scope & Method
 
-This document provides the complete, authoritative behavioral specification for *Conquest of Skyrim* v0.3.9. Derived from static record analysis (`conquerskyrim.esp`), 1,539 Papyrus script sources, engine event models, and empirical playtesting logs, this specification details the observable inputs, preconditions, state machines, mathematical equations, and failure conditions across all **51 inventoried features** in the 18 strategic domains.
+This document provides the complete, authoritative behavioral specification for *Conquest of Skyrim* v0.3.9. Derived from static record analysis (`conquerskyrim.esp`), 1,539 Papyrus script sources, engine event models, and community playthrough reports (with empirical test protocols codified in [`research/playtesting/test-plan.md`](../research/playtesting/test-plan.md)), this specification details the observable inputs, preconditions, state machines, mathematical equations, and failure conditions across all **51 inventoried features** in the 18 strategic domains.
+
+### Calibrated Confidence Legend
+- **`CONFIRMED IN CODE`**: Static bytecode and source code verified directly in `Data/scripts/source/` and `conquerskyrim.esp`.
+- **`REPORTED (RUNTIME)`**: Operational in-game behavior reported by community walkthroughs and author notes; pending local human execution of M41 playtest experiments.
+- **`INCOMPLETE STUB`**: Documented feature that is disabled, commented out, or lacks linking assets in v0.3.9.
+- **`UNKNOWN`**: General AI calculation heuristics that cannot be reconstructed from available files.
 
 ---
 
