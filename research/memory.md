@@ -65,3 +65,9 @@
 - **Finding**: Progression spans 6 tiers: Outlaw Faction Founding -> Outpost Expansion -> Contiguous Hold Invasions -> Capital City Sieges -> The Moot (`CS_MeetingScript`) -> Royal Coronation (`CS_CoronationScript`). The Moot requires all 9 holds conquered; an appointed Jarl with >=60 loyalty nominates the player (otherwise self-nomination fallback). Jarls cast roll-call votes based on hold loyalty keyword; victory requires `MootVoteFor >= MootVoteAgainst`. Coronation stages Jarl/citizen kneeling animations, fealty oaths (+30 loyalty per hold), awards the High King/Queen crown, and sets `IsHighKing = 1`.
 - **Evidence**: `research/findings/progression.md`
 - **Related**: M11, M21, M22, M23, M29
+
+## Player Interaction Surfaces & Control Modalities
+- **Status**: CONFIRMED
+- **Finding**: Player command is structured across four primary modalities: (1) Immersive NPC dialogue trees (935 `TopicInfo` scripts for Steward civil/taxes, Commander invasion/POWs, Blacksmith armory); (2) Interactive world activators (`CS_ManageHolding` on placed banners, thrones, chopping blocks); (3) Tactical war tables (`CS_MapManageMenuScript` checking contiguous adjacency `HoldsNotLinked` and troop superiority `MessageNoSuperiority`); and (4) Scaleform `UIlib v1` text/list prompts for custom naming. Configuration is governed by SkyUI MCM sliders (`CS_BattleSize`, `CS_BattleSpeed`) with an inventory `SettingsMenu` item fallback for gamepad/console users.
+- **Evidence**: `research/findings/interactions.md`
+- **Related**: M12, M03, M06, M09, M14, M17
