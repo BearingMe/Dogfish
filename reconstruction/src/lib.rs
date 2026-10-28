@@ -17,7 +17,10 @@ pub mod territory;
 pub mod types;
 
 pub use core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
-pub use diplomacy::{calculate_truce_acceptance_chance, DiplomacyManager, ForeignFactionRelation};
+pub use diplomacy::{
+    calculate_exact_papyrus_negotiation_chance, calculate_truce_acceptance_chance, DiplomacyManager,
+    ForeignFactionRelation,
+};
 pub use economy::{calculate_gross_production, EconomyManager, FacilityType};
 pub use faction::{BannerColor, FactionProfile, GovernmentDoctrine};
 pub use government::{CabinetMinister, CabinetRole, GovernmentManager, JudicialSentence, LegalOffense, MootOutcome};
@@ -810,5 +813,28 @@ mod tests {
         assert_eq!(conscript_troops(&mut holding, 0.10), 1);
         assert_eq!(holding.unemployed, 0);
         assert_eq!(holding.population, 9);
+    }
+
+    // --- MILESTONE M75 DIPLOMACY & PAPYRUS NEGOTIATION TESTS ---
+
+    #[test]
+    fn test_exact_papyrus_negotiation_math() {
+        // Vector 1: Peace Offer (1) + Stormcloak (+50) + Friendly (+25) + Military >= 100 (+25) + Base (25) = 125 -> clamped 95%
+        assert_eq!(
+            calculate_exact_papyrus_negotiation_chance(FactionId::Stormcloak, 1, 1, 1, 120),
+            95
+        );
+
+        // Vector 2: Peace Offer (1) + Imperial (-25) + Hostile (-25) + Military < 60 (-25) + Base (25) = -50 -> clamped 5%
+        assert_eq!(
+            calculate_exact_papyrus_negotiation_chance(FactionId::Imperial, -1, 1, 1, 40),
+            5
+        );
+
+        // Vector 3: Truce Offer (2, base +25) + Stormcloak + Neutral (0) + Commercial Argument (+25) + Base (25) = 75%
+        assert_eq!(
+            calculate_exact_papyrus_negotiation_chance(FactionId::Stormcloak, 0, 2, 3, 80),
+            75
+        );
     }
 }

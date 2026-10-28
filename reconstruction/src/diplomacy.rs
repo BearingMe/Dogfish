@@ -47,6 +47,86 @@ pub fn calculate_truce_acceptance_chance(
     chance.clamp(5, 95) as u32
 }
 
+/// Exact bilateral treaty acceptance calculation from primary Papyrus code (cs_negotiationscript.psc:120-170).
+///
+/// Factors:
+/// - Base chance: 25%
+/// - Jarl relationship rank: > 0 gives +25%, < 0 gives -25%
+/// - Offer type 1 (Peace):
+///     Stormcloak: +50%, Imperial: -25%
+///     Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
+///     Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
+///     Argument 3 (Commercial): Imperial gives -25%
+/// - Offer type 2 (Truce):
+///     Base offer: +25%
+///     Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
+///     Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
+///     Argument 3 (Commercial): Stormcloak gives +25%, Imperial gives -25%
+/// Clamped between 5% and 95%.
+pub fn calculate_exact_papyrus_negotiation_chance(
+    target_faction: FactionId,
+    relationship_rank: i32,
+    offer_type: u8,
+    argument: u8,
+    total_troops: i32,
+) -> u32 {
+    let mut chance = 25i32;
+
+    if relationship_rank > 0 {
+        chance += 25;
+    } else if relationship_rank < 0 {
+        chance -= 25;
+    }
+
+    if offer_type == 1 {
+        if target_faction == FactionId::Stormcloak {
+            chance += 50;
+        } else if target_faction == FactionId::Imperial {
+            chance -= 25;
+        }
+
+        if argument == 1 {
+            if total_troops < 60 {
+                chance -= 25;
+            } else if total_troops >= 100 {
+                chance += 25;
+            }
+        } else if argument == 2 {
+            if target_faction == FactionId::Stormcloak {
+                chance -= 25;
+            } else if target_faction == FactionId::Imperial {
+                chance += 25;
+            }
+        } else if argument == 3 && target_faction == FactionId::Imperial {
+            chance -= 25;
+        }
+    } else if offer_type == 2 {
+        chance += 25;
+
+        if argument == 1 {
+            if total_troops < 60 {
+                chance -= 25;
+            } else if total_troops >= 100 {
+                chance += 25;
+            }
+        } else if argument == 2 {
+            if target_faction == FactionId::Stormcloak {
+                chance -= 25;
+            } else if target_faction == FactionId::Imperial {
+                chance += 25;
+            }
+        } else if argument == 3 {
+            if target_faction == FactionId::Stormcloak {
+                chance += 25;
+            } else if target_faction == FactionId::Imperial {
+                chance -= 25;
+            }
+        }
+    }
+
+    chance.clamp(5, 95) as u32
+}
+
 /// Bilateral diplomatic relationship between Player and a foreign faction.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ForeignFactionRelation {

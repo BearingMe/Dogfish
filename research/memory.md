@@ -444,6 +444,13 @@
 - **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/state.rs`, `reconstruction/tests/adversarial_regressions.rs`
 - **Related**: M74, M65, M66, M69, M70, M52, M76
 
+## Diplomacy, Treaty Probability & Judicial Fidelity Repair
+- **Status**: CONFIRMED
+- **Finding**: Bilateral treaty negotiation logic audited and repaired in `reconstruction/src/diplomacy.rs` (41/41 lib tests, 12/12 adversarial tests passing): (1) Transcribed exact Papyrus negotiation equation from `cs_negotiationscript.psc:120-170` into `calculate_exact_papyrus_negotiation_chance()`, properly distinguishing vanilla foreign faction alignment (`GovSons` +50% peace bonus vs `GovImperial` -25% penalty) from player doctrine; (2) Preserved troop leverage thresholds (< 60: -25%, >= 100: +25%) and argument explanations (Military, Ideological, Commercial); (3) Verified negative court fine rejection and checked arithmetic in judicial throne hearings.
+- **Evidence**: `reconstruction/src/diplomacy.rs`, `cs_negotiationscript.psc`, `reconstruction/src/lib.rs`
+- **Related**: M75, M74, M66, M53, M76
+
+
 
 
 

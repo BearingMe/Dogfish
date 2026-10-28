@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 8 | 0 | 0 | 74 |
+| 82 | 7 | 0 | 0 | 75 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -106,7 +106,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M72** | Faction, World Model & Territory Fidelity | Phase 18 | COMPLETE | Phase 17 Gate | Coordinator | `reconstruction/src/` | PASS | None | `203b6be` |
 | **M73** | Economy, Population & Infrastructure Fidelity | Phase 18 | COMPLETE | Phase 17 Gate | Coordinator | `reconstruction/src/` | PASS | None | `f838593` |
 | **M74** | Military, Strategic AI & Siege Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `2375502` |
-| **M75** | Government, Diplomacy, Law & Progression Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate, M72 | Unassigned | `reconstruction/src/` | Pending | None | — |
+| **M75** | Government, Diplomacy, Law & Progression Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | Pending |
 | **M76** | Independent Differential Validation | Phase 18 | NOT STARTED | M72, M73, M74, M75 | Unassigned | `research/findings/independent-differential-validation.md` | Pending | None | — |
 | **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | NOT STARTED | M63, Phase 17 Gate | Unassigned | `integration/` | Pending | None | — |
 | **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | NOT STARTED | M77 | Unassigned | `integration/` | Pending | None | — |
