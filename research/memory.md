@@ -173,3 +173,9 @@
 - **Finding**: The complete behavioral specification addresses all 51 inventoried features across 18 strategic domains (`docs/behavioral-specification.md`). Core mechanisms specify: proxy container naming, 4-tier territory model (9 hold capitals with index numbers 0-8), 10 field armies with class scaling across mortal/arcane/Dwemer units, battle throttling via `CS_BattleSize`, 6-stage siege lifecycle with catapults and rams, mathematical production equations, demographic keyword allocation waterfall, 4-tier infrastructure upgrades, 7-member royal cabinet, Spymaster covert network and coups, judicial court hearings with 7 crime factions, bilateral non-aggression diplomacy, and The Moot election leading to High King coronation.
 - **Evidence**: `docs/behavioral-specification.md`
 - **Related**: M29, M03, M09-M24, M30, M32
+
+## Recovered System Model & Architectural Topology
+- **Status**: CONFIRMED
+- **Finding**: The recovered system model (`docs/system-model.md`) synthesizes the investigated architecture across 7 subsystems (Governance Hub, Territorial Engine, Economic Engine, Military Command, Siege/Battle Simulator, Diplomatic Engine, Judicial System) bound to a domain ERD, 4 core state machines (Territorial Holdings, Bilateral Diplomacy, Combat Waves, Stability Cascades), and an event scheduling model (24h daily economic ticks, OnCellAttach dynamic streaming, OnDying attrition hooks, and Scaleform ModEvents). Engine integration directly overrides 83 master forms in `Skyrim.esm` (including `CWCampaignObj` `0x00026F45`, Tullius, Ulfric, and 57 locations).
+- **Evidence**: `docs/system-model.md`
+- **Related**: M30, M06, M07, M25, M27, M32
