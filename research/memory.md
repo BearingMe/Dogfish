@@ -59,3 +59,9 @@
 - **Finding**: Skyrim's territory is organized into a 4-tier hierarchy: 9 Hold Capitals (`citynum` 0..8, where 0..4 are major walled and 5..8 are minor open cities), Strategic Forts, Dependent Villages, and Frontier Outposts. State is dual-encoded: holding global variables use 1 (Player), 11 (Imperial), 12 (Stormcloak); native `CWOwner` keyword uses 69 for Player and `(newfaction - 10)` for vanilla factions. Transitions in `CS_TransferOwnershipScript` atomically clear local hold crime gold to 0, unseat Jarls to `CitizenFaction`, force enemy capital relocation (`ChooseRandomCapital()`), and enforce contiguous borders via `MessageNoHoldLink`.
 - **Evidence**: `research/findings/territory.md`
 - **Related**: M10, M11, M14, M16, M22, M24
+
+## Campaign Progression & Endgame Victory Loop
+- **Status**: CONFIRMED
+- **Finding**: Progression spans 6 tiers: Outlaw Faction Founding -> Outpost Expansion -> Contiguous Hold Invasions -> Capital City Sieges -> The Moot (`CS_MeetingScript`) -> Royal Coronation (`CS_CoronationScript`). The Moot requires all 9 holds conquered; an appointed Jarl with >=60 loyalty nominates the player (otherwise self-nomination fallback). Jarls cast roll-call votes based on hold loyalty keyword; victory requires `MootVoteFor >= MootVoteAgainst`. Coronation stages Jarl/citizen kneeling animations, fealty oaths (+30 loyalty per hold), awards the High King/Queen crown, and sets `IsHighKing = 1`.
+- **Evidence**: `research/findings/progression.md`
+- **Related**: M11, M21, M22, M23, M29
