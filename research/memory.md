@@ -306,6 +306,13 @@
 - **Evidence**: `reconstruction/src/economy.rs`, `reconstruction/src/population.rs`, `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
 - **Related**: M51, M46, M49, M50, M52, M53, M54
 
+## Military Organization & Combat Simulation Reconstruction
+- **Status**: CONFIRMED
+- **Finding**: Independent domain module authored in `reconstruction/src/military.rs` (20/20 tests passing). Reconstructs: (1) 10-division army management architecture (`DivisionId` 0..9) with commander appointments and troop outfitting; (2) Task Barrel AI order dispatching model (`FollowPlayer`, `PatrolHold`, `GarrisonFort`, `GarrisonCity`, `CampAt`, `HuntBounties`, `AssaultHolding`, `StandBy`); (3) Linear troop training upgrade costs: $\text{CostGold} = 5000 + 10000(L-1)$ and $\text{CostMetal} = 50 + 100(L-1)$; (4) Off-screen detachment casualty simulation from `cs_bountyscript.psc`; (5) 5-stage siege operations (StagingCamp &rarr; OuterGateBreach &rarr; UrbanStreetCombat &rarr; PalaceConfrontation &rarr; Capitulated) with atomic holding capitulation; (6) Defender reinforcement wave dispatching at casualty milestones (20, 40, 60, 80, 100 deaths); (7) Military field force food upkeep consumption (1 food unit per active soldier daily).
+- **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
+- **Related**: M52, M46, M49, M50, M51, M53, M54
+
+
 
 
 

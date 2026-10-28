@@ -3,9 +3,10 @@
 use crate::core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
 use crate::economy::{calculate_gross_production, EconomyManager, FacilityType};
 use crate::faction::FactionProfile;
+use crate::military::{ArmyOrder, MilitaryManager, SiegeOperation, SiegePhase};
 use crate::population::{allocate_holding_labor, calculate_population_growth, conscript_troops};
 use crate::territory::TerritoryManager;
-use crate::types::{FactionId, HoldingId, HoldingTier};
+use crate::types::{DivisionId, FactionId, HoldingId, HoldingTier};
 
 /// National resource stockpiles pooled across holdings.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -149,6 +150,7 @@ pub struct GameState {
     pub rng: DeterministicRng,
     pub faction: FactionProfile,
     pub territory: TerritoryManager,
+    pub military: MilitaryManager,
     pub treasury: i64,
     pub stockpile: ResourceStockpile,
     pub holdings: Vec<HoldingState>,
@@ -178,6 +180,7 @@ impl GameState {
             rng: DeterministicRng::new(seed),
             faction: FactionProfile::new_player(),
             territory: TerritoryManager::new(),
+            military: MilitaryManager::new(),
             treasury: 10000,
             stockpile: ResourceStockpile::new(),
             holdings,
@@ -194,7 +197,7 @@ impl GameState {
         new_day
     }
 
-    /// Execute the complete 24-hour daily economic, demographic, and upkeep simulation cycle.
+    /// Execute the complete 24-hour daily economic, demographic, and military upkeep simulation cycle.
     pub fn tick_day(&mut self) {
         self.events.push(SimulationEvent::DayAdvanced { day: self.time.day });
         self.territory.advance_day();
@@ -205,6 +208,9 @@ impl GameState {
         let mut total_metal_produced = 0i32;
         let mut total_wood_produced = 0i32;
         let mut total_docks_produced = 0i32;
+
+        // Active military field troops consume food daily (1 food per soldier)
+        total_food_consumed += self.military.total_soldiers();
 
         for holding in &mut self.holdings {
             if holding.owner == FactionId::Player {
@@ -250,7 +256,7 @@ impl GameState {
                 total_wood_produced += wood_yield;
                 total_docks_produced += docks_yield;
 
-                // 4. Food consumption
+                // 4. Municipal food consumption (citizens + guards)
                 total_food_consumed += holding.food_required();
 
                 // 5. Population growth when Deficit > 0
@@ -343,7 +349,6 @@ impl GameState {
             return 0;
         }
 
-        // Apply doctrine conscription modifier
         let doc_mod = self.faction.doctrine.conscription_modifier_pct() as f64 / 100.0;
         let effective_pct = (percentage + doc_mod).max(0.0).min(1.0);
 
@@ -355,6 +360,64 @@ impl GameState {
             });
         }
         recruits
+    }
+
+    /// Assign order to division.
+    pub fn assign_army_order(&mut self, div_id: DivisionId, order: ArmyOrder) -> Result<()> {
+        self.military.assign_order(div_id, order)
+    }
+
+    /// Upgrade division power level.
+    pub fn upgrade_division_power(&mut self, div_id: DivisionId) -> Result<()> {
+        if !div_id.is_valid() {
+            return Err(SimulationError::InvalidDivisionId(div_id.0));
+        }
+        self.military.divisions[div_id.0 as usize].upgrade_power(
+            &mut self.treasury,
+            &mut self.stockpile,
+        )
+    }
+
+    /// Assign recruited soldiers to division.
+    pub fn reinforce_division(&mut self, div_id: DivisionId, count: i32) -> Result<()> {
+        self.military.reinforce_division(div_id, count)
+    }
+
+    /// Launch a siege operation against a target holding (FEAT-SIEG-01).
+    pub fn start_siege(
+        &mut self,
+        target_id: HoldingId,
+        pincer: bool,
+        artillery: bool,
+    ) -> Result<()> {
+        if !target_id.is_capital() {
+            return Err(SimulationError::InvalidStateTransition(
+                "Siege operations can only target Hold Capitals",
+            ));
+        }
+        if self.holdings[target_id.0 as usize].owner == FactionId::Player {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot siege an already owned holding",
+            ));
+        }
+
+        self.military.active_siege = Some(SiegeOperation::new(target_id, pincer, artillery));
+        Ok(())
+    }
+
+    /// Advance active siege to next phase.
+    pub fn advance_siege(&mut self) -> Result<SiegePhase> {
+        let siege = self.military.active_siege.as_mut().ok_or(
+            SimulationError::InvalidStateTransition("No active siege operation underway"),
+        )?;
+
+        let next_phase = siege.advance_phase()?;
+        if next_phase == SiegePhase::Capitulated {
+            let target = siege.target_holding;
+            self.transfer_holding(target, FactionId::Player, true)?;
+        }
+
+        Ok(next_phase)
     }
 
     /// Transfer ownership of a holding atomically.

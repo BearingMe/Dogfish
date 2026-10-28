@@ -6,6 +6,7 @@
 pub mod core;
 pub mod economy;
 pub mod faction;
+pub mod military;
 pub mod population;
 pub mod state;
 pub mod territory;
@@ -14,6 +15,7 @@ pub mod types;
 pub use core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
 pub use economy::{calculate_gross_production, EconomyManager, FacilityType};
 pub use faction::{BannerColor, FactionProfile, GovernmentDoctrine};
+pub use military::{simulate_bounty_combat, ArmyOrder, CombatResult, Division, MilitaryManager, SiegeOperation, SiegePhase, TroopClass};
 pub use population::{allocate_holding_labor, calculate_population_growth, conscript_troops, LaborAllocationResult};
 pub use state::{FacilityLevels, GameState, HoldingState, ResourceStockpile};
 pub use territory::{AppointedGovernor, TerritoryManager};
@@ -77,22 +79,16 @@ mod tests {
 
     #[test]
     fn test_hand_calculated_taxation_vectors() {
-        // Test Vector A: Major Walled Capital (Pop 50, TaxRate 2)
-        // Expected: 500 * 50 + 250 * 50 * 2 = 25,000 + 25,000 = 50,000 gold
         let mut whiterun = HoldingState::new(HoldingId::WHITERUN, FactionId::Player);
         whiterun.population = 50;
         whiterun.tax_rate = 2;
         assert_eq!(whiterun.calculate_tax(), 50000);
 
-        // Test Vector B: Minor Open Capital (Pop 30, TaxRate 1)
-        // Expected: 300 * 30 + 150 * 30 * 1 = 9,000 + 4,500 = 13,500 gold
         let mut falkreath = HoldingState::new(HoldingId::FALKREATH, FactionId::Player);
         falkreath.population = 30;
         falkreath.tax_rate = 1;
         assert_eq!(falkreath.calculate_tax(), 13500);
 
-        // Test Vector C: Dependent Village (Pop 15, TaxRate 1)
-        // Expected: 200 * 15 + 100 * 15 * 1 = 3,000 + 1,500 = 4,500 gold
         let mut riverwood = HoldingState::new(HoldingId::RIVERWOOD, FactionId::Player);
         riverwood.population = 15;
         riverwood.tax_rate = 1;
@@ -106,11 +102,9 @@ mod tests {
         assert_eq!(state.holdings.len(), 15);
         assert_eq!(state.treasury, 10000);
 
-        // Transfer Falkreath to Player directly
         assert!(state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, true).is_ok());
-        state.holdings[1].tax_rate = 1; // 13,500 tax
+        state.holdings[1].tax_rate = 1;
 
-        // Advance 24 hours (1 day)
         for _ in 0..24 {
             state.tick_hour();
         }
@@ -125,7 +119,6 @@ mod tests {
         let mut sim1 = GameState::new(9999);
         let mut sim2 = GameState::new(9999);
 
-        // Run 7 full simulation days (168 hourly ticks)
         for _ in 0..168 {
             sim1.tick_hour();
             sim2.tick_hour();
@@ -234,45 +227,24 @@ mod tests {
 
     #[test]
     fn test_gross_resource_production_math() {
-        // Vector A: Standard farm without maritime docks bonus (Whiterun Farm 4, Change 10, JobsOpen 0)
-        // Production = 3 * ((4 * 10) + 0 - 0) = 120 units
         assert_eq!(calculate_gross_production(4, 10, 0, 0, 0), 120);
-
-        // Vector B: Maritime port bonus (Solitude Farm 4, Change 5, Docks 4, DocksChange 10, JobsOpen 0)
-        // Bonus = floor(0.3 * 10 * 4) = 12
-        // Net = (4 * 5) + 12 - 0 = 32
-        // Gross = 3 * 32 = 96 units
         assert_eq!(calculate_gross_production(4, 5, 4, 10, 0), 96);
-
-        // Vector C: Labor shortage (JobsOpen = 10)
-        // Gross = 3 * (32 - 10) = 66 units
         assert_eq!(calculate_gross_production(4, 5, 4, 10, 10), 66);
     }
 
     #[test]
     fn test_labor_allocation_waterfall_priority() {
         let mut holding = HoldingState::new(HoldingId::WHITERUN, FactionId::Player);
-        // Whiterun: Farm 4 (Change 10 -> 40 jobs), Mine 2 (Change 5 -> 10 jobs), Lumber 2 (Change 5 -> 10 jobs)
-        // Total capacity: 60 jobs. Set population to 45.
         holding.population = 45;
 
         let labor = allocate_holding_labor(&holding);
-        // Priority 1: Food fills completely (40 labor, 0 open)
         assert_eq!(labor.food_labor, 40);
         assert_eq!(labor.food_jobs_open, 0);
-
-        // Priority 2: Docks (Whiterun has 0 docks)
         assert_eq!(labor.docks_labor, 0);
-
-        // Priority 3: Wood takes remaining 5 labor (capacity 10, so 5 labor, 5 open)
         assert_eq!(labor.wood_labor, 5);
         assert_eq!(labor.wood_jobs_open, 5);
-
-        // Priority 4: Metal gets 0 labor (capacity 10, 10 open)
         assert_eq!(labor.metal_labor, 0);
         assert_eq!(labor.metal_jobs_open, 10);
-
-        // 0 unemployed
         assert_eq!(labor.unemployed, 0);
     }
 
@@ -282,13 +254,11 @@ mod tests {
         holding.population = 100;
         holding.unemployed = 20;
 
-        // Draft 15% from 20 unemployed: ceil(0.15 * 20) = ceil(3.0) = 3
         let drafted = conscript_troops(&mut holding, 0.15);
         assert_eq!(drafted, 3);
         assert_eq!(holding.unemployed, 17);
         assert_eq!(holding.population, 97);
 
-        // Draft 10% from 11 unemployed: ceil(0.10 * 11) = ceil(1.1) = 2
         holding.unemployed = 11;
         let drafted2 = conscript_troops(&mut holding, 0.10);
         assert_eq!(drafted2, 2);
@@ -299,11 +269,9 @@ mod tests {
     #[test]
     fn test_facility_upgrade_transaction() {
         let mut state = GameState::new(505);
-        // Whiterun farm is already level 4 (max)
         let max_err = state.upgrade_facility(HoldingId::WHITERUN, FacilityType::Farm);
         assert!(max_err.is_err());
 
-        // Falkreath mine is level 2. Upgrade to level 3.
         let initial_gold = state.treasury;
         let initial_wood = state.stockpile.wood;
         let initial_jobs = state.holdings[1].max_jobs;
@@ -321,18 +289,98 @@ mod tests {
         let mut state = GameState::new(606);
         assert!(state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).is_ok());
 
-        // Zero out agricultural production to simulate a total crop failure / famine
         state.holdings[0].facilities.farm = 0;
         state.stockpile.food = -100;
-        let initial_loyalty = state.holdings[0].loyalty; // 60
+        let initial_loyalty = state.holdings[0].loyalty;
 
-        // Run 3 daily ticks (72 hours)
         for _ in 0..72 {
             state.tick_hour();
         }
 
-        // Each day of starvation drops loyalty by 10
         assert_eq!(state.holdings[0].loyalty, initial_loyalty - 30);
         assert_eq!(state.holdings[0].loyalty, 30);
+    }
+
+    // --- MILESTONE M52 TESTS ---
+
+    #[test]
+    fn test_division_ceiling_and_orders() {
+        let mut state = GameState::new(707);
+        assert_eq!(state.military.divisions.len(), 10);
+
+        // Assign orders to division 0
+        let res = state.assign_army_order(DivisionId(0), ArmyOrder::PatrolHold(HoldingId::WHITERUN));
+        assert!(res.is_ok());
+        assert_eq!(state.military.divisions[0].order, ArmyOrder::PatrolHold(HoldingId::WHITERUN));
+
+        // Invalid division ID 10 is rejected
+        let invalid_res = state.assign_army_order(DivisionId(10), ArmyOrder::FollowPlayer);
+        assert!(matches!(invalid_res, Err(SimulationError::InvalidDivisionId(10))));
+    }
+
+    #[test]
+    fn test_division_training_costs_and_upgrade() {
+        // Recovered formula: CostGold = 5000 + 10000(L-1), CostMetal = 50 + 100(L-1)
+        assert_eq!(Division::training_upgrade_cost(1), (5000, 50));
+        assert_eq!(Division::training_upgrade_cost(2), (15000, 150));
+        assert_eq!(Division::training_upgrade_cost(3), (25000, 250));
+        assert_eq!(Division::training_upgrade_cost(4), (35000, 350));
+
+        let mut state = GameState::new(808);
+        state.treasury = 50000;
+        state.stockpile.metal = 500;
+
+        assert_eq!(state.military.divisions[0].power_level, 1);
+        assert!(state.upgrade_division_power(DivisionId(0)).is_ok());
+        assert_eq!(state.military.divisions[0].power_level, 2);
+        assert_eq!(state.treasury, 50000 - 5000);
+        assert_eq!(state.stockpile.metal, 500 - 50);
+    }
+
+    #[test]
+    fn test_bounty_combat_simulation_math() {
+        let mut rng = DeterministicRng::new(42);
+
+        // 50 troops vs 50 difficulty -> 100% chance -> always victory with casualties
+        let res = simulate_bounty_combat(50, 50, 1000, &mut rng);
+        assert!(res.is_victory);
+        assert!(res.surviving_troops > 0);
+        assert!(res.casualties < 50);
+        assert_eq!(res.gold_reward, 1000);
+
+        // 0 troops -> defeat
+        let res_zero = simulate_bounty_combat(0, 50, 1000, &mut rng);
+        assert!(!res_zero.is_victory);
+    }
+
+    #[test]
+    fn test_siege_operation_phases_and_reinforcement_waves() {
+        let mut state = GameState::new(909);
+        assert!(state.start_siege(HoldingId::WINDHELM, true, true).is_ok());
+
+        let siege = state.military.active_siege.as_mut().unwrap();
+        assert_eq!(siege.phase, SiegePhase::StagingCamp);
+
+        // Record casualties and test reinforcement wave triggers (at 20, 40, 60, 80, 100)
+        for _ in 0..19 {
+            assert!(!siege.record_defender_casualty());
+        }
+        assert!(siege.record_defender_casualty()); // 20th casualty triggers Wave 1
+        assert_eq!(siege.reinforcement_wave, 1);
+
+        for _ in 0..19 {
+            assert!(!siege.record_defender_casualty());
+        }
+        assert!(siege.record_defender_casualty()); // 40th casualty triggers Wave 2
+        assert_eq!(siege.reinforcement_wave, 2);
+
+        // Advance phases
+        assert_eq!(state.advance_siege().unwrap(), SiegePhase::OuterGateBreach);
+        assert_eq!(state.advance_siege().unwrap(), SiegePhase::UrbanStreetCombat);
+        assert_eq!(state.advance_siege().unwrap(), SiegePhase::PalaceConfrontation);
+        assert_eq!(state.advance_siege().unwrap(), SiegePhase::Capitulated);
+
+        // Capitulation transfers holding
+        assert_eq!(state.holdings[3].owner, FactionId::Player);
     }
 }

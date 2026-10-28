@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 11 | 0 | 0 | 51 |
+| 62 | 10 | 0 | 0 | 52 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -82,7 +82,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M49** | Minimal Rust Simulation Core | Phase 13 | COMPLETE | M46, M47, Phase 12 Gate | Coordinator | `reconstruction/` | PASS | None | `ace699b` |
 | **M50** | Faction & Territory Reconstruction | Phase 13 | COMPLETE | M49 | Coordinator | `reconstruction/` | PASS | None | `efe3437` |
 | **M51** | Economy & Population Reconstruction | Phase 13 | COMPLETE | M49, M50 | Coordinator | `reconstruction/` | PASS | None | `e889494` |
-| **M52** | Military & Warfare Reconstruction | Phase 13 | NOT STARTED | M49, M50 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M52** | Military & Warfare Reconstruction | Phase 13 | COMPLETE | M49, M50 | Coordinator | `reconstruction/` | PASS | None | Pending |
 | **M53** | Government & Diplomacy Reconstruction | Phase 13 | NOT STARTED | M50, M51, M52 | Unassigned | `reconstruction/` | Pending | None | — |
 | **M54** | Persistence & Scenario Execution | Phase 13 | NOT STARTED | M49–M53 | Unassigned | `reconstruction/` | Pending | None | — |
 | **M55** | Differential Behavior Testing | Phase 14 | NOT STARTED | M54, Phase 13 Gate | Unassigned | `research/findings/differential-testing.md` | Pending | None | — |
