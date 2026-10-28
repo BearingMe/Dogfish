@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 1 | 0 | 1 | 80 |
+| 82 | 0 | 0 | 1 | 81 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -113,7 +113,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M79** | SKSE Save/Load & State Synchronization | Phase 19 | COMPLETE | M67, M68, M78 | Coordinator | `integration/` | PASS | None | `ded135f` |
 | **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | `c9a871c` |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | COMPLETE | Phase 18 Gate, M76, M80 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `c03fdb5` |
-| **M82** | Final Reconstruction Quality Gate | Phase 20 | NOT STARTED | M81 | Unassigned | `docs/reconstruction-repair-report.md` | Pending | None | — |
+| **M82** | Final Reconstruction Quality Gate | Phase 20 | COMPLETE | M81 | Coordinator | `docs/reconstruction-repair-report.md` | PASS | None | Pending |
 
 ---
 
@@ -308,7 +308,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `docs/reconstruction-coverage.md`, `docs/milestones.md`
 - **M82: Final Reconstruction Quality Gate** — Integrated review across M63–M81, executing all automated tests, attempting falsification, and authoring capstone repair report.
   - *Deliverable*: `docs/reconstruction-repair-report.md`
-- **Phase 20 Gate Criteria**: Pass when the repair program produces a trustworthy reconstruction with clearly stated limitations.
+- **Phase 20 Gate Criteria**: **PASSED (2026-10-28)**. Capstone quality gate report (`docs/reconstruction-repair-report.md`) delivers evidence-backed answers to all 10 mandatory program questions. 19 of 20 defects resolved; M80 preserved as BLOCKED awaiting human in-engine playtesting in accordance with Rule 1.4; 62 automated tests passing with zero failures and zero clippy warnings; honest calibrated fidelity documented. All M81–M82 COMPLETE. Validation and Repair Program closed.
 
 ---
 
