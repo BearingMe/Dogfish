@@ -78,7 +78,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M45** | Research Policy Transition | Phase 12 | COMPLETE | None | Coordinator | `guardrails.md`, `AGENTS.md` | PASS | None | `e40d1ff` |
 | **M46** | Behavioral Contract Inventory | Phase 12 | COMPLETE | M45 | Coordinator | `docs/behavioral-contracts.md` | PASS | None | `6d13c5a` |
 | **M47** | Reconstruction Validation Strategy | Phase 12 | COMPLETE | M45 | Coordinator | `docs/reconstruction-testing.md` | PASS | None | `d803cf2` |
-| **M48** | Skyrim Integration Environment Survey | Phase 12 | COMPLETE | M45 | Coordinator | `docs/integration-survey.md` | PASS | None | Pending |
+| **M48** | Skyrim Integration Environment Survey | Phase 12 | COMPLETE | M45 | Coordinator | `docs/integration-survey.md` | PASS | None | `23fb296` |
 | **M49** | Minimal Rust Simulation Core | Phase 13 | NOT STARTED | M46, M47, Phase 12 Gate | Unassigned | `reconstruction/` | Pending | None | — |
 | **M50** | Faction & Territory Reconstruction | Phase 13 | NOT STARTED | M49 | Unassigned | `reconstruction/` | Pending | None | — |
 | **M51** | Economy & Population Reconstruction | Phase 13 | NOT STARTED | M49, M50 | Unassigned | `reconstruction/` | Pending | None | — |
