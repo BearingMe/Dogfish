@@ -7,7 +7,7 @@ Full reference management policy, acquisition criteria, and version pinning rule
 ## Directory Structure
 
 - `sources/`: External Git repositories (managed via Git submodules) and isolated reference code. Project-chosen reference directory names use **lowercased-with-hyphen naming** (`kebab-case`); upstream contents are not renamed.
-- `local/`: Manually supplied, non-Git reference material. Acquisition READMEs and ignore rules are tracked; original mod contents are ignored. `Data/` is currently MISSING (checked 2026-10-27); recheck before dependent work.
+- `local/`: Manually supplied, non-Git reference material. Acquisition READMEs and ignore rules are tracked; original mod contents are ignored. `Data/` is physically present locally (audited in M33: 3,779 files, SHA256 2fe454bf...); Git-ignored in compliance with guardrails.
 - `README.md`: Authoritative catalog of all acquired references.
 
 ## Active References
@@ -16,7 +16,7 @@ Full reference management policy, acquisition criteria, and version pinning rule
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | [skyui-community](https://github.com/doodlum/SkyUI-Community) | Git Submodule | UI/MCM reference; mod usage not yet verified | `b7a24a9` (`v6.11-2-gb7a24a9`) | Project-wide license unverified | M05, M06, M12 |
 | [skse64](https://github.com/ianpatt/skse64) | Git Submodule | Script Extender bindings and engine interface reference | `25b7235` (`v2.3.1-3-g25b7235`) | Restrictions documented; full reuse terms unverified | M05, M06, M08 |
-| [conquest-of-skyrim](./local/conquest-of-skyrim/README.md) | Local Reference (MISSING) | Primary research subject; user supplies original files | Target v0.3.9 (March 2023, task-supplied metadata) | Permissions unverified; no redistribution | All (M01–M32) |
+| [conquest-of-skyrim](./local/conquest-of-skyrim/README.md) | Local Reference (AVAILABLE) | Primary research subject; user supplies original files | v0.3.9 (March 23, 2023 release, verified in M33) | Proprietary / galvatron304; no redistribution | All (M01–M44) |
 
 ---
 

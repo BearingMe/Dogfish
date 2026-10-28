@@ -191,3 +191,9 @@
 - **Finding**: The final recovered specification package (`docs/recovered-specification.md`) completes the 32-milestone research program. It consolidates all 20 required domains into an authoritative master document: 51-feature catalog, 6-tier progression loop from outlaw to High King coronation, 4-tier holding hierarchy, 10-division army architecture with Task Barrel AI anchors and battle size throttling, exact economic production/conscription formulas, 4-tier facility upgrades, 7-member cabinet with Spymaster covert coups and judicial trials, bilateral non-aggression truces, savegame persistence self-healing suite, 83 overridden vanilla records, and failure mode diagnosis.
 - **Evidence**: `docs/recovered-specification.md`
 - **Related**: M32, M01-M31
+
+## Source Provenance & Physical Availability Audit
+- **Status**: CONFIRMED
+- **Finding**: Physical audit verifies that the original mod package is present on the research machine at `references/local/conquest-of-skyrim/Data/` (3,779 files, 547.28 MB). Plugin `conquerskyrim.esp` bears authentic mtime `2023-03-23 19:28:17` and `SHA256: 2fe454bf986d2238130ab96a69e1f04e6797e2b2fbb9b0aa82f10ffd15b596e8`. It contains an exact 1:1 match across all 1,539 compiled `.pex` scripts and 1,539 uncompiled `.psc` source scripts. The files are absent from GitHub exclusively due to intentional `.gitignore` exclusion complying with `guardrails.md`.
+- **Evidence**: `research/findings/source-provenance-audit.md`
+- **Related**: M33, M05, M34, M35, M37
