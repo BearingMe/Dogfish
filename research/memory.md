@@ -95,3 +95,9 @@
 - **Finding**: Sieges execute through `CS_AttackCitySiegeScript` across 6 phases: (1) Precondition validation (land contiguity and military superiority); (2) Staging camp setup (`CampMarker1`/`CampMarker2` added to world map); (3) Outer gate assault with optional pincer flanking (`DoubleAttack`) and artillery (`CatapultsList`, `BatteringRamEnabled`); (4) Urban street combat balancing melee, ranged, healers, and buffers; (5) Palace breach into the seat of government triggering `JarlConfrontScene` and `JarlSurrenderScene`; and (6) Atomic holding transfer (`TransferOwnershipCity` to faction 69) and victory parade.
 - **Evidence**: `research/findings/sieges.md`
 - **Related**: M16, M10, M14, M15, M22, M27
+
+## Regional Economic Simulation & Production Formulas
+- **Status**: CONFIRMED
+- **Finding**: Economy is simulated across 5 resources (Gold, Food, Metal, Wood, Trade Docks). Production is calculated via facility levels multiplied by base holding change (`FoodMax = FarmLevel * FoodChange`, `MetalMax = MineLevel * MetalChange`, etc.). Population growth evaluates `PopIncrease = random(0.3*Deficit, 0.5*Deficit)` where `Deficit = MaxJobs - 0.25*Pop`. Labor allocation strictly prioritizes Food first, Docks second, Wood third, Metal fourth. Major cities start at Pop 50 / FoodRequired 50 with distinct endowments (Whiterun is agricultural breadbasket with Farm 4/Yield 10; Markarth is mining capital with Mine 4/Yield 7; Solitude is trade capital with Docks 4/Yield 10).
+- **Evidence**: `research/findings/economy.md`
+- **Related**: M17, M18, M19, M21
