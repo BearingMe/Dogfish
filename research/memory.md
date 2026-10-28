@@ -125,3 +125,9 @@
 - **Finding**: Sovereign government operates through a central cabinet (Steward for civil/treasury, Second-in-Command for warfare, Spymaster for covert spy networks and coups in `CS_IntelReportScript`, Blacksmith for armory supply, Court Mage for arcane wards, Court Bard for ceremonies, Executioner for capital trials) and provincial Jarls across the 9 holds. Judicial administration in `CS_CourtScript` allows convening court from royal thrones to judge seven legal categories (Theft, Assault, Murder, Speaking Out, Worship, Treason, Contraband) resulting in fines, dungeon imprisonment, or chopping block executions (`ExecutionQuest`).
 - **Evidence**: `research/findings/government.md`
 - **Related**: M21, M09, M22, M23, M24
+
+## Jarlship Administration & Stability Mechanics
+- **Status**: CONFIRMED
+- **Finding**: Hold administration is delegated to appointed Jarls (`JarlAliases[0..8]`) in `CS_RecruitJarl`, dispatched via Story Manager event `CS_StoryJarlChooseGov`. Stability is tracked via dual keyword channels: `Loyalty` (public approval) and `JarlLoyalty` (ruler fealty). Negative modifiers include `NoFood`, `NoGarrison`, `NoCourt`, and high taxes; positive modifiers include `Parties` and `ArmiesDefending`. When hold `Loyalty` drops below 40, `ProtestQuest` initiates civilian demonstrations outside the palace; below 20 triggers `RebelDefendQuestStarted` armed secession. Deposed native Jarls are stripped of ruling packages and added to `CitizenFaction`.
+- **Evidence**: `research/findings/jarls.md`
+- **Related**: M22, M10, M11, M21, M24
