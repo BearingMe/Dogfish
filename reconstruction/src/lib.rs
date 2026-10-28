@@ -501,7 +501,7 @@ mod tests {
     #[test]
     fn test_invalid_savegame_rejection() {
         // Corrupted negative treasury
-        let corrupted_treasury_json = "{\"day\": 5, \"hour\": 12, \"treasury\": -5000}";
+        let corrupted_treasury_json = "{\"version\": 1, \"day\": 5, \"hour\": 12, \"treasury\": -5000}";
         let res1 = StatePersistence::deserialize(corrupted_treasury_json, 42);
         assert!(matches!(res1, Err(SimulationError::InsufficientFunds { .. })));
 
@@ -662,5 +662,55 @@ mod tests {
 
         // 7. PRNG State Continuation
         assert_eq!(restored.rng.state(), state.rng.state());
+    }
+
+    // --- MILESTONE M68 SERIALIZATION SAFETY TESTS ---
+
+    #[test]
+    fn test_json_unicode_and_escape_sequences() {
+        let json_input = r#"{"name": "Jarl Thórsteinn of Hjaalmarch", "escapes": "\"Line1\\Line2\n\tTab\""}"#;
+        let parsed = JsonParser::parse(json_input).unwrap();
+
+        assert_eq!(parsed.get("name").unwrap().as_str().unwrap(), "Jarl Thórsteinn of Hjaalmarch");
+        assert_eq!(parsed.get("escapes").unwrap().as_str().unwrap(), "\"Line1\\Line2\n\tTab\"");
+    }
+
+    #[test]
+    fn test_json_trailing_garbage_rejection() {
+        let json_with_garbage = r#"{"version": 1, "day": 1} trailing garbage"#;
+        assert!(JsonParser::parse(json_with_garbage).is_err());
+    }
+
+    #[test]
+    fn test_json_unsupported_version_rejection() {
+        let unsupported_json = r#"{"version": 99, "day": 1, "hour": 0, "treasury": 1000}"#;
+        let res = StatePersistence::deserialize(unsupported_json, 42);
+        assert!(matches!(res, Err(SimulationError::InvalidStateTransition(msg)) if msg.contains("Unsupported savegame version")));
+    }
+
+    #[test]
+    fn test_json_malformed_syntax_no_panic() {
+        // Must reject all malformed input cleanly without panicking
+        let malformed_inputs = [
+            "",
+            "   ",
+            "{",
+            "}",
+            "[",
+            "]",
+            "{\"unclosed\": ",
+            "{\"key\": }",
+            "{unquoted: 1}",
+            "{\"trailing_comma\": 1, }",
+            "{\"key\": \"unclosed string}",
+            "[1, 2, ]",
+            "null extra",
+            "123.456.789",
+        ];
+
+        for input in malformed_inputs {
+            let res = JsonParser::parse(input);
+            assert!(res.is_err(), "Input should be rejected: {}", input);
+        }
     }
 }

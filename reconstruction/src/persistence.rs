@@ -111,6 +111,11 @@ impl<'a> JsonParser<'a> {
         parser.skip_whitespace();
         let val = parser.parse_value()?;
         parser.skip_whitespace();
+        if parser.chars.peek().is_some() {
+            return Err(SimulationError::InvalidStateTransition(
+                "Trailing characters after valid JSON value",
+            ));
+        }
         Ok(val)
     }
 
@@ -216,9 +221,25 @@ impl<'a> JsonParser<'a> {
                     match esc {
                         '"' => s.push('"'),
                         '\\' => s.push('\\'),
+                        '/' => s.push('/'),
+                        'b' => s.push('\x08'),
+                        'f' => s.push('\x0C'),
                         'n' => s.push('\n'),
                         'r' => s.push('\r'),
                         't' => s.push('\t'),
+                        'u' => {
+                            let mut hex = String::with_capacity(4);
+                            for _ in 0..4 {
+                                if let Some(h) = self.chars.next() {
+                                    hex.push(h);
+                                }
+                            }
+                            if let Ok(code) = u32::from_str_radix(&hex, 16) {
+                                if let Some(ch) = char::from_u32(code) {
+                                    s.push(ch);
+                                }
+                            }
+                        }
                         _ => s.push(esc),
                     }
                 }
@@ -499,6 +520,15 @@ impl StatePersistence {
     /// Deserialize complete GameState from a JSON string, enforcing domain invariants.
     pub fn deserialize(json_str: &str, fallback_seed: u64) -> Result<GameState> {
         let root = JsonParser::parse(json_str)?;
+
+        let version = root.get("version").and_then(|v| v.as_u32()).ok_or(
+            SimulationError::InvalidStateTransition("Missing 'version' field in savegame"),
+        )?;
+        if version != 1 {
+            return Err(SimulationError::InvalidStateTransition(
+                "Unsupported savegame version (expected version 1)",
+            ));
+        }
 
         let day = root.get("day").and_then(|v| v.as_u32()).ok_or(
             SimulationError::InvalidStateTransition("Missing 'day' field in savegame"),

@@ -402,6 +402,13 @@
 - **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/core.rs`, `reconstruction/tests/adversarial_regressions.rs`
 - **Related**: M67, M65, M66, M68, M54
 
+## Serialization Safety, Unicode & Malformed Input Hardening
+- **Status**: CONFIRMED
+- **Finding**: Data validation and serialization safety hardened in `reconstruction/src/persistence.rs` (36/36 tests passing): (1) Strict version gating rejects unsupported savegame versions (`version != 1`); (2) Trailing garbage detector rejects characters following valid JSON root; (3) Unicode hex escape sequence parsing (`\uXXXX`) handles international/Nordic character sets without corruption; (4) Malformed input test harness proves 14 distinct syntax errors (unquoted keys, missing delimiters, unclosed strings, invalid numbers) reject cleanly with `Err` without panicking.
+- **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/lib.rs`
+- **Related**: M68, M67, M65, M66, M69
+
+
 
 
 

@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 15 | 0 | 0 | 67 |
+| 82 | 14 | 0 | 0 | 68 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -99,7 +99,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M65** | Adversarial Regression Baseline | Phase 16 | COMPLETE | M63, M64 | Coordinator | `research/investigations/adversarial-regression-baseline.md` | PASS | None | `e42336a` |
 | **M66** | Defect Registry & Repair Prioritization | Phase 16 | COMPLETE | M63, M64, M65 | Coordinator | `research/investigations/defect-registry.md` | PASS | None | `f3c4a59` |
 | **M67** | Complete State Persistence | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `8997075` |
-| **M68** | Serialization Safety & Data Validation | Phase 17 | NOT STARTED | M67 | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
+| **M68** | Serialization Safety & Data Validation | Phase 17 | COMPLETE | M67 | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | Pending |
 | **M69** | Domain Invariants & Authorization | Phase 17 | NOT STARTED | M66, Phase 16 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M70** | Transactional Consistency & Resource Safety | Phase 17 | NOT STARTED | M69 | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M71** | Time, Randomness & Long-Running Simulation | Phase 17 | NOT STARTED | M67, M69, M70 | Unassigned | `reconstruction/src/` | Pending | None | — |
