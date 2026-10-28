@@ -312,6 +312,13 @@
 - **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
 - **Related**: M52, M46, M49, M50, M51, M53, M54
 
+## Government Administration, Diplomacy & The Moot Reconstruction
+- **Status**: CONFIRMED
+- **Finding**: Independent domain modules authored in `reconstruction/src/government.rs` and `reconstruction/src/diplomacy.rs` (24/24 tests passing). Reconstructs: (1) 7-member Royal Cabinet (Steward, Commander, Blacksmith, Spymaster, Court Mage, Court Bard, Executioner); (2) Spymaster covert coup operations bypassing siege combat with bribe gold; (3) Judicial throne hearings over 7 offenses with fines, dungeons, and execution sentences; (4) Bilateral non-aggression truce negotiations based on recovered formula: $\text{Chance} = 25\% \pm 25\% (\text{Relationship}) \pm 25\%/50\% (\text{Ideology}) \pm 25\% (\text{Troop Leverage } < 60 \text{ vs } \ge 100)$; (5) Prisoner of war ransoming; (6) The Moot convocation and coronation loop with explicit deadlock prevention (requires all 9 capitals owned and all 8 non-capital provincial Jarls appointed prior to voting, resolving the Papyrus `GetJarls()` soft-lock).
+- **Evidence**: `reconstruction/src/government.rs`, `reconstruction/src/diplomacy.rs`, `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
+- **Related**: M53, M31, M38, M46, M49, M50, M51, M52, M54
+
+
 
 
 

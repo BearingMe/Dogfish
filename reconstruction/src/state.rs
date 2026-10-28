@@ -1,8 +1,10 @@
 //! Global simulation state container and deterministic execution loop.
 
 use crate::core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
+use crate::diplomacy::DiplomacyManager;
 use crate::economy::{calculate_gross_production, EconomyManager, FacilityType};
 use crate::faction::FactionProfile;
+use crate::government::{CabinetRole, GovernmentManager, JudicialSentence, LegalOffense, MootOutcome};
 use crate::military::{ArmyOrder, MilitaryManager, SiegeOperation, SiegePhase};
 use crate::population::{allocate_holding_labor, calculate_population_growth, conscript_troops};
 use crate::territory::TerritoryManager;
@@ -151,6 +153,8 @@ pub struct GameState {
     pub faction: FactionProfile,
     pub territory: TerritoryManager,
     pub military: MilitaryManager,
+    pub government: GovernmentManager,
+    pub diplomacy: DiplomacyManager,
     pub treasury: i64,
     pub stockpile: ResourceStockpile,
     pub holdings: Vec<HoldingState>,
@@ -181,6 +185,8 @@ impl GameState {
             faction: FactionProfile::new_player(),
             territory: TerritoryManager::new(),
             military: MilitaryManager::new(),
+            government: GovernmentManager::new(),
+            diplomacy: DiplomacyManager::new(),
             treasury: 10000,
             stockpile: ResourceStockpile::new(),
             holdings,
@@ -197,10 +203,11 @@ impl GameState {
         new_day
     }
 
-    /// Execute the complete 24-hour daily economic, demographic, and military upkeep simulation cycle.
+    /// Execute the complete 24-hour daily economic, demographic, and diplomatic simulation cycle.
     pub fn tick_day(&mut self) {
         self.events.push(SimulationEvent::DayAdvanced { day: self.time.day });
         self.territory.advance_day();
+        self.diplomacy.advance_day();
 
         let mut daily_tax_revenue = 0i64;
         let mut total_food_consumed = 0i32;
@@ -209,19 +216,15 @@ impl GameState {
         let mut total_wood_produced = 0i32;
         let mut total_docks_produced = 0i32;
 
-        // Active military field troops consume food daily (1 food per soldier)
         total_food_consumed += self.military.total_soldiers();
 
         for holding in &mut self.holdings {
             if holding.owner == FactionId::Player {
-                // 1. Taxation revenue
                 daily_tax_revenue += holding.calculate_tax();
 
-                // 2. Demographic labor allocation waterfall (Food -> Docks -> Wood -> Metal)
                 let labor = allocate_holding_labor(holding);
                 holding.unemployed = labor.unemployed;
 
-                // 3. Resource production calculation
                 let food_yield = calculate_gross_production(
                     holding.facilities.farm,
                     holding.food_change,
@@ -256,10 +259,8 @@ impl GameState {
                 total_wood_produced += wood_yield;
                 total_docks_produced += docks_yield;
 
-                // 4. Municipal food consumption (citizens + guards)
                 total_food_consumed += holding.food_required();
 
-                // 5. Population growth when Deficit > 0
                 let pop_increase = calculate_population_growth(
                     holding.population,
                     holding.max_jobs,
@@ -275,18 +276,15 @@ impl GameState {
             }
         }
 
-        // Apply doctrine tax modifier
         let tax_mod_pct = self.faction.doctrine.tax_modifier_pct();
         let adjusted_tax = daily_tax_revenue + (daily_tax_revenue * tax_mod_pct as i64 / 100);
         self.treasury += adjusted_tax;
 
-        // Resource accumulation
         self.stockpile.food += total_food_produced - total_food_consumed;
         self.stockpile.metal += total_metal_produced;
         self.stockpile.wood += total_wood_produced;
         self.stockpile.trade_docks += total_docks_produced;
 
-        // Famine cascade: if food drops negative, citizens starve and loyalty falls
         if self.stockpile.food < 0 {
             for holding in &mut self.holdings {
                 if holding.owner == FactionId::Player {
@@ -383,7 +381,7 @@ impl GameState {
         self.military.reinforce_division(div_id, count)
     }
 
-    /// Launch a siege operation against a target holding (FEAT-SIEG-01).
+    /// Launch a siege operation against a target holding.
     pub fn start_siege(
         &mut self,
         target_id: HoldingId,
@@ -418,6 +416,74 @@ impl GameState {
         }
 
         Ok(next_phase)
+    }
+
+    /// Appoint a minister to a cabinet position (FEAT-GOV-01).
+    pub fn appoint_cabinet_minister(&mut self, role: CabinetRole, name: impl Into<String>) {
+        let day = self.time.day;
+        self.government.appoint_minister(role, name, day);
+    }
+
+    /// Attempt a covert coup via Chief Spymaster.
+    pub fn attempt_covert_coup(&mut self, target: HoldingId) -> Result<bool> {
+        let success = self.government.attempt_covert_coup(
+            target,
+            &mut self.treasury,
+            &mut self.rng,
+        )?;
+        if success {
+            self.transfer_holding(target, FactionId::Player, true)?;
+        }
+        Ok(success)
+    }
+
+    /// Judge a court case in royal throne session (FEAT-LAW-02).
+    pub fn judge_court_case(
+        &mut self,
+        offense: LegalOffense,
+        sentence: JudicialSentence,
+    ) -> Result<i64> {
+        self.government.judge_case(offense, sentence, &mut self.treasury)
+    }
+
+    /// Negotiate a bilateral non-aggression truce (FEAT-DIPL-02).
+    pub fn negotiate_truce(
+        &mut self,
+        target_faction: FactionId,
+        compatible_doctrine: bool,
+        truce_days: u32,
+    ) -> Result<bool> {
+        let player_troops = self.military.total_soldiers();
+        let success = self.diplomacy.negotiate_truce(
+            target_faction,
+            compatible_doctrine,
+            player_troops,
+            truce_days,
+            &mut self.rng,
+        )?;
+        if success {
+            self.events.push(SimulationEvent::TreatySigned {
+                other_faction: target_faction.name(),
+                duration_days: truce_days,
+            });
+        }
+        Ok(success)
+    }
+
+    /// Ransom prisoners of war for gold (FEAT-DIPL-03).
+    pub fn ransom_pows(&mut self, target_faction: FactionId, gold_per_pow: i64) -> Result<u32> {
+        self.diplomacy.ransom_pows(target_faction, &mut self.treasury, gold_per_pow)
+    }
+
+    /// Convene The Moot to elect the High King (FEAT-VICT-02).
+    pub fn convene_the_moot(&mut self, player_capital: HoldingId) -> Result<MootOutcome> {
+        let day = self.time.day;
+        self.government.convene_the_moot(
+            &self.holdings,
+            &self.territory.governors,
+            player_capital,
+            day,
+        )
     }
 
     /// Transfer ownership of a holding atomically.
