@@ -131,3 +131,9 @@
 - **Finding**: Hold administration is delegated to appointed Jarls (`JarlAliases[0..8]`) in `CS_RecruitJarl`, dispatched via Story Manager event `CS_StoryJarlChooseGov`. Stability is tracked via dual keyword channels: `Loyalty` (public approval) and `JarlLoyalty` (ruler fealty). Negative modifiers include `NoFood`, `NoGarrison`, `NoCourt`, and high taxes; positive modifiers include `Parties` and `ArmiesDefending`. When hold `Loyalty` drops below 40, `ProtestQuest` initiates civilian demonstrations outside the palace; below 20 triggers `RebelDefendQuestStarted` armed secession. Deposed native Jarls are stripped of ruling packages and added to `CitizenFaction`.
 - **Evidence**: `research/findings/jarls.md`
 - **Related**: M22, M10, M11, M21, M24
+
+## Diplomatic Framework & Truce Probability Formula
+- **Status**: CONFIRMED
+- **Finding**: Faction relations exist across four bilateral states: Neutral -> War <-> Truce -> Defeated. Formal joint-military alliances are UNIMPLEMENTED; diplomacy is restricted to non-aggression truces. In `CS_NegotiationScript`, treaty acceptance calculates: $\text{Chance} = 25\% \pm 25\% (\text{Relationship}) \pm 25\%/50\% (\text{Ideology}) \pm 25\% (\text{Army Size} < 60 \text{ vs } \ge 100)$. A successful truce temporarily removes `CWImperialFaction` or `CWSonsFaction` tags and halts AI invasion timers. POWs can be ransomed for gold via Commander dialogue or executed at the cost of diplomatic goodwill.
+- **Evidence**: `research/findings/diplomacy.md`
+- **Related**: M23, M11, M14, M21, M24
