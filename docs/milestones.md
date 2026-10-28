@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 7 | 0 | 0 | 75 |
+| 82 | 6 | 0 | 0 | 76 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -107,7 +107,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M73** | Economy, Population & Infrastructure Fidelity | Phase 18 | COMPLETE | Phase 17 Gate | Coordinator | `reconstruction/src/` | PASS | None | `f838593` |
 | **M74** | Military, Strategic AI & Siege Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `2375502` |
 | **M75** | Government, Diplomacy, Law & Progression Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `cef262a` |
-| **M76** | Independent Differential Validation | Phase 18 | NOT STARTED | M72, M73, M74, M75 | Unassigned | `research/findings/independent-differential-validation.md` | Pending | None | — |
+| **M76** | Independent Differential Validation | Phase 18 | COMPLETE | M72, M73, M74, M75 | Coordinator | `research/findings/independent-differential-validation.md` | PASS | None | Pending |
 | **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | NOT STARTED | M63, Phase 17 Gate | Unassigned | `integration/` | Pending | None | — |
 | **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | NOT STARTED | M77 | Unassigned | `integration/` | Pending | None | — |
 | **M79** | SKSE Save/Load & State Synchronization | Phase 19 | NOT STARTED | M67, M68, M78 | Unassigned | `integration/` | Pending | None | — |
@@ -288,7 +288,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `reconstruction/src/`
 - **M76: Independent Differential Validation** — Execute differential testing with source-supported test vectors and explicit provenance; document known deviations.
   - *Deliverable*: `research/findings/independent-differential-validation.md`
-- **Phase 18 Gate Criteria**: Pass when major strategic systems are supported by independent test evidence and unverified behavior remains visibly labeled.
+- **Phase 18 Gate Criteria**: **PASSED (2026-10-28)**. Major strategic systems are supported by independent test evidence with explicit source provenance (`independent-differential-validation.md`). Unjustified claims eliminated; true fidelity calibrated to 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%). All M72–M76 COMPLETE. Unblocks Phase 19 (M77).
 
 ### Phase 19: Native Skyrim Integration Repair
 - **Objective**: Replace mock-tested integration claims with a correctly implemented and empirically tested engine bridge.

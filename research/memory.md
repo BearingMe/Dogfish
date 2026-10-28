@@ -450,6 +450,13 @@
 - **Evidence**: `reconstruction/src/diplomacy.rs`, `cs_negotiationscript.psc`, `reconstruction/src/lib.rs`
 - **Related**: M75, M74, M66, M53, M76
 
+## Independent Differential Validation & Phase 18 Gate Closure
+- **Status**: CONFIRMED
+- **Finding**: Comprehensive differential evaluation (`research/findings/independent-differential-validation.md`) compares the repaired Rust simulation against independently derived test vectors with explicit script provenance: (1) 0.00% variance verified across all mathematical formulas (tiered taxation, gross production with maritime docks, labor allocation waterfall, conscription drafts, off-screen combat casualties, strategic AI division sizing, aggressiveness bounds, invasion priority weights, and bilateral negotiation probability); (2) Recalibrates honest fidelity breakdown across N = 55 features: 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%); (3) Explicitly documents intentional architectural improvements (split-brain desync elimination, Moot deadlock prevention, decoupled persistence); (4) Labels all engine-dependent behaviors as PENDING (IN ENGINE). Formally closes Phase 18 Gate with all 5 gameplay fidelity milestones (M72–M76) complete.
+- **Evidence**: `research/findings/independent-differential-validation.md`, `reconstruction/src/lib.rs`
+- **Related**: M76, M72, M73, M74, M75, M81, M82
+
+
 
 
 
