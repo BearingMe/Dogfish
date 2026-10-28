@@ -456,6 +456,13 @@
 - **Evidence**: `research/findings/independent-differential-validation.md`, `reconstruction/src/lib.rs`
 - **Related**: M76, M72, M73, M74, M75, M81, M82
 
+## SKSE C-ABI Alignment & Loader Interface Validation
+- **Status**: CONFIRMED
+- **Finding**: Native integration adapter (`integration/src/lib.rs`) audited and aligned against primary SKSE header `references/sources/skse64/skse64/PluginAPI.h` (3/3 tests passing, 0 clippy warnings): (1) Resolved DEF-INTEG-01 by declaring `SKSEPlugin_Query` and `SKSEPlugin_Load` as `pub unsafe extern "C" fn` with complete safety documentation, eliminating all clippy raw pointer errors; (2) Reconciled `SKSEInterface` memory layout with 64-bit offsets and interface constants (`INTERFACE_PAPYRUS`, `INTERFACE_SERIALIZATION`); (3) Implemented runtime version verification rejecting zero or uninitialized runtime versions; (4) Strictly maintains NATIVE ABI validation level without conflating it with RUNTIME game execution.
+- **Evidence**: `integration/src/lib.rs`, `references/sources/skse64/skse64/PluginAPI.h`
+- **Related**: M77, M63, M66, M78, M79, M80
+
+
 
 
 

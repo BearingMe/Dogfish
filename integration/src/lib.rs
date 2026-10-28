@@ -10,6 +10,8 @@ use dogfish_reconstruction::{
     FactionId, GameState, HoldingId, SimulationError,
 };
 
+pub type PluginHandle = u32;
+
 /// SKSE plugin info structure matching skse64/PluginAPI.h.
 #[repr(C)]
 pub struct PluginInfo {
@@ -25,7 +27,17 @@ pub struct SKSEInterface {
     pub runtime_version: u32,
     pub editor_version: u32,
     pub is_editor: u32,
+    pub query_interface: Option<unsafe extern "C" fn(id: u32) -> *mut std::ffi::c_void>,
+    pub get_plugin_handle: Option<unsafe extern "C" fn() -> PluginHandle>,
+    pub get_release_index: Option<unsafe extern "C" fn() -> u32>,
+    pub get_plugin_info: Option<unsafe extern "C" fn(name: *const c_char) -> *const PluginInfo>,
 }
+
+pub const INTERFACE_SCALEFORM: u32 = 1;
+pub const INTERFACE_PAPYRUS: u32 = 2;
+pub const INTERFACE_SERIALIZATION: u32 = 3;
+pub const INTERFACE_TASK: u32 = 4;
+pub const INTERFACE_MESSAGING: u32 = 5;
 
 /// Static plugin name string.
 static PLUGIN_NAME: &[u8] = b"DogfishIntegration\0";
@@ -49,28 +61,39 @@ pub fn is_adapter_initialized() -> bool {
 // SKSE Native Plugin Entry Points (C-ABI)
 // ============================================================================
 
-/// Query function called by the SKSE loader to verify plugin compatibility.
+/// Query function called by the SKSE loader to verify plugin compatibility (resolves DEF-INTEG-01).
+///
+/// # Safety
+///
+/// Callers must provide valid, non-null pointers to initialized `SKSEInterface` and `PluginInfo` structures.
 #[no_mangle]
-pub extern "C" fn SKSEPlugin_Query(
-    _skse: *const SKSEInterface,
+pub unsafe extern "C" fn SKSEPlugin_Query(
+    skse: *const SKSEInterface,
     info: *mut PluginInfo,
 ) -> bool {
-    if info.is_null() {
+    if info.is_null() || skse.is_null() {
         return false;
     }
 
-    unsafe {
-        (*info).info_version = 1;
-        (*info).name = PLUGIN_NAME.as_ptr() as *const c_char;
-        (*info).version = 1;
+    let runtime = (*skse).runtime_version;
+    if runtime == 0 {
+        return false;
     }
+
+    (*info).info_version = 1;
+    (*info).name = PLUGIN_NAME.as_ptr() as *const c_char;
+    (*info).version = 1;
 
     true
 }
 
 /// Load function called by the SKSE loader to initialize the plugin.
+///
+/// # Safety
+///
+/// Callers must provide a valid pointer to an initialized `SKSEInterface` structure.
 #[no_mangle]
-pub extern "C" fn SKSEPlugin_Load(_skse: *const SKSEInterface) -> bool {
+pub unsafe extern "C" fn SKSEPlugin_Load(_skse: *const SKSEInterface) -> bool {
     init_adapter(42);
     true
 }
@@ -212,10 +235,14 @@ mod tests {
             runtime_version: 0x01060470,
             editor_version: 0,
             is_editor: 0,
+            query_interface: None,
+            get_plugin_handle: None,
+            get_release_index: None,
+            get_plugin_info: None,
         };
 
         // 1. Test Query
-        assert!(SKSEPlugin_Query(&dummy_skse, &mut info));
+        assert!(unsafe { SKSEPlugin_Query(&dummy_skse, &mut info) });
         assert_eq!(info.info_version, 1);
         assert_eq!(info.version, 1);
         assert!(!info.name.is_null());
@@ -224,7 +251,7 @@ mod tests {
         assert_eq!(name, "DogfishIntegration");
 
         // 2. Test Load
-        assert!(SKSEPlugin_Load(&dummy_skse));
+        assert!(unsafe { SKSEPlugin_Load(&dummy_skse) });
         assert!(is_adapter_initialized());
     }
 
