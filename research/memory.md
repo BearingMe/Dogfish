@@ -282,3 +282,10 @@
 - **Evidence**: `docs/reconstruction-testing.md`
 - **Related**: M47, M45, M46, M48, M49, M55
 
+## Skyrim Integration Architecture & Tooling Survey
+- **Status**: CONFIRMED
+- **Finding**: Comprehensive technical survey (`docs/integration-survey.md`) establishes the baseline for Phase 15 Skyrim integration: (1) Target runtime: Skyrim Special Edition 1.6+ (AE 1.6.640/1.6.1170) using Address Library for SKSE Plugins for version-independent memory offsets; (2) Plugin format: ESL-flagged ESP (`ESP-FE`) using slot `0xFE` (FormIDs `0x800`–`0xFFF`) to avoid 254-master slot consumption; (3) Engine bridge: Pure Rust `cdylib` or thin C++ proxy exporting standard C-ABI SKSE entry points (`SKSEPlugin_Query`, `SKSEPlugin_Load`) directly embedding the `reconstruction` simulation core; (4) Persistence: Decoupled JSON/SQLite external file synchronized via SKSE co-save (`.skse`) hooks to eliminate `.ess` savegame bloat; (5) Test environment: Isolated interior test cell (`DogfishTestRoom`) bypassing exterior navmesh/LOD hazards; (6) UI: Dialogue/MessageBox plus Dear ImGui telemetry overlay, eliminating fragile Adobe Flash/ActionScript 2 toolchain dependencies. Host environment verified with Rust 1.98.1, MSVC 2022 Community, CMake, Ninja, and Python 3.13.3.
+- **Evidence**: `docs/integration-survey.md`
+- **Related**: M48, M45, M46, M47, M59, M60, M61, M62
+
+
