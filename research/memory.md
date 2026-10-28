@@ -101,3 +101,9 @@
 - **Finding**: Economy is simulated across 5 resources (Gold, Food, Metal, Wood, Trade Docks). Production is calculated via facility levels multiplied by base holding change (`FoodMax = FarmLevel * FoodChange`, `MetalMax = MineLevel * MetalChange`, etc.). Population growth evaluates `PopIncrease = random(0.3*Deficit, 0.5*Deficit)` where `Deficit = MaxJobs - 0.25*Pop`. Labor allocation strictly prioritizes Food first, Docks second, Wood third, Metal fourth. Major cities start at Pop 50 / FoodRequired 50 with distinct endowments (Whiterun is agricultural breadbasket with Farm 4/Yield 10; Markarth is mining capital with Mine 4/Yield 7; Solitude is trade capital with Docks 4/Yield 10).
 - **Evidence**: `research/findings/economy.md`
 - **Related**: M17, M18, M19, M21
+
+## Demographic Data Model & Conscription Mathematics
+- **Status**: CONFIRMED
+- **Finding**: Population is tracked abstractly via location keywords (`Population`, `Unemployed`, `FoodRequired`, `CS_RecruitablePercentage`). Food requirement scales as `FoodRequired = Population + CS_NumGuards`. Conscription draws directly from the labor reserve (`RecruitableTroops = ceiling(RecruitablePercentage * Unemployed)`), deducting from both `Population` and `Unemployed`. Daily tax revenue scales with population and tier: Major Capitals yield `500*Pop + 250*Pop*TaxRate`, Minor Cities yield `300*Pop + 150*Pop*TaxRate`, and Villages yield `200*Pop + 100*Pop*TaxRate`. Local holdings store up to 5 surplus resource units before pooling into the national stockpile.
+- **Evidence**: `research/findings/population.md`
+- **Related**: M18, M13, M17, M19, M24
