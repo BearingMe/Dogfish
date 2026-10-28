@@ -396,6 +396,13 @@
 - **Evidence**: `research/investigations/defect-registry.md`, `docs/milestones.md`
 - **Related**: M66, M63, M64, M65, M67–M82
 
+## Complete State Persistence & Serialization Repair
+- **Status**: CONFIRMED
+- **Finding**: Persistence engine (`reconstruction/src/persistence.rs`) completely repaired, resolving DEF-PERS-01, DEF-PERS-02, DEF-PERS-03, and DEF-PERS-04 (32/32 tests passing): (1) Active sieges (`active_siege`) with tactical phases, casualties, and reinforcement waves survive save/load; (2) All 10 army divisions with names, commanders, troop counts, power levels, and typed `ArmyOrder` survive save/load; (3) Appointed governors across all 15 holdings survive save/load; (4) Foreign diplomatic relations, truce timers, and POW counts survive save/load; (5) Wilderness camp cooldowns and crime gold arrays survive save/load; (6) `DeterministicRng` seed/state is persisted, ensuring bit-for-bit PRNG continuation after reload; (7) String escaping (`escape_json_str`) handles quotes and backslashes without JSON syntax corruption. Validated via `test_complete_state_persistence_equivalence` and adversarial regression cases 01, 02, and 03.
+- **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/core.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M67, M65, M66, M68, M54
+
+
 
 
 

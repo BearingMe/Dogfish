@@ -585,4 +585,82 @@ mod tests {
         // Desperate capital defense (down to 1 city and this is own capital) -> 100
         assert_eq!(calculate_hold_invasion_priority(true, 0, 0, 1, true, &mut rng), 100);
     }
+
+    // --- MILESTONE M67 COMPLETE PERSISTENCE TEST ---
+
+    #[test]
+    fn test_complete_state_persistence_equivalence() {
+        let mut state = GameState::new(777);
+        state.treasury = 65000;
+        state.stockpile.food = 500;
+        state.stockpile.metal = 300;
+        state.stockpile.wood = 250;
+        state.stockpile.trade_docks = 50;
+
+        // Faction
+        state.faction.declare_faction(
+            "The Great North",
+            "Winter Legion",
+            BannerColor::EmeraldGreen,
+            GovernmentDoctrine::Feudalism,
+            state.time.day,
+        );
+
+        // Holdings & Governors
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.appoint_governor(HoldingId::WHITERUN, "Vignar Gray-Mane").unwrap();
+
+        // Divisions
+        state.reinforce_division(DivisionId(0), 40).unwrap();
+        state.assign_army_order(DivisionId(0), ArmyOrder::PatrolHold(HoldingId::WHITERUN)).unwrap();
+        state.military.divisions[0].commander_name = Some("General Sinmir".to_string());
+
+        // Active Siege
+        state.start_siege(HoldingId::FALKREATH, true, true).unwrap();
+        state.advance_siege().unwrap(); // OuterGateBreach
+        state.advance_siege().unwrap(); // UrbanStreetCombat
+
+        // Cabinet & Diplomacy
+        state.appoint_cabinet_minister(CabinetRole::Steward, "Proventus");
+        state.diplomacy.relations[0].stance = DiplomaticStance::Truce { days_remaining: 18 };
+
+        // Cooldowns & Crime
+        state.territory.camp_cooldowns[9] = 2;
+        state.territory.crime_gold[3] = 250;
+
+        // Round-trip serialization
+        let json_str = StatePersistence::serialize(&state);
+        let restored = StatePersistence::deserialize(&json_str, 777).unwrap();
+
+        // Comprehensive Assertions across all 7 previously omitted subsystems:
+        // 1. Active Siege
+        assert!(restored.military.active_siege.is_some());
+        let siege = restored.military.active_siege.as_ref().unwrap();
+        assert_eq!(siege.target_holding, HoldingId::FALKREATH);
+        assert_eq!(siege.phase, SiegePhase::UrbanStreetCombat);
+        assert!(siege.pincer_assault);
+        assert!(siege.artillery_enabled);
+
+        // 2. Divisions
+        assert_eq!(restored.military.divisions[0].troop_count, 40);
+        assert_eq!(restored.military.divisions[0].order, ArmyOrder::PatrolHold(HoldingId::WHITERUN));
+        assert_eq!(restored.military.divisions[0].commander_name, Some("General Sinmir".to_string()));
+
+        // 3. Governors
+        assert!(restored.territory.has_appointed_governor(HoldingId::WHITERUN));
+        assert_eq!(restored.territory.governors[0].as_ref().unwrap().name, "Vignar Gray-Mane");
+
+        // 4. Cabinet
+        assert!(restored.government.has_minister(CabinetRole::Steward));
+
+        // 5. Diplomacy
+        assert_eq!(restored.diplomacy.relations[0].stance, DiplomaticStance::Truce { days_remaining: 18 });
+
+        // 6. Cooldowns & Crime
+        assert_eq!(restored.territory.camp_cooldowns[9], 2);
+        assert_eq!(restored.territory.crime_gold[3], 250);
+
+        // 7. PRNG State Continuation
+        assert_eq!(restored.rng.state(), state.rng.state());
+    }
 }
