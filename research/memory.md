@@ -137,3 +137,9 @@
 - **Finding**: Faction relations exist across four bilateral states: Neutral -> War <-> Truce -> Defeated. Formal joint-military alliances are UNIMPLEMENTED; diplomacy is restricted to non-aggression truces. In `CS_NegotiationScript`, treaty acceptance calculates: $\text{Chance} = 25\% \pm 25\% (\text{Relationship}) \pm 25\%/50\% (\text{Ideology}) \pm 25\% (\text{Army Size} < 60 \text{ vs } \ge 100)$. A successful truce temporarily removes `CWImperialFaction` or `CWSonsFaction` tags and halts AI invasion timers. POWs can be ransomed for gold via Commander dialogue or executed at the cost of diplomatic goodwill.
 - **Evidence**: `research/findings/diplomacy.md`
 - **Related**: M23, M11, M14, M21, M24
+
+## Sovereign Legal System & Off-Screen Combat Equations
+- **Status**: CONFIRMED
+- **Finding**: Sovereign law operates across 7 crime categories (Theft, Assault, Murder, Speaking Out, Worship, Treason, Contraband) judged during throne court sessions (`CS_CourtScript`), sentencing offenders to fines, municipal hold jails (`CS_PrisonScript`), or chopping block decapitations (`ExecutionQuest`). In `CS_BountyScript`, off-screen detachment engagements simulate casualties using exact mathematical ratios: $\text{Chance} = \text{Troops} / \text{TroopCertain}$; if $\text{Chance} > \text{Roll}$, $\text{Dead} = \lfloor (1 - (\text{Chance} - \text{Roll})) \times \text{Troops} \rfloor$; if defeated, all dispatched troops are lost. Conquered holds zero out vanilla `CrimeFaction*` gold to establish independent jurisdiction.
+- **Evidence**: `research/findings/law-and-stability.md`
+- **Related**: M24, M15, M21, M22, M27
