@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 1 | 0 | 0 | 61 |
+| 62 | 0 | 0 | 0 | 62 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -92,7 +92,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M59** | Engine Boundary Mapping | Phase 15 | COMPLETE | M48, Phase 14 Gate | Coordinator | `docs/engine-boundary-map.md` | PASS | None | `dbba8a7` |
 | **M60** | Minimal In-Game Vertical Slice | Phase 15 | COMPLETE | M59 | Coordinator | `integration/` | PASS | None | `449a469` |
 | **M61** | Persistence & Compatibility Probe | Phase 15 | COMPLETE | M60 | Coordinator | `research/findings/integration-persistence-probe.md` | PASS | None | `bedb7a7` |
-| **M62** | Reconstruction Feasibility Report | Phase 15 | NOT STARTED | M58, M61 | Unassigned | `docs/reconstruction-feasibility.md` | Pending | None | — |
+| **M62** | Reconstruction Feasibility Report | Phase 15 | COMPLETE | M58, M61 | Coordinator | `docs/reconstruction-feasibility.md` | PASS | None | Pending |
 
 ---
 
@@ -227,7 +227,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/integration-persistence-probe.md`
 - **M62: Reconstruction Feasibility Report** — Master evaluation synthesizing M45–M61 answering the 10 core feasibility questions and assessing technical viability of complete independent reconstruction.
   - *Deliverable*: `docs/reconstruction-feasibility.md`
-- **Phase 15 Gate Criteria**: Pass when the project has demonstrated, or clearly identified blockers to demonstrating, a minimal path from independent simulation to Skyrim integration.
+- **Phase 15 Gate Criteria**: **PASSED (2026-10-28)**. Master feasibility report (`docs/reconstruction-feasibility.md`) delivers answers to the 10 core feasibility questions. Minimal path from independent simulation to Skyrim integration fully demonstrated via native SKSE C-ABI adapter (`integration/`, 3/3 tests passing), engine boundary mapping (`docs/engine-boundary-map.md`), and persistence compatibility probe (`research/findings/integration-persistence-probe.md`). All M59–M62 COMPLETE. All 62 project milestones across all 15 phases COMPLETE. Roadmap closed.
 
 ---
 
