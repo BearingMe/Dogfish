@@ -53,3 +53,9 @@
 - **Finding**: Faction creation executes at `GovQuest` Stage 0: grants `BannerSpell` & `SettingsMenu`, opens Scaleform `UIlib_1` text prompts via `CS_SelectName` to rename proxy containers (`FactionNameChestObject` & `ChestObject`), teleports player to `BannerRoomTeleport` to swap 3D banners at scale 1.53 via `CS_ChangeBanners`, and initializes Skyrim holdings to Imperial (11) or Stormcloak (12) via `SetUpFactionOwners()`. Treasury starts at 0; player must recruit a Steward (free for friends, 100g/day for neutral NPCs), Second-in-Command (ASIC), and Blacksmith.
 - **Evidence**: `research/findings/faction-creation.md`
 - **Related**: M09, M10, M12, M13, M21
+
+## Territorial Ownership & Holding State Machine
+- **Status**: CONFIRMED
+- **Finding**: Skyrim's territory is organized into a 4-tier hierarchy: 9 Hold Capitals (`citynum` 0..8, where 0..4 are major walled and 5..8 are minor open cities), Strategic Forts, Dependent Villages, and Frontier Outposts. State is dual-encoded: holding global variables use 1 (Player), 11 (Imperial), 12 (Stormcloak); native `CWOwner` keyword uses 69 for Player and `(newfaction - 10)` for vanilla factions. Transitions in `CS_TransferOwnershipScript` atomically clear local hold crime gold to 0, unseat Jarls to `CitizenFaction`, force enemy capital relocation (`ChooseRandomCapital()`), and enforce contiguous borders via `MessageNoHoldLink`.
+- **Evidence**: `research/findings/territory.md`
+- **Related**: M10, M11, M14, M16, M22, M24
