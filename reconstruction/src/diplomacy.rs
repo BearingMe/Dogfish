@@ -150,13 +150,23 @@ impl DiplomacyManager {
                 "Target faction not found for POW ransom",
             ))?;
 
+        if gold_per_pow < 0 {
+            return Err(SimulationError::InvalidStateTransition(
+                "Ransom payment cannot be negative",
+            ));
+        }
+
         if rel.held_pow_count == 0 {
             return Ok(0);
         }
 
         let ransomed = rel.held_pow_count;
-        let total_ransom = ransomed as i64 * gold_per_pow;
-        *treasury += total_ransom;
+        let total_ransom = (ransomed as i64)
+            .checked_mul(gold_per_pow)
+            .ok_or(SimulationError::InvalidStateTransition("Ransom gold overflow"))?;
+        *treasury = treasury
+            .checked_add(total_ransom)
+            .ok_or(SimulationError::InvalidStateTransition("Treasury overflow on ransom deposit"))?;
         rel.held_pow_count = 0;
 
         Ok(ransomed)

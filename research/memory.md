@@ -414,6 +414,13 @@
 - **Evidence**: `reconstruction/src/state.rs`, `reconstruction/tests/adversarial_regressions.rs`
 - **Related**: M69, M65, M66, M70, M50, M51
 
+## Transactional Consistency & Checked Arithmetic Safety
+- **Status**: CONFIRMED
+- **Finding**: Resource arithmetic and multi-step transaction safety hardened across domain modules (36/36 lib tests, 10/12 adversarial tests passing): (1) `deposit_treasury` and `withdraw_treasury` in `economy.rs` use `checked_add` and `checked_sub`, eliminating unhandled arithmetic overflow panics on large balances (resolves DEF-TRANS-02, adversarial case 09 PASS); (2) `judge_case` in `government.rs` strictly rejects negative court fines, preventing unauthorized treasury deductions (resolves DEF-TRANS-01, adversarial case 08 PASS); (3) `ransom_pows` in `diplomacy.rs` rejects negative ransom amounts and guards against integer multiplication overflow; (4) Verified multi-step atomic failure safety in `upgrade_facility` where insufficient wood preserves treasury gold without partial deductions.
+- **Evidence**: `reconstruction/src/economy.rs`, `reconstruction/src/government.rs`, `reconstruction/src/diplomacy.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M70, M65, M66, M69, M71, M51, M53
+
+
 
 
 

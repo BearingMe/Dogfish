@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 13 | 0 | 0 | 69 |
+| 82 | 12 | 0 | 0 | 70 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -101,7 +101,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M67** | Complete State Persistence | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `8997075` |
 | **M68** | Serialization Safety & Data Validation | Phase 17 | COMPLETE | M67 | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `11d3faf` |
 | **M69** | Domain Invariants & Authorization | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/` | PASS | None | `8673fcf` |
-| **M70** | Transactional Consistency & Resource Safety | Phase 17 | NOT STARTED | M69 | Unassigned | `reconstruction/src/` | Pending | None | — |
+| **M70** | Transactional Consistency & Resource Safety | Phase 17 | COMPLETE | M69 | Coordinator | `reconstruction/src/` | PASS | None | Pending |
 | **M71** | Time, Randomness & Long-Running Simulation | Phase 17 | NOT STARTED | M67, M69, M70 | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M72** | Faction, World Model & Territory Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M73** | Economy, Population & Infrastructure Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
