@@ -113,3 +113,9 @@
 - **Finding**: Holdings support 4-tier facility upgrades across 5 types: Farms (`FarmLevel`), Mines (`MineLevel`), Lumber Mills (`LumberMillLevel`), Docks (`DocksLevel`), and Barracks (`BarracksLevel`). Upgrades cost Treasury gold (`UpgradeCost`) and Wood reserves (`UpgradeCostWood`). Upgrading invokes `AddJobs()`, which immediately expands open jobs by the holding's base rate (`FoodChange`, `WoodChange`, `MetalChange`), raising the `MaxJobs` employment ceiling and driving subsequent population growth. Supported locations include all 9 hold capitals (`citynum 0..8`) and 6 major villages (`villagenum 9..14`: Riverwood, Rorikstead, Dragon Bridge, Ivarstead, Shor's Stone, Karthwasten).
 - **Evidence**: `research/findings/infrastructure.md`
 - **Related**: M19, M17, M18, M20
+
+## Technology Progression & Research Equations
+- **Status**: CONFIRMED
+- **Finding**: Technology advances across 71 `PERK` records in 4 branches: Martial (10 levels for Soldier, Warrior, Archer, Crossbow, Guard), Arcane (Levels 1-5 for Destruction Fire/Frost/Shock), Dwemer Engineering (4 automaton tiers), and Dragon Mastery (`CS_SpeakToTamedDragonPerk`). Martial upgrade costs scale linearly: $\text{CostGold} = 5000 + (\text{Level}-1) \times 10000$ and $\text{CostMetal} = 50 + (\text{Level}-1) \times 100$, immediately incrementing `TroopPowerLevels` and unlocking tier gear in `UnlocksHeavy[]`/`UnlocksLight[]`.
+- **Evidence**: `research/findings/technology.md`
+- **Related**: M20, M13, M17, M19, M29
