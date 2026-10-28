@@ -167,3 +167,9 @@
 - **Finding**: Root-cause analysis categorizes 10 critical failure modes: (1) Siege multi-actor CTDs from Papyrus heap exhaustion (mitigated by setting `CS_BattleSize` to 25-30 and *SSE Engine Fixes*); (2) Navmesh assault freezes in exterior city overhauls (*JK's Skyrim*); (3) The Moot deadlock in `CS_MeetingScript.GetJarls()` if any hold lacks an appointed Jarl or has an invalid alias; (4) Fort Amol trigger freeze from out-of-order Eastmarch border init (patched by *Conquest of Skyrim Fixes* #119992); (5) Mid-siege save barricade desync; and (6) Irreparable save corruption upon mid-game uninstallation due to disabled vanilla markers and orphaned scripts.
 - **Evidence**: `research/findings/failure-modes.md`
 - **Related**: M28, M04, M08, M11, M15, M16, M26, M27
+
+## Complete Behavioral Specification
+- **Status**: CONFIRMED
+- **Finding**: The complete behavioral specification addresses all 51 inventoried features across 18 strategic domains (`docs/behavioral-specification.md`). Core mechanisms specify: proxy container naming, 4-tier territory model (9 hold capitals with index numbers 0-8), 10 field armies with class scaling across mortal/arcane/Dwemer units, battle throttling via `CS_BattleSize`, 6-stage siege lifecycle with catapults and rams, mathematical production equations, demographic keyword allocation waterfall, 4-tier infrastructure upgrades, 7-member royal cabinet, Spymaster covert network and coups, judicial court hearings with 7 crime factions, bilateral non-aggression diplomacy, and The Moot election leading to High King coronation.
+- **Evidence**: `docs/behavioral-specification.md`
+- **Related**: M29, M03, M09-M24, M30, M32
