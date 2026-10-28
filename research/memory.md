@@ -138,6 +138,12 @@
 - **Evidence**: `research/findings/diplomacy.md`
 - **Related**: M23, M11, M14, M21, M24
 
+## Cross-System Dependency Graph & Execution Ordering
+- **Status**: CONFIRMED
+- **Finding**: The strategic simulation couples 10 core subsystems governed by shared globals (`CS_FactionTreasury`, `AllHoldings` 1/11/12, `CWOwner` 69, `Cities[]` boolean array, `WarScore`, `IsHighKing`). Daily 24h game-time updates execute in strict sequence: Production -> Domestic Sustenance (`Pop + Guards`) -> Military Upkeep (`TroopCountFood` + wages) -> 5-unit local reserve pooling -> Stability/Loyalty modifiers -> AI offensives. Circular feedback loops can trigger economic death spirals (Famine Spiral and Taxation/Mutiny Spiral).
+- **Evidence**: `research/findings/system-dependencies.md`
+- **Related**: M25, M10, M13, M17, M18, M22, M26
+
 ## Sovereign Legal System & Off-Screen Combat Equations
 - **Status**: CONFIRMED
 - **Finding**: Sovereign law operates across 7 crime categories (Theft, Assault, Murder, Speaking Out, Worship, Treason, Contraband) judged during throne court sessions (`CS_CourtScript`), sentencing offenders to fines, municipal hold jails (`CS_PrisonScript`), or chopping block decapitations (`ExecutionQuest`). In `CS_BountyScript`, off-screen detachment engagements simulate casualties using exact mathematical ratios: $\text{Chance} = \text{Troops} / \text{TroopCertain}$; if $\text{Chance} > \text{Roll}$, $\text{Dead} = \lfloor (1 - (\text{Chance} - \text{Roll})) \times \text{Troops} \rfloor$; if defeated, all dispatched troops are lost. Conquered holds zero out vanilla `CrimeFaction*` gold to establish independent jurisdiction.
