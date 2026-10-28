@@ -300,6 +300,13 @@
 - **Evidence**: `reconstruction/src/faction.rs`, `reconstruction/src/territory.rs`, `reconstruction/src/lib.rs`
 - **Related**: M50, M40, M46, M49, M51, M52, M53
 
+## Regional Economy & Demographic Labor Reconstruction
+- **Status**: CONFIRMED
+- **Finding**: Independent domain modules authored in `reconstruction/src/economy.rs` and `reconstruction/src/population.rs` (16/16 tests passing). Reconstructs: (1) Treasury management with non-negative balance enforcement; (2) 5-type facility upgrades (Farms, Mines, Lumber Mills, Docks, Barracks) across levels 1..4 consuming Gold and Wood, expanding `MaxJobs` via `AddJobs()`; (3) Gross resource production formula incorporating maritime trade docks bonuses: $3 \times ((\text{Level} \times \text{Change}) + \lfloor 0.3 \times \text{DocksChange} \times \text{DocksLevel} \rfloor - \text{JobsOpen})$; (4) Strict 4-stage demographic labor waterfall: Food &rarr; Docks &rarr; Wood &rarr; Metal; (5) Conscription draft formula $\lceil \text{RecruitablePercentage} \times \text{Unemployed} \rceil$ deducting from both Population and Unemployed; (6) Dynamic population growth when employment deficit exists; (7) Food consumption and famine cascade triggering loyalty decay and unrest events.
+- **Evidence**: `reconstruction/src/economy.rs`, `reconstruction/src/population.rs`, `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
+- **Related**: M51, M46, M49, M50, M52, M53, M54
+
+
 
 
 

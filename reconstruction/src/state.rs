@@ -1,7 +1,9 @@
 //! Global simulation state container and deterministic execution loop.
 
 use crate::core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
+use crate::economy::{calculate_gross_production, EconomyManager, FacilityType};
 use crate::faction::FactionProfile;
+use crate::population::{allocate_holding_labor, calculate_population_growth, conscript_troops};
 use crate::territory::TerritoryManager;
 use crate::types::{FactionId, HoldingId, HoldingTier};
 
@@ -192,27 +194,110 @@ impl GameState {
         new_day
     }
 
-    /// Execute the complete 24-hour daily economic and demographic simulation cycle.
+    /// Execute the complete 24-hour daily economic, demographic, and upkeep simulation cycle.
     pub fn tick_day(&mut self) {
         self.events.push(SimulationEvent::DayAdvanced { day: self.time.day });
         self.territory.advance_day();
 
         let mut daily_tax_revenue = 0i64;
         let mut total_food_consumed = 0i32;
+        let mut total_food_produced = 0i32;
+        let mut total_metal_produced = 0i32;
+        let mut total_wood_produced = 0i32;
+        let mut total_docks_produced = 0i32;
 
         for holding in &mut self.holdings {
             if holding.owner == FactionId::Player {
+                // 1. Taxation revenue
                 daily_tax_revenue += holding.calculate_tax();
+
+                // 2. Demographic labor allocation waterfall (Food -> Docks -> Wood -> Metal)
+                let labor = allocate_holding_labor(holding);
+                holding.unemployed = labor.unemployed;
+
+                // 3. Resource production calculation
+                let food_yield = calculate_gross_production(
+                    holding.facilities.farm,
+                    holding.food_change,
+                    holding.facilities.docks,
+                    holding.docks_change,
+                    labor.food_jobs_open,
+                );
+                let metal_yield = calculate_gross_production(
+                    holding.facilities.mine,
+                    holding.metal_change,
+                    0,
+                    0,
+                    labor.metal_jobs_open,
+                );
+                let wood_yield = calculate_gross_production(
+                    holding.facilities.lumber_mill,
+                    holding.wood_change,
+                    0,
+                    0,
+                    labor.wood_jobs_open,
+                );
+                let docks_yield = calculate_gross_production(
+                    holding.facilities.docks,
+                    holding.docks_change,
+                    0,
+                    0,
+                    labor.docks_jobs_open,
+                );
+
+                total_food_produced += food_yield;
+                total_metal_produced += metal_yield;
+                total_wood_produced += wood_yield;
+                total_docks_produced += docks_yield;
+
+                // 4. Food consumption
                 total_food_consumed += holding.food_required();
+
+                // 5. Population growth when Deficit > 0
+                let pop_increase = calculate_population_growth(
+                    holding.population,
+                    holding.max_jobs,
+                    &mut self.rng,
+                );
+                if pop_increase > 0 {
+                    holding.population += pop_increase;
+                    self.events.push(SimulationEvent::PopulationGrown {
+                        holding_id: holding.id.0,
+                        increase: pop_increase,
+                    });
+                }
             }
         }
 
-        self.treasury += daily_tax_revenue;
-        self.stockpile.food -= total_food_consumed;
+        // Apply doctrine tax modifier
+        let tax_mod_pct = self.faction.doctrine.tax_modifier_pct();
+        let adjusted_tax = daily_tax_revenue + (daily_tax_revenue * tax_mod_pct as i64 / 100);
+        self.treasury += adjusted_tax;
 
-        if daily_tax_revenue > 0 {
+        // Resource accumulation
+        self.stockpile.food += total_food_produced - total_food_consumed;
+        self.stockpile.metal += total_metal_produced;
+        self.stockpile.wood += total_wood_produced;
+        self.stockpile.trade_docks += total_docks_produced;
+
+        // Famine cascade: if food drops negative, citizens starve and loyalty falls
+        if self.stockpile.food < 0 {
+            for holding in &mut self.holdings {
+                if holding.owner == FactionId::Player {
+                    holding.loyalty = (holding.loyalty - 10).max(0);
+                    if holding.loyalty < 40 {
+                        self.events.push(SimulationEvent::UnrestTriggered {
+                            holding_id: holding.id.0,
+                            loyalty: holding.loyalty,
+                        });
+                    }
+                }
+            }
+        }
+
+        if adjusted_tax > 0 {
             self.events.push(SimulationEvent::TaxesCollected {
-                total_gold: daily_tax_revenue,
+                total_gold: adjusted_tax,
             });
         }
 
@@ -220,6 +305,56 @@ impl GameState {
             total_consumed: total_food_consumed,
             net_surplus: self.stockpile.food,
         });
+    }
+
+    /// Deposit gold into national treasury.
+    pub fn deposit_treasury(&mut self, amount: i64) -> Result<()> {
+        EconomyManager::deposit_treasury(&mut self.treasury, amount)
+    }
+
+    /// Withdraw gold from national treasury.
+    pub fn withdraw_treasury(&mut self, amount: i64) -> Result<()> {
+        EconomyManager::withdraw_treasury(&mut self.treasury, amount)
+    }
+
+    /// Upgrade a facility within an owned holding.
+    pub fn upgrade_facility(
+        &mut self,
+        holding_id: HoldingId,
+        facility: FacilityType,
+    ) -> Result<i32> {
+        let idx = holding_id.0 as usize;
+        if idx >= self.holdings.len() {
+            return Err(SimulationError::InvalidHoldingId(holding_id.0));
+        }
+
+        EconomyManager::upgrade_facility(
+            &mut self.holdings[idx],
+            &mut self.treasury,
+            &mut self.stockpile,
+            facility,
+        )
+    }
+
+    /// Conscript troops from holding's unemployed labor reserve.
+    pub fn conscript_troops(&mut self, holding_id: HoldingId, percentage: f64) -> i32 {
+        let idx = holding_id.0 as usize;
+        if idx >= self.holdings.len() {
+            return 0;
+        }
+
+        // Apply doctrine conscription modifier
+        let doc_mod = self.faction.doctrine.conscription_modifier_pct() as f64 / 100.0;
+        let effective_pct = (percentage + doc_mod).max(0.0).min(1.0);
+
+        let recruits = conscript_troops(&mut self.holdings[idx], effective_pct);
+        if recruits > 0 {
+            self.events.push(SimulationEvent::TroopsRecruited {
+                holding_id: holding_id.0,
+                count: recruits,
+            });
+        }
+        recruits
     }
 
     /// Transfer ownership of a holding atomically.
