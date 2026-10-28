@@ -71,3 +71,9 @@
 - **Finding**: Player command is structured across four primary modalities: (1) Immersive NPC dialogue trees (935 `TopicInfo` scripts for Steward civil/taxes, Commander invasion/POWs, Blacksmith armory); (2) Interactive world activators (`CS_ManageHolding` on placed banners, thrones, chopping blocks); (3) Tactical war tables (`CS_MapManageMenuScript` checking contiguous adjacency `HoldsNotLinked` and troop superiority `MessageNoSuperiority`); and (4) Scaleform `UIlib v1` text/list prompts for custom naming. Configuration is governed by SkyUI MCM sliders (`CS_BattleSize`, `CS_BattleSpeed`) with an inventory `SettingsMenu` item fallback for gamepad/console users.
 - **Evidence**: `research/findings/interactions.md`
 - **Related**: M12, M03, M06, M09, M14, M17
+
+## Military Organization & Unit Architecture
+- **Status**: CONFIRMED
+- **Finding**: The military system supports up to 10 operational field divisions (`MaxArmies = 10`), commanded by unique NPCs (free for friends, 100g/day for neutral NPCs; external follower frameworks corrupt AI packages). Unit rosters span standard infantry (`CountSoldier`, `CountWarrior`, `CountArcher`, `CountCrossbow`), 6 magic disciplines (Fire, Frost, Shock, Restoration, Conjuration, Alteration), 4 Dwemer automatons (Spider, Sphere, Ballista, Centurion), war beasts, and optional vampire hosts. Recruitment filters allow toggling playable races and genders via `CS_ChooseTroopRacesScript`. Equipment standardization uses a container-proxy pattern (`CS_CommanderOutfitScript`) across vanilla tiers or custom armor sets, sustained by daily food upkeep (`TroopCountFood`) and optional `AutoRecruitment`.
+- **Evidence**: `research/findings/military-organization.md`
+- **Related**: M13, M14, M15, M16, M20
