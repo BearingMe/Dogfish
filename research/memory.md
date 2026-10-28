@@ -77,3 +77,9 @@
 - **Finding**: The military system supports up to 10 operational field divisions (`MaxArmies = 10`), commanded by unique NPCs (free for friends, 100g/day for neutral NPCs; external follower frameworks corrupt AI packages). Unit rosters span standard infantry (`CountSoldier`, `CountWarrior`, `CountArcher`, `CountCrossbow`), 6 magic disciplines (Fire, Frost, Shock, Restoration, Conjuration, Alteration), 4 Dwemer automatons (Spider, Sphere, Ballista, Centurion), war beasts, and optional vampire hosts. Recruitment filters allow toggling playable races and genders via `CS_ChooseTroopRacesScript`. Equipment standardization uses a container-proxy pattern (`CS_CommanderOutfitScript`) across vanilla tiers or custom armor sets, sustained by daily food upkeep (`TroopCountFood`) and optional `AutoRecruitment`.
 - **Evidence**: `research/findings/military-organization.md`
 - **Related**: M13, M14, M15, M16, M20
+
+## Military Dispatch & AI Package Anchor Architecture
+- **Status**: CONFIRMED
+- **Finding**: Military orders (Follow, Hold Patrol, Fort Garrison, City Garrison, Staging Camp, Hunt, Offensive Assault, Stand By) are dispatched via an invisible "Task Barrel" proxy pattern (`CS_PatrolHoldScript`) that alters AI package routines instantly without Papyrus re-evaluation loops. Transit duration between holds is computed via spatial distance markers (`DistanceMarker*`); off-screen arrivals automatically teleport commanders to assigned duty markers (`MoveTo`) to prevent wilderness grid stalls. Tactical 5x4 blocks and parade marches use relative offset AI packages.
+- **Evidence**: `research/findings/military-orders.md`
+- **Related**: M14, M15, M16, M27
