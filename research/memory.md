@@ -498,3 +498,9 @@
 - **Finding**: Papyrus-to-native communication layer implemented in `integration/` (4/4 tests passing, 0 clippy warnings): (1) Authored physical uncompiled Papyrus sources in `integration/scripts/source/` (`DogfishNativeBridge.psc` declaring native global bindings, `DogfishClaimBannerScript.psc` handling `OnActivate` and UI feedback); (2) Implemented `SKSEPapyrusInterface` registration structures and `RegisterPapyrusFunctions()` callback; (3) Authored isolated test plugin recipe (`integration/records/dogfish_test_recipe.md`) defining `dogfish_test.esp` (ESL-flagged Form Version 44), `DogfishTestCell` (interior space based on `qasmoke`), `DogfishClaimBannerActi`, and `DogfishAnchorQuest`.
 - **Evidence**: `integration/scripts/source/`, `integration/records/dogfish_test_recipe.md`, `integration/src/lib.rs`
 - **Related**: M78, M77, M66, M60, M79, M80
+
+## SKSE Co-Save Registration & State Persistence Integration
+- **Status**: CONFIRMED (NATIVE ABI Verified; RUNTIME In-Engine Pending)
+- **Finding**: Actual SKSE co-save persistence hooks implemented in `integration/src/lib.rs` (5/5 tests passing, 0 clippy warnings): (1) Resolved DEF-INTEG-02 by declaring `SKSESerializationInterface` matching `skse64/PluginAPI.h` and querying `INTERFACE_SERIALIZATION` in `SKSEPlugin_Load()`; (2) Implemented `Dogfish_RevertCallback` resetting in-memory native state on pre-load/new-game; (3) Implemented `Dogfish_SaveCallback` writing tagged `STAT` record chunks with serialized JSON state; (4) Implemented `Dogfish_LoadCallback` reading `STAT` record chunks and restoring `GameState` via `StatePersistence::deserialize()`; (5) Validated via `test_skse_serialization_lifecycle`.
+- **Evidence**: `integration/src/lib.rs`, `references/sources/skse64/PluginAPI.h`
+- **Related**: M79, M78, M77, M67, M68, M80

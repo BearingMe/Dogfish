@@ -62,6 +62,102 @@ pub unsafe extern "C" fn RegisterPapyrusFunctions(_registry: *mut std::ffi::c_vo
     true
 }
 
+/// SKSE Serialization Interface matching skse64/PluginAPI.h (M79).
+#[repr(C)]
+pub struct SKSESerializationInterface {
+    pub version: u32,
+    pub set_unique_id: Option<unsafe extern "C" fn(plugin: PluginHandle, uid: u32)>,
+    pub set_revert_callback: Option<unsafe extern "C" fn(plugin: PluginHandle, callback: unsafe extern "C" fn(*mut SKSESerializationInterface))>,
+    pub set_save_callback: Option<unsafe extern "C" fn(plugin: PluginHandle, callback: unsafe extern "C" fn(*mut SKSESerializationInterface))>,
+    pub set_load_callback: Option<unsafe extern "C" fn(plugin: PluginHandle, callback: unsafe extern "C" fn(*mut SKSESerializationInterface))>,
+    pub set_form_delete_callback: Option<unsafe extern "C" fn(plugin: PluginHandle, callback: unsafe extern "C" fn(handle: u64))>,
+    pub write_record: Option<unsafe extern "C" fn(type_id: u32, version: u32, buf: *const std::ffi::c_void, length: u32) -> bool>,
+    pub open_record: Option<unsafe extern "C" fn(type_id: u32, version: u32) -> bool>,
+    pub write_record_data: Option<unsafe extern "C" fn(buf: *const std::ffi::c_void, length: u32) -> bool>,
+    pub get_next_record_info: Option<unsafe extern "C" fn(type_id: *mut u32, version: *mut u32, length: *mut u32) -> bool>,
+    pub read_record_data: Option<unsafe extern "C" fn(buf: *mut std::ffi::c_void, length: u32) -> u32>,
+    pub resolve_handle: Option<unsafe extern "C" fn(handle: u64, handle_out: *mut u64) -> bool>,
+    pub resolve_form_id: Option<unsafe extern "C" fn(form_id: u32, form_id_out: *mut u32) -> bool>,
+}
+
+pub const DOGFISH_UID: u32 = 0x44474648; // 'DGFH'
+pub const RECORD_STATE: u32 = 0x53544154; // 'STAT'
+
+/// Callback invoked by SKSE before loading a save or starting a new game.
+///
+/// # Safety
+///
+/// Must be invoked by SKSE runtime.
+#[no_mangle]
+pub unsafe extern "C" fn Dogfish_RevertCallback(_intfc: *mut SKSESerializationInterface) {
+    init_adapter(42);
+}
+
+/// Callback invoked by SKSE during savegame writing to save co-save state (resolves DEF-INTEG-02).
+///
+/// # Safety
+///
+/// Must be invoked by SKSE with an open co-save stream.
+#[no_mangle]
+pub unsafe extern "C" fn Dogfish_SaveCallback(intfc: *mut SKSESerializationInterface) {
+    if intfc.is_null() {
+        return;
+    }
+    let lock = match ADAPTER_STATE.lock() {
+        Ok(guard) => guard,
+        Err(_) => return,
+    };
+    if let Some(state) = lock.as_ref() {
+        let serialized = dogfish_reconstruction::StatePersistence::serialize(state);
+        let bytes = serialized.as_bytes();
+        if let Some(open_rec) = (*intfc).open_record {
+            if open_rec(RECORD_STATE, 1) {
+                if let Some(write_data) = (*intfc).write_record_data {
+                    write_data(bytes.as_ptr() as *const std::ffi::c_void, bytes.len() as u32);
+                }
+            }
+        }
+    }
+}
+
+/// Callback invoked by SKSE during savegame loading to restore co-save state (resolves DEF-INTEG-02).
+///
+/// # Safety
+///
+/// Must be invoked by SKSE with an open co-save stream.
+#[no_mangle]
+pub unsafe extern "C" fn Dogfish_LoadCallback(intfc: *mut SKSESerializationInterface) {
+    if intfc.is_null() {
+        return;
+    }
+    let mut rec_type = 0u32;
+    let mut rec_ver = 0u32;
+    let mut rec_len = 0u32;
+
+    while let Some(get_info) = (*intfc).get_next_record_info {
+        if !get_info(&mut rec_type, &mut rec_ver, &mut rec_len) {
+            break;
+        }
+        if rec_type == RECORD_STATE && rec_len > 0 {
+            let mut buf = vec![0u8; rec_len as usize];
+            if let Some(read_data) = (*intfc).read_record_data {
+                let bytes_read = read_data(buf.as_mut_ptr() as *mut std::ffi::c_void, rec_len);
+                if bytes_read == rec_len {
+                    if let Ok(json_str) = std::str::from_utf8(&buf) {
+                        if let Ok(restored) = dogfish_reconstruction::StatePersistence::deserialize(json_str, 42) {
+                            let mut lock = match ADAPTER_STATE.lock() {
+                                Ok(guard) => guard,
+                                Err(_) => return,
+                            };
+                            *lock = Some(restored);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /// Static plugin name string.
 static PLUGIN_NAME: &[u8] = b"DogfishIntegration\0";
 
@@ -116,8 +212,30 @@ pub unsafe extern "C" fn SKSEPlugin_Query(
 ///
 /// Callers must provide a valid pointer to an initialized `SKSEInterface` structure.
 #[no_mangle]
-pub unsafe extern "C" fn SKSEPlugin_Load(_skse: *const SKSEInterface) -> bool {
+pub unsafe extern "C" fn SKSEPlugin_Load(skse: *const SKSEInterface) -> bool {
     init_adapter(42);
+
+    if !skse.is_null() {
+        if let Some(query_iface) = (*skse).query_interface {
+            let serde_ptr = query_iface(INTERFACE_SERIALIZATION) as *mut SKSESerializationInterface;
+            if !serde_ptr.is_null() {
+                let handle = (*skse).get_plugin_handle.map(|f| f()).unwrap_or(0);
+                if let Some(set_uid) = (*serde_ptr).set_unique_id {
+                    set_uid(handle, DOGFISH_UID);
+                }
+                if let Some(set_revert) = (*serde_ptr).set_revert_callback {
+                    set_revert(handle, Dogfish_RevertCallback);
+                }
+                if let Some(set_save) = (*serde_ptr).set_save_callback {
+                    set_save(handle, Dogfish_SaveCallback);
+                }
+                if let Some(set_load) = (*serde_ptr).set_load_callback {
+                    set_load(handle, Dogfish_LoadCallback);
+                }
+            }
+        }
+    }
+
     true
 }
 
@@ -338,5 +456,24 @@ mod tests {
     fn test_papyrus_registration_interface() {
         // Test that the Papyrus registration callback behaves safely with null or dummy registry
         assert!(unsafe { RegisterPapyrusFunctions(std::ptr::null_mut()) });
+    }
+
+    #[test]
+    fn test_skse_serialization_lifecycle() {
+        // 1. Revert callback resets adapter state cleanly
+        unsafe { Dogfish_RevertCallback(std::ptr::null_mut()) };
+        assert!(is_adapter_initialized());
+
+        // 2. Safe handling of null interface pointers in Save and Load
+        unsafe { Dogfish_SaveCallback(std::ptr::null_mut()) };
+        unsafe { Dogfish_LoadCallback(std::ptr::null_mut()) };
+
+        // 3. Mutate state via claim
+        assert_eq!(Dogfish_ClaimLocation(0, true), 0);
+        assert_eq!(Dogfish_GetHoldingOwner(0), 0);
+
+        // 4. Revert resets holding ownership back to Imperial (1)
+        unsafe { Dogfish_RevertCallback(std::ptr::null_mut()) };
+        assert_eq!(Dogfish_GetHoldingOwner(0), 1);
     }
 }
