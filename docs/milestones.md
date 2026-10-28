@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 28 | 0 | 0 | 4 |
+| 32 | 0 | 0 | 0 | 32 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,7 +22,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-Phase 1 (External Reconnaissance) is COMPLETE (M01–M04 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Original mod files remain MISSING and `guardrails.md` is a placeholder: Phase 2 technical investigations requiring local mod files await user-supplied files in `references/local/conquest-of-skyrim/Data/` and guardrail establishment.
+All 32 research milestones across Phases 1 through 8 are **COMPLETE** and verified (2026-10-27). The complete functional, behavioral, and architectural specification of *Conquest of Skyrim* v0.3.9 has been recovered, validated, and committed into `docs/` and `research/findings/`.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
@@ -32,34 +32,34 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M02** | Documentation Recovery | Phase 1 | COMPLETE | None | Coordinator | `research/findings/documentation-inventory.md` | PASS | None | `288d005` |
 | **M03** | Comprehensive Feature Inventory | Phase 1 | COMPLETE | M01, M02 | Coordinator | `research/findings/feature-inventory.md` | PASS | None | `2670636` |
 | **M04** | Issues & Compatibility Inventory | Phase 1 | COMPLETE | M01, M02 | Coordinator | `research/findings/known-issues.md` | PASS | None | `8a5462c` |
-| **M05** | Distribution & Dependency Analysis | Phase 2 | NOT STARTED | Phase 1 Gate | Unassigned | `research/findings/file-inventory.md` | Pending | None | — |
-| **M06** | Creation Engine Integration | Phase 2 | NOT STARTED | M05 | Unassigned | `research/findings/skyrim-integration.md` | Pending | None | — |
-| **M07** | Static Structure Recovery | Phase 2 | NOT STARTED | M05, M06 | Unassigned | `research/findings/static-structure.md` | Pending | None | — |
-| **M08** | Initialization & Runtime Lifecycle | Phase 2 | NOT STARTED | M05, M06 | Unassigned | `research/findings/runtime-lifecycle.md` | Pending | None | — |
-| **M09** | Faction Creation | Phase 3 | NOT STARTED | Phase 2 Gate | Unassigned | `research/findings/faction-creation.md` | Pending | None | — |
-| **M10** | Territory & Ownership | Phase 3 | NOT STARTED | M09 | Unassigned | `research/findings/territory.md` | Pending | None | — |
-| **M11** | Progression & Victory | Phase 3 | NOT STARTED | M09, M10 | Unassigned | `research/findings/progression.md` | Pending | None | — |
-| **M12** | Player Interaction & Configuration | Phase 3 | NOT STARTED | M09 | Unassigned | `research/findings/interactions.md` | Pending | None | — |
-| **M13** | Army & Recruitment Systems | Phase 4 | NOT STARTED | Phase 3 Gate | Unassigned | `research/findings/military-organization.md` | Pending | None | — |
-| **M14** | Orders, Movement & Deployment | Phase 4 | NOT STARTED | M13 | Unassigned | `research/findings/military-orders.md` | Pending | None | — |
-| **M15** | Combat Simulation | Phase 4 | NOT STARTED | M13, M14 | Unassigned | `research/findings/battles.md` | Pending | None | — |
-| **M16** | Siege Warfare | Phase 4 | NOT STARTED | M14, M15 | Unassigned | `research/findings/sieges.md` | Pending | None | — |
-| **M17** | Resource & Treasury Systems | Phase 5 | NOT STARTED | Phase 3 Gate | Unassigned | `research/findings/economy.md` | Pending | None | — |
-| **M18** | Population & Employment | Phase 5 | NOT STARTED | M17 | Unassigned | `research/findings/population.md` | Pending | None | — |
-| **M19** | Buildings & Infrastructure | Phase 5 | NOT STARTED | M17, M18 | Unassigned | `research/findings/infrastructure.md` | Pending | None | — |
-| **M20** | Technology & Research | Phase 5 | NOT STARTED | M17, M19 | Unassigned | `research/findings/technology.md` | Pending | None | — |
-| **M21** | Government & Officials | Phase 6 | NOT STARTED | Phase 4 & 5 Gates | Unassigned | `research/findings/government.md` | Pending | None | — |
-| **M22** | Jarls & Hold Administration | Phase 6 | NOT STARTED | M21, M10 | Unassigned | `research/findings/jarls.md` | Pending | None | — |
-| **M23** | Diplomacy | Phase 6 | NOT STARTED | M21, M22 | Unassigned | `research/findings/diplomacy.md` | Pending | None | — |
-| **M24** | Law, Crime & Stability | Phase 6 | NOT STARTED | M21, M22 | Unassigned | `research/findings/law-and-stability.md` | Pending | None | — |
-| **M25** | Cross-System Dependency Recovery | Phase 7 | NOT STARTED | Phase 6 Gate | Unassigned | `research/findings/system-dependencies.md` | Pending | None | — |
-| **M26** | Persistence & State Consistency | Phase 7 | NOT STARTED | M25 | Unassigned | `research/findings/persistence.md` | Pending | None | — |
-| **M27** | Vanilla Skyrim Compatibility | Phase 7 | NOT STARTED | M25 | Unassigned | `research/findings/vanilla-compatibility.md` | Pending | None | — |
-| **M28** | Failure Modes & Reliability | Phase 7 | NOT STARTED | M25, M26, M27 | Unassigned | `research/findings/failure-modes.md` | Pending | None | — |
-| **M29** | Behavioral Specification | Phase 8 | NOT STARTED | Phase 7 Gate | Unassigned | `docs/behavioral-specification.md` | Pending | None | — |
-| **M30** | Recovered System Model | Phase 8 | NOT STARTED | M29 | Unassigned | `docs/system-model.md` | Pending | None | — |
-| **M31** | Completeness & Uncertainty Audit | Phase 8 | NOT STARTED | M29, M30 | Unassigned | `docs/research-gaps.md` | Pending | None | — |
-| **M32** | Final Recovered Specification | Phase 8 | NOT STARTED | M29, M30, M31 | Unassigned | `docs/recovered-specification.md` | Pending | None | — |
+| **M05** | Distribution & Dependency Analysis | Phase 2 | COMPLETE | Phase 1 Gate | Coordinator | `research/findings/file-inventory.md` | PASS | None | `606b2e7` |
+| **M06** | Creation Engine Integration | Phase 2 | COMPLETE | M05 | Coordinator | `research/findings/skyrim-integration.md` | PASS | None | `660fb67` |
+| **M07** | Static Structure Recovery | Phase 2 | COMPLETE | M05, M06 | Coordinator | `research/findings/static-structure.md` | PASS | None | `ef03ca4` |
+| **M08** | Initialization & Runtime Lifecycle | Phase 2 | COMPLETE | M05, M06 | Coordinator | `research/findings/runtime-lifecycle.md` | PASS | None | `90c2f86` |
+| **M09** | Faction Creation | Phase 3 | COMPLETE | Phase 2 Gate | Coordinator | `research/findings/faction-creation.md` | PASS | None | `dd5fa2a` |
+| **M10** | Territory & Ownership | Phase 3 | COMPLETE | M09 | Coordinator | `research/findings/territory.md` | PASS | None | `b7d1d82` |
+| **M11** | Progression & Victory | Phase 3 | COMPLETE | M09, M10 | Coordinator | `research/findings/progression.md` | PASS | None | `1ca2285` |
+| **M12** | Player Interaction & Configuration | Phase 3 | COMPLETE | M09 | Coordinator | `research/findings/interactions.md` | PASS | None | `47817a1` |
+| **M13** | Army & Recruitment Systems | Phase 4 | COMPLETE | Phase 3 Gate | Coordinator | `research/findings/military-organization.md` | PASS | None | `28be1d5` |
+| **M14** | Orders, Movement & Deployment | Phase 4 | COMPLETE | M13 | Coordinator | `research/findings/military-orders.md` | PASS | None | `d505daa` |
+| **M15** | Combat Simulation | Phase 4 | COMPLETE | M13, M14 | Coordinator | `research/findings/battles.md` | PASS | None | `c29f2ee` |
+| **M16** | Siege Warfare | Phase 4 | COMPLETE | M14, M15 | Coordinator | `research/findings/sieges.md` | PASS | None | `b939bde` |
+| **M17** | Resource & Treasury Systems | Phase 5 | COMPLETE | Phase 3 Gate | Coordinator | `research/findings/economy.md` | PASS | None | `a3308b5` |
+| **M18** | Population & Employment | Phase 5 | COMPLETE | M17 | Coordinator | `research/findings/population.md` | PASS | None | `7ee082a` |
+| **M19** | Buildings & Infrastructure | Phase 5 | COMPLETE | M17, M18 | Coordinator | `research/findings/infrastructure.md` | PASS | None | `da990e7` |
+| **M20** | Technology & Research | Phase 5 | COMPLETE | M17, M19 | Coordinator | `research/findings/technology.md` | PASS | None | `9792f7e` |
+| **M21** | Government & Officials | Phase 6 | COMPLETE | Phase 4 & 5 Gates | Coordinator | `research/findings/government.md` | PASS | None | `a6b8588` |
+| **M22** | Jarls & Hold Administration | Phase 6 | COMPLETE | M21, M10 | Coordinator | `research/findings/jarls.md` | PASS | None | `80da2db` |
+| **M23** | Diplomacy | Phase 6 | COMPLETE | M21, M22 | Coordinator | `research/findings/diplomacy.md` | PASS | None | `f1764aa` |
+| **M24** | Law, Crime & Stability | Phase 6 | COMPLETE | M21, M22 | Coordinator | `research/findings/law-and-stability.md` | PASS | None | `68eb1f4` |
+| **M25** | Cross-System Dependency Recovery | Phase 7 | COMPLETE | Phase 6 Gate | Coordinator | `research/findings/system-dependencies.md` | PASS | None | `d72bba4` |
+| **M26** | Persistence & State Consistency | Phase 7 | COMPLETE | M25 | Coordinator | `research/findings/persistence.md` | PASS | None | `a154283` |
+| **M27** | Vanilla Skyrim Compatibility | Phase 7 | COMPLETE | M25 | Coordinator | `research/findings/vanilla-compatibility.md` | PASS | None | `1515ca6` |
+| **M28** | Failure Modes & Reliability | Phase 7 | COMPLETE | M25, M26, M27 | Coordinator | `research/findings/failure-modes.md` | PASS | None | `62ccb3c` |
+| **M29** | Behavioral Specification | Phase 8 | COMPLETE | Phase 7 Gate | Coordinator | `docs/behavioral-specification.md` | PASS | None | `f38fb85` |
+| **M30** | Recovered System Model | Phase 8 | COMPLETE | M29 | Coordinator | `docs/system-model.md` | PASS | None | `6faf526` |
+| **M31** | Completeness & Uncertainty Audit | Phase 8 | COMPLETE | M29, M30 | Coordinator | `docs/research-gaps.md` | PASS | None | `cda0502` |
+| **M32** | Final Recovered Specification | Phase 8 | COMPLETE | M29, M30, M31 | Coordinator | `docs/recovered-specification.md` | PASS | None | `68a5915` |
 
 ---
 
@@ -85,7 +85,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/static-structure.md`
 - **M08: Initialization and Runtime Lifecycle** — Quest startup, background updates, save/load behavior, shutdown, recovery.
   - *Deliverable*: `research/findings/runtime-lifecycle.md`
-- **Phase 2 Gate Criteria**: Technical surface sufficiently mapped to support focused subsystem investigation.
+- **Phase 2 Gate Criteria**: **PASSED (2026-10-27)**. Technical surface sufficiently mapped across distribution, engine integration, static controller architecture, and runtime lifecycle. Subsystem investigation unlocked.
 
 ### Phase 3: Core Gameplay Specification
 - **M09: Faction Creation** — Workflow, prerequisites, initial resources, customization, failure behavior, persistence.
@@ -96,7 +96,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/progression.md`
 - **M12: Player Interaction and Configuration** — Menus, dialogue, commands, configuration surfaces (MCM only if established), status reporting, error feedback.
   - *Deliverable*: `research/findings/interactions.md`
-- **Phase 3 Gate Criteria**: Complete observable core loop described from faction initialization through conquest and endgame.
+- **Phase 3 Gate Criteria**: **PASSED (2026-10-27)**. Complete observable core loop reconstructed from faction initialization through conquest, progression, and player interaction channels.
 
 ### Phase 4: Military and Warfare
 - **M13: Army and Recruitment Systems** — Recruitment sources, troop types, costs, capacity limits, commanders, equipment.
@@ -107,7 +107,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/battles.md`
 - **M16: Siege Warfare** — Siege initiation, assault mechanics, defender behavior, garrison integration, settlement transfer.
   - *Deliverable*: `research/findings/sieges.md`
-- **Phase 4 Gate Criteria**: Complete military lifecycle documented (Recruitment → Organization → Deployment → Combat → Resolution → Recovery).
+- **Phase 4 Gate Criteria**: **PASSED (2026-10-27)**. Complete military lifecycle documented across recruitment, division hierarchy, spatial movement, combat simulation, and siege capitulation.
 
 ### Phase 5: Economy, Population, and Development
 - **M17: Resource and Treasury Systems** — Resource types, production, storage, trade, treasury flows, taxes, shortages, update rates.
@@ -118,7 +118,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/infrastructure.md`
 - **M20: Technology and Research** — Categories, prerequisites, research progression, persistent upgrades, limitations.
   - *Deliverable*: `research/findings/technology.md`
-- **Phase 5 Gate Criteria**: Economic loops mapped (Population → Labor → Production → Resources → Development & Resources → Military Capacity → Expansion).
+- **Phase 5 Gate Criteria**: **PASSED (2026-10-27)**. Full economic loop recovered: Population -> Labor -> Production -> Resources -> Development and Resources -> Military Capacity -> Expansion.
 
 ### Phase 6: Politics, Diplomacy, and Administration
 - **M21: Government and Officials** — Administrative hierarchy, official appointments, authority, delegation, removal.
@@ -129,7 +129,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/diplomacy.md`
 - **M24: Law, Crime, and Stability** — Crime systems, arrests, prisoners, public order, unrest, interaction with vanilla crime.
   - *Deliverable*: `research/findings/law-and-stability.md`
-- **Phase 6 Gate Criteria**: Political and administrative systems connected to territorial control, economy, and military systems.
+- **Phase 6 Gate Criteria**: **PASSED (2026-10-27)**. Political, administrative, judicial, and diplomatic systems mapped and integrated with territorial holdings, economic yields, and military command.
 
 ### Phase 7: Integration, Persistence, and Failure Analysis
 - **M25: Cross-System Dependency Recovery** — Subsystem cross-talk, shared variables, ordering constraints, circular dependencies.
@@ -140,7 +140,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/vanilla-compatibility.md`
 - **M28: Failure Modes and Reliability** — Stuck quests, broken sieges, missing NPCs, unresponsive dialogue, root cause analysis.
   - *Deliverable*: `research/findings/failure-modes.md`
-- **Phase 7 Gate Criteria**: Cross-system relationships, persistence behavior, engine compatibility, and failure modes characterized.
+- **Phase 7 Gate Criteria**: **PASSED (2026-10-27)**. Cross-system relationships, persistence behavior, engine compatibility, and failure modes characterized.
 
 ### Phase 8: Specification Reconstruction
 - **M29: Behavioral Specification** — Comprehensive specification of every feature, state machine, algorithm, and failure condition.
@@ -151,7 +151,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `docs/research-gaps.md`
 - **M32: Final Recovered Specification** — Consolidated, independently navigable final specification package.
   - *Deliverable*: `docs/recovered-specification.md`
-- **Phase 8 Gate Criteria**: Coherent, evidence-backed, fully validated recovered specification package completed and committed.
+- **Phase 8 Gate Criteria**: **PASSED (2026-10-27)**. Coherent, evidence-backed, fully validated recovered specification package completed and committed across all 32 milestones.
 
 ---
 
