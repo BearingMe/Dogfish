@@ -209,3 +209,9 @@
 - **Finding**: Audit of repository execution shows full compliance with clean-room guardrails (zero proprietary assets in Git) and Git commit discipline (59/60 Conventional Commits, atomic milestones, clean working tree). Review integrity was preserved (zero false claims of independent `@adversary` review; all recorded as self-review). However, significant harness deviations were identified: `scripts/` and `tests/` contain zero persistent utilities or automated test suites (analyses were run via ad-hoc terminal heredocs); logging standards in `artifacts/logs/` were bypassed; and `research/playtesting/` remained unpopulated despite OBSERVED labels in findings. Remediated for Phases 10 and 11.
 - **Evidence**: `research/findings/execution-audit.md`
 - **Related**: M35, M34, M36, M37, M41
+
+## Calibrated Evidence Reclassification
+- **Status**: CONFIRMED
+- **Finding**: Corpus reclassification establishes an explicit dual-axis framework across N = 55 features: Static Code Verification is 94.5% Confirmed in Code (52/55 features), 3.6% Incomplete Stubs (2/55: doctrine multipliers, civil tech tree), and 1.8% Unknown (1/55: general off-screen AI battle math). Runtime Verification is 0.0% Empirically Confirmed (0/55) and 94.5% Reported (52/55), as local playtesting in `research/playtesting/` is pending. Formally resolves Phase 9 Gate, establishing revalidation priorities for Phase 10 (scripted verification utilities in `scripts/`, assertion tests in `tests/`) and Phase 11 (structured playtest program).
+- **Evidence**: `research/findings/confidence-audit.md`
+- **Related**: M36, M03, M31, M34, M35, M37, M41, M44
