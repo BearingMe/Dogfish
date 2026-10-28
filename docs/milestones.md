@@ -101,7 +101,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M67** | Complete State Persistence | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `8997075` |
 | **M68** | Serialization Safety & Data Validation | Phase 17 | COMPLETE | M67 | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `11d3faf` |
 | **M69** | Domain Invariants & Authorization | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/` | PASS | None | `8673fcf` |
-| **M70** | Transactional Consistency & Resource Safety | Phase 17 | COMPLETE | M69 | Coordinator | `reconstruction/src/` | PASS | None | Pending |
+| **M70** | Transactional Consistency & Resource Safety | Phase 17 | COMPLETE | M69 | Coordinator | `reconstruction/src/` | PASS | None | `ced81d0` |
 | **M71** | Time, Randomness & Long-Running Simulation | Phase 17 | NOT STARTED | M67, M69, M70 | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M72** | Faction, World Model & Territory Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M73** | Economy, Population & Infrastructure Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
