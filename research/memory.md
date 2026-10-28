@@ -510,3 +510,9 @@
 - **Finding**: In strict compliance with Rule 1.4 of the Validation and Repair Program, Milestone M80 and Phase 19 Gate are formally recorded as BLOCKED: (1) Native Windows DLL (`dogfish_integration.dll`), Papyrus script sources, and test plugin recipe (`dogfish_test.esp`) are complete and verified at the NATIVE ABI level; (2) In-engine game execution requires manual human playtesting (loading `SkyrimSE.exe` via `skse64_loader.exe`, teleporting to `DogfishTestCell`, and activating the banner); (3) Zero in-engine execution is fabricated.
 - **Evidence**: `integration/target/release/dogfish_integration.dll`, `integration/scripts/source/`, `integration/records/dogfish_test_recipe.md`
 - **Related**: M80, M78, M79, M77, M81, M82
+
+## Fidelity, Coverage & Claims Reconciliation (Phase 20 Audit)
+- **Status**: CONFIRMED
+- **Finding**: Master documentation reconciled in `docs/reconstruction-coverage.md` and `docs/reconstruction-feasibility.md`: (1) Corrected earlier fidelity inflation down to audited reality across N = 55 features: 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%); (2) Delineated coverage by verification level: STATIC (100%), UNIT (92.7%), SCENARIO (92.7%), DIFFERENTIAL (45.5%), NATIVE (100%), RUNTIME (0.0% PENDING / BLOCKED); (3) Corrected unverified claims regarding guaranteed clean uninstallation and full in-engine integration; (4) Preserved all historical milestone records and commits intact without erasure.
+- **Evidence**: `docs/reconstruction-coverage.md`, `docs/reconstruction-feasibility.md`
+- **Related**: M81, M64, M76, M80, M82
