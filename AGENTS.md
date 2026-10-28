@@ -2,18 +2,21 @@
 
 ## Project Identity & Purpose
 
-**Dogfish** is an exploratory research project focused on *Conquest of Skyrim*, a Skyrim Special Edition mod by galvatron304 ([Nexus Mods #65628](https://www.nexusmods.com/skyrimspecialedition/mods/65628)).
+**Dogfish** is a research, probing, and experimental reconstruction project focused on *Conquest of Skyrim*, a Skyrim Special Edition mod by galvatron304 ([Nexus Mods #65628](https://www.nexusmods.com/skyrimspecialedition/mods/65628)).
 
-The project's purpose is to systematically investigate and understand the mod's strategic mechanics (faction management, territorial conquest, warfare, politics, and economy) and technical characteristics. This is strictly an exploratory research workspace, not an implementation project.
+The project's purpose is to systematically investigate the mod's architecture, independently reconstruct its strategic systems (faction management, territorial conquest, warfare, politics, and economy) as an executable behavioral reference model, and experimentally probe minimal integration paths into the Skyrim engine runtime.
 
 ## Repository Structure
 
 ```text
 ├── AGENTS.md               # AI agent entry point and instructions
 ├── README.md               # Project overview and status
-├── guardrails.md           # Research boundaries and rules (placeholder)
+├── guardrails.md           # Clean-room boundaries and IP protection rules
 ├── .gitignore              # Git ignore rules
-├── scripts/                # Reusable research utilities
+├── reconstruction/         # Independent implementation & executable models (Rust)
+│   ├── Cargo.toml          # (Created upon milestone need)
+│   └── src/lib.rs
+├── scripts/                # Reusable research & verification utilities
 │   └── README.md
 ├── tests/                  # Automated validation and verification procedures
 │   └── README.md
@@ -25,7 +28,7 @@ The project's purpose is to systematically investigate and understand the mod's 
 │   ├── sources/            # Pinned reference repositories (skyui-community, skse64)
 │   └── local/              # User-supplied local references (conquest-of-skyrim)
 ├── docs/
-│   ├── milestones.md           # Research roadmap, milestone registry, and phase gates
+│   ├── milestones.md           # Research roadmap, milestone registry, and phase gates (62 milestones)
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
 │   ├── testing.md              # Testing, script, and artifact management rules
 │   ├── logging.md              # Logging standards, formats, and evidence capture
@@ -34,8 +37,16 @@ The project's purpose is to systematically investigate and understand the mod's 
 └── research/
     ├── findings/           # Consolidated, evidence-backed conclusions
     ├── investigations/     # Technical research topics and questions
-    └── playtesting/        # Human gameplay observations and bug reports
+    └── playtesting/        # Human gameplay observations and test plans
 ```
+
+## Workstream Architecture
+
+Work is structured across three interdependent workstreams:
+
+1. **Reconstruction**: Independent implementation of recovered behavior as a standalone, deterministic simulation model (preferring Rust for domain logic, state machines, and calculations).
+2. **Probing**: Evidence-driven investigation of original binaries and Papyrus code (`references/local/conquest-of-skyrim/Data/`) to extract behavioral contracts and resolve uncertainties.
+3. **Integration**: Experimental interaction with Skyrim's runtime, exploring SKSE, Papyrus bridges, and minimal in-game vertical slices.
 
 ## Organization of Research Material
 
@@ -50,7 +61,7 @@ Research is divided into two streams that feed into consolidated findings:
 
 All agents must follow the full workflow defined in [`docs/execution-discipline.md`](./docs/execution-discipline.md). Key requirements:
 
-- **Milestone Tracking**: Maintain all 44 milestones in [`docs/milestones.md`](./docs/milestones.md) through the `NOT STARTED`, `IN PROGRESS`, `BLOCKED`, `COMPLETE` lifecycle.
+- **Milestone Tracking**: Maintain all 62 milestones in [`docs/milestones.md`](./docs/milestones.md) through the `NOT STARTED`, `IN PROGRESS`, `BLOCKED`, `COMPLETE` lifecycle.
 - **Capability Fallbacks**: Probe environment before use; apply documented fallbacks if optional tools (AgentMemory, Checkpoints, Orca, `@adversary`) are absent.
 - **Separate Knowledge & Progress**: Store nonredundant durable facts in AgentMemory or `research/memory.md` when needed; keep execution state in native checkpoints or `research/checkpoints/`. The repository remains authoritative.
 - **Delegation & Concurrency**: Maintain explicit task boundaries and strict file ownership per worker.
@@ -111,10 +122,25 @@ Agents working with original *Conquest of Skyrim* files must adhere to the local
 7. **Authoritative Guide**: The local README (`references/local/conquest-of-skyrim/README.md`) is the authoritative acquisition and layout specification.
 8. **Outputs Separated**: Analysis outputs belong in `artifacts/`, and research findings belong in `research/findings/`—never in `Data/`.
 
+## Reconstruction and Implementation Discipline
+
+During the experimental reconstruction and integration phases, agents must adhere to the following principles:
+
+1. **Query Primary Sources**: Directly query uncompiled scripts and ESP records under `references/local/conquest-of-skyrim/Data/` for implementation-dependent claims.
+2. **Zero Code Copying**: Do not copy or directly translate original Papyrus code into reconstruction implementations.
+3. **Behavioral Contracts**: Formalize implementation-independent contracts (inputs, preconditions, transitions, outputs, invariants) before authoring code.
+4. **Independent Expectations**: Validate reconstruction against independently reviewed contracts, not self-generated implementation outputs.
+5. **Role Separation**: Maintain conceptual separation between researcher probing and independent implementer authoring.
+6. **Prefer Rust**: Use Rust for domain state, state machines, economic equations, and deterministic simulation tools under `reconstruction/`.
+7. **Minimal Vertical Slices**: Prefer the smallest useful experiment (e.g., claiming a single test location) over speculative full mod replacements.
+8. **Document Manual Steps**: Clearly specify manual Creation Kit, savegame, or load order procedures required for engine integration.
+9. **Track Implementation Gaps**: Explicitly categorize fidelity (EXACT, COMPATIBLE, APPROXIMATE, INCOMPLETE, UNKNOWN, CONTRADICTED).
+10. **Preserve Definition of Done**: Every milestone follows Execute &rarr; Validate &rarr; Review &rarr; Commit.
+
 ## Agent Guidelines & Tooling
 
-- **Commit Style**: Always use Conventional Commits (`docs:`, `chore:`, `feat:`, `fix:`, etc.) for all git commits.
-- **Reverse Engineering**: Probing with REA (Reverse Engineer Anything / reverse engineering everything) is allowed only within established research boundaries. While `guardrails.md` remains a placeholder, restrict research to public documentation and ordinary reference discovery; defer inspection or transformation of the original mod's implementation. File-availability checks do not authorize implementation inspection.
+- **Commit Style**: Always use Conventional Commits (`docs:`, `chore:`, `feat:`, `fix:`, `refactor:`, etc.) for all git commits.
+- **Reverse Engineering**: Probing with REA (Reverse Engineer Anything / reverse engineering everything) and primary source inspection are authorized within the clean-room boundaries in [`guardrails.md`](./guardrails.md). Original reference files in `references/` remain strictly immutable and read-only.
 
 ## Future Agent Instructions
 
