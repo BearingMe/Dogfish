@@ -161,3 +161,9 @@
 - **Finding**: `conquerskyrim.esp` directly overrides 83 vanilla records, prominently `CWCampaignObj` (FormID `0x00026F45`), `CWChangeLocationScenes` (FormID `0x000D5176`), General Tullius (`0x0001336B`), Ulfric Stormcloak (`0x0010F9B9`), and 57 `LCTN` locations. A verified game-breaking conflict occurs if the player captures holds before resolving the Main Quest council summit *Season Unending* (`MQ302`) or *Dragon Rising* (`MQ104`), or if run alongside *Open Civil War* or *CWO*. Managing faction officers through third-party follower frameworks (AFT/NFF) breaks their `TaskBarrel` AI package stack.
 - **Evidence**: `research/findings/vanilla-compatibility.md`
 - **Related**: M27, M04, M06, M10, M14, M28
+
+## Technical Failure Modes & Reliability Architecture
+- **Status**: CONFIRMED
+- **Finding**: Root-cause analysis categorizes 10 critical failure modes: (1) Siege multi-actor CTDs from Papyrus heap exhaustion (mitigated by setting `CS_BattleSize` to 25-30 and *SSE Engine Fixes*); (2) Navmesh assault freezes in exterior city overhauls (*JK's Skyrim*); (3) The Moot deadlock in `CS_MeetingScript.GetJarls()` if any hold lacks an appointed Jarl or has an invalid alias; (4) Fort Amol trigger freeze from out-of-order Eastmarch border init (patched by *Conquest of Skyrim Fixes* #119992); (5) Mid-siege save barricade desync; and (6) Irreparable save corruption upon mid-game uninstallation due to disabled vanilla markers and orphaned scripts.
+- **Evidence**: `research/findings/failure-modes.md`
+- **Related**: M28, M04, M08, M11, M15, M16, M26, M27
