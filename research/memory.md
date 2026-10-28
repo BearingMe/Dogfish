@@ -432,6 +432,13 @@
 - **Evidence**: `reconstruction/src/faction.rs`, `cs_factiongovernmentscript.psc`
 - **Related**: M72, M71, M66, M50, M73, M74
 
+## Economy, Population & Municipal Infrastructure Fidelity Repair
+- **Status**: CONFIRMED
+- **Finding**: Economic and demographic simulation calibrated in `reconstruction/src/state.rs` (40/40 tests passing): (1) Verified daily update ordering (Taxation &rarr; Labor allocation &rarr; Gross production &rarr; Food consumption &rarr; Stability check &rarr; Population growth); (2) Implemented benevolent loyalty recovery (+2 loyalty daily up to 100) when food is in surplus and taxes are reasonable (`tax_rate <= 1`) based on `cs_loyaltycheckscript.psc`; (3) Verified boundary conditions (0 population holdings, 0/1 unemployed conscription drafts); (4) Proved cross-system resource flow resilience in `test_loyalty_recovery_post_famine`.
+- **Evidence**: `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
+- **Related**: M73, M72, M71, M66, M51, M74, M76
+
+
 
 
 

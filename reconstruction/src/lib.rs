@@ -771,4 +771,43 @@ mod tests {
         assert_eq!(sim1.stockpile, sim2_restored.stockpile);
         assert_eq!(sim1.rng.state(), sim2_restored.rng.state());
     }
+
+    // --- MILESTONE M73 ECONOMIC & DEMOGRAPHIC FIDELITY TESTS ---
+
+    #[test]
+    fn test_loyalty_recovery_post_famine() {
+        let mut state = GameState::new(3003);
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.holdings[0].loyalty = 40;
+        state.holdings[0].tax_rate = 1; // Reasonable tax allows recovery
+        state.stockpile.food = 500; // Guaranteed food surplus
+
+        // Run 5 daily ticks (120 hours)
+        for _ in 0..120 {
+            state.tick_hour();
+        }
+
+        // Each day of food surplus recovers +2 loyalty: 40 + (5 * 2) = 50
+        assert_eq!(state.holdings[0].loyalty, 50);
+    }
+
+    #[test]
+    fn test_economic_boundary_conditions() {
+        let mut holding = HoldingState::new(HoldingId::WHITERUN, FactionId::Player);
+        holding.population = 0;
+        holding.guards = 0;
+        assert_eq!(holding.calculate_tax(), 0);
+        assert_eq!(holding.food_required(), 0);
+
+        // Conscription with 0 unemployed returns 0
+        holding.unemployed = 0;
+        assert_eq!(conscript_troops(&mut holding, 0.50), 0);
+
+        // Conscription with 1 unemployed returns ceil(0.10 * 1) = 1
+        holding.population = 10;
+        holding.unemployed = 1;
+        assert_eq!(conscript_troops(&mut holding, 0.10), 1);
+        assert_eq!(holding.unemployed, 0);
+        assert_eq!(holding.population, 9);
+    }
 }

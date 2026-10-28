@@ -317,6 +317,13 @@ impl GameState {
             for ev in unrest_events {
                 self.record_event(ev);
             }
+        } else {
+            // Benevolent recovery (cs_loyaltycheckscript.psc): when food is in surplus and taxes are reasonable, loyalty recovers +2 daily
+            for holding in &mut self.holdings {
+                if holding.owner == FactionId::Player && holding.tax_rate <= 1 {
+                    holding.loyalty = (holding.loyalty + 2).min(100);
+                }
+            }
         }
 
         if adjusted_tax > 0 {
