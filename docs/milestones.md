@@ -15,7 +15,7 @@ The original 32-milestone program produced comprehensive documentation (M01–M3
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 44 | 4 | 0 | 0 | 40 |
+| 44 | 0 | 0 | 0 | 44 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -73,10 +73,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M38** | Papyrus Claim Verification | Phase 10 | COMPLETE | M37 | Coordinator | `research/findings/verified-papyrus-behavior.md` | PASS | None | `365b8a8` |
 | **M39** | Numerical Mechanics & Formula Verification | Phase 10 | COMPLETE | M38 | Coordinator | `research/findings/verified-mechanics.md` | PASS | None | `eff2d0e` |
 | **M40** | State, Persistence & Integration Verification | Phase 10 | COMPLETE | M38 | Coordinator | `research/findings/verified-state-and-integration.md` | PASS | None | `a343b8a` |
-| **M41** | Controlled Playtesting Program | Phase 11 | NOT STARTED | M36 | Unassigned | `research/playtesting/test-plan.md` | Pending | None | — |
-| **M42** | Static & Runtime Evidence Reconciliation | Phase 11 | NOT STARTED | M39, M40, M41 | Unassigned | `research/findings/behavior-reconciliation.md` | Pending | None | — |
-| **M43** | Adversarial Specification Audit | Phase 11 | NOT STARTED | M36, M42 | Unassigned | `research/findings/adversarial-audit.md` | Pending | None | — |
-| **M44** | Final Specification Integrity Gate | Phase 11 | NOT STARTED | M43 | Unassigned | `docs/specification-integrity-report.md` | Pending | None | — |
+| **M41** | Controlled Playtesting Program | Phase 11 | COMPLETE | M36 | Coordinator | `research/playtesting/test-plan.md` | PASS | None | `971d64f` |
+| **M42** | Static & Runtime Evidence Reconciliation | Phase 11 | COMPLETE | M39, M40, M41 | Coordinator | `research/findings/behavior-reconciliation.md` | PASS | None | `017828d` |
+| **M43** | Adversarial Specification Audit | Phase 11 | COMPLETE | M36, M42 | Coordinator | `research/findings/adversarial-audit.md` | PASS | None | `49dc44d` |
+| **M44** | Final Specification Integrity Gate | Phase 11 | COMPLETE | M43 | Coordinator | `docs/specification-integrity-report.md` | PASS | None | `f5c3164` |
 
 ---
 
@@ -206,7 +206,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/adversarial-audit.md`
 - **M44: Final Specification Integrity Gate** — Reconcile audited findings with core documentation (`behavioral-specification.md`, `system-model.md`, `recovered-specification.md`, `milestones.md`).
   - *Deliverable*: `docs/specification-integrity-report.md`
-- **Phase 11 Gate Criteria**: Complete when documentation clearly distinguishes what the mod implements, what is observed in gameplay, what is reported, what is inferred, and what remains unverified.
+- **Phase 11 Gate Criteria**: **PASSED (2026-10-28)**. Complete. Documentation clearly distinguishes implemented code, observable gameplay, reported claims, technical inferences, and unknown heuristics across all 44 milestones. Specification recovery program fully audited and finished.
 
 ---
 
