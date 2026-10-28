@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 4 | 0 | 0 | 58 |
+| 62 | 3 | 0 | 0 | 59 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -89,7 +89,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M56** | Targeted Source Probing | Phase 14 | COMPLETE | M55 | Coordinator | `research/findings/targeted-source-probing.md` | PASS | None | `a2ca099` |
 | **M57** | Reconstruction Corrections | Phase 14 | COMPLETE | M56 | Coordinator | `reconstruction/` | PASS | None | `947ffb8` |
 | **M58** | Fidelity & Coverage Audit | Phase 14 | COMPLETE | M57 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `877754b` |
-| **M59** | Engine Boundary Mapping | Phase 15 | NOT STARTED | M48, Phase 14 Gate | Unassigned | `docs/engine-boundary-map.md` | Pending | None | — |
+| **M59** | Engine Boundary Mapping | Phase 15 | COMPLETE | M48, Phase 14 Gate | Coordinator | `docs/engine-boundary-map.md` | PASS | None | Pending |
 | **M60** | Minimal In-Game Vertical Slice | Phase 15 | NOT STARTED | M59 | Unassigned | `integration/` | Pending | None | — |
 | **M61** | Persistence & Compatibility Probe | Phase 15 | NOT STARTED | M60 | Unassigned | `research/findings/integration-persistence-probe.md` | Pending | None | — |
 | **M62** | Reconstruction Feasibility Report | Phase 15 | NOT STARTED | M58, M61 | Unassigned | `docs/reconstruction-feasibility.md` | Pending | None | — |

@@ -348,6 +348,13 @@
 - **Evidence**: `docs/reconstruction-coverage.md`, `reconstruction/src/lib.rs`
 - **Related**: M58, M55, M56, M57, M46, M59, M62
 
+## Skyrim Engine Boundary Mapping & Interface Architecture
+- **Status**: CONFIRMED
+- **Finding**: Definitive engine boundary specification (`docs/engine-boundary-map.md`) delineates simulation-owned state (15 holdings, macroeconomics, 10 divisions, 7 ministers, diplomacy, Moot, persistence) from Creation Engine-owned state (3D rendering, Havok physics, cell grid, navmesh, Scaleform, Papyrus VM, .ess saves). Defines typed cross-boundary communication interfaces: inward triggers (activator interaction, death events, throne sessions, time ticks, save callbacks) and outward signals (crime bounty clearing, actor reinforcement spawning, treasury globals, notifications). Verifies native SKSE C-ABI plugin APIs (`SKSEPlugin_Query`, `SKSEPlugin_Load`, `SKSESerializationInterface`) and event sinks. Identifies minimal manual asset requirements (ESL-flagged ESP, isolated interior `DogfishTestCell` based on `qasmoke`, claim banner activator, anchor quest). Documents mitigations for original mod traps (split-brain desync, Havok barricade reset, Moot null deadlock, savegame bloat, Papyrus thread throttling).
+- **Evidence**: `docs/engine-boundary-map.md`, `references/sources/skse64/PluginAPI.h`
+- **Related**: M59, M48, M58, M60, M61, M62
+
+
 
 
 
