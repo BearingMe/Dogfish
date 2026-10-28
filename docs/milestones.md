@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 17 | 1 | 0 | 44 |
+| 62 | 17 | 0 | 0 | 45 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -75,7 +75,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M42** | Static & Runtime Evidence Reconciliation | Phase 11 | COMPLETE | M39, M40, M41 | Coordinator | `research/findings/behavior-reconciliation.md` | PASS | None | `017828d` |
 | **M43** | Adversarial Specification Audit | Phase 11 | COMPLETE | M36, M42 | Coordinator | `research/findings/adversarial-audit.md` | PASS | None | `49dc44d` |
 | **M44** | Final Specification Integrity Gate | Phase 11 | COMPLETE | M43 | Coordinator | `docs/specification-integrity-report.md` | PASS | None | `f5c3164` |
-| **M45** | Research Policy Transition | Phase 12 | IN PROGRESS | None | Coordinator | `guardrails.md`, `AGENTS.md` | In Progress | None | — |
+| **M45** | Research Policy Transition | Phase 12 | COMPLETE | None | Coordinator | `guardrails.md`, `AGENTS.md` | PASS | None | `e40d1ff` |
 | **M46** | Behavioral Contract Inventory | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/behavioral-contracts.md` | Pending | None | — |
 | **M47** | Reconstruction Validation Strategy | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/reconstruction-testing.md` | Pending | None | — |
 | **M48** | Skyrim Integration Environment Survey | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/integration-survey.md` | Pending | None | — |
