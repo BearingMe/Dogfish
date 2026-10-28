@@ -13,13 +13,15 @@ An exploratory research and specification recovery project centered on **Conques
 
 **Dogfish** is a dedicated research initiative designed to systematically investigate, reverse engineer, and document the mod's architecture, underlying systems, technical characteristics, Papyrus scripting, and engine dependencies.
 
-### Core Philosophy: Research Before Action
-This project is an **exploratory research and specification recovery effort**, not an implementation or mod-development project.
-- **Investigate first**: This project does not implement replacement gameplay systems or speculative architecture. Research utilities may be added for a demonstrated investigation need, without requiring complete domain knowledge.
-- **Evidence-driven**: Every conclusion must be grounded in verifiable empirical data, static inspection, or game engine logs.
-- **Methodical progression**: The dual-track methodology ensures theoretical analysis and hands-on gameplay validation inform each other continuously.
+### Project Purpose & Workstreams
+The project's purpose is to systematically investigate the mod's architecture, independently reconstruct its strategic systems (faction management, territorial conquest, warfare, politics, and economy) as an executable behavioral reference model, and experimentally probe minimal integration paths into the Skyrim engine runtime.
 
-**Current Status**: Initial Research Phase (Bootstrap & Discipline Establishment).
+Work is organized across three interdependent workstreams:
+1. **Reconstruction (`reconstruction/`)**: Independent implementation of recovered behavior as a standalone, deterministic simulation model in Rust (`dogfish-reconstruction`, 31 unit & scenario tests).
+2. **Probing (`references/local/conquest-of-skyrim/Data/`)**: Evidence-driven investigation of original binaries and Papyrus code to extract behavioral contracts and resolve uncertainties.
+3. **Integration (`integration/`)**: Experimental interaction with Skyrim's runtime, exploring SKSE, native C-ABI bridges (`dogfish-integration`), and minimal in-game vertical slices.
+
+**Current Status**: Complete Specification Recovery & Independent Reconstruction (All 62 Milestones Complete across 15 Phases).
 
 ---
 
@@ -55,7 +57,7 @@ All AI agents operating in this workspace must adhere to the structured research
 
 ### Core Capabilities & Tooling
 - **Persistent Knowledge with AgentMemory**: Use **AgentMemory** (`plugin:agentmemory:agentmemory` or `research/memory.md` fallback) to store durable facts, discovered engine constraints, and verified technical characteristics. Keep progress checkpoints strictly separate (`research/checkpoints/` or execution checkpoints) as defined in [`docs/execution-discipline.md`](./docs/execution-discipline.md).
-- **Reverse Engineering with REA**: REA (Reverse Engineer Anything / reverse engineering everything) may be used within the boundaries in [`AGENTS.md`](./AGENTS.md). While `guardrails.md` remains a placeholder, limit research to public documentation and ordinary reference discovery; defer original-mod implementation inspection.
+- **Reverse Engineering & Clean-Room Boundaries**: Probing with REA (Reverse Engineer Anything / reverse engineering everything) and primary source inspection are authorized within the clean-room boundaries in [`guardrails.md`](./guardrails.md). Original reference files in `references/` remain strictly immutable and read-only.
 
 ### Workflow & Discipline Standards
 - **Execution & Delegation**: Follow [`docs/execution-discipline.md`](./docs/execution-discipline.md). Maintain strict task boundaries and exclusive file ownership during parallel execution. When `@adversary` is unavailable, perform structured self-review without impersonation.
