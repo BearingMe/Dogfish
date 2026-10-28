@@ -239,3 +239,9 @@
 - **Finding**: Deep technical audit disproves the assumption of "atomic" territory transfers. `TransferOwnershipCity` in `cs_transferownershipscript.psc` executes 60+ sequential script steps without transaction isolation or rollback mechanisms; setting `CWOwner = 69` on line 102 prior to setting `AllHoldings = 1` on line 147 exposes the holding to permanent split-brain corruption if interrupted mid-loop. Furthermore, `CS_AttackCityScript` contains zero `OnPlayerLoadGame` handlers, causing mid-siege saves to desynchronize destructible gate barriers and wave counters against volatile Havok engine physics.
 - **Evidence**: `research/findings/verified-state-and-integration.md`
 - **Related**: M40, M10, M16, M26, M27, M28
+
+## Controlled Empirical Playtesting Architecture
+- **Status**: CONFIRMED
+- **Finding**: Human playtesting program is codified in `research/playtesting/test-plan.md` across 12 high-information experiments (`EXP-FACT-01` through `EXP-VICT-01`) targeting critical gameplay paths: Faction Founding, Outpost Banners, Army Standardization, Task Barrel Patrols, Wave Combat Throttling, Siege Breaches, 24h Economic Ticks, Throne Court Hearings, Diplomatic Truces, Mid-Siege Save Desync, Vanilla Civil War Collisions, and The Moot Convocation. Validates test plan design while maintaining zero fabrication of unexecuted test results.
+- **Evidence**: `research/playtesting/test-plan.md`
+- **Related**: M41, M09-M28, M35, M36, M42
