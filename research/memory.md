@@ -149,3 +149,9 @@
 - **Finding**: Sovereign law operates across 7 crime categories (Theft, Assault, Murder, Speaking Out, Worship, Treason, Contraband) judged during throne court sessions (`CS_CourtScript`), sentencing offenders to fines, municipal hold jails (`CS_PrisonScript`), or chopping block decapitations (`ExecutionQuest`). In `CS_BountyScript`, off-screen detachment engagements simulate casualties using exact mathematical ratios: $\text{Chance} = \text{Troops} / \text{TroopCertain}$; if $\text{Chance} > \text{Roll}$, $\text{Dead} = \lfloor (1 - (\text{Chance} - \text{Roll})) \times \text{Troops} \rfloor$; if defeated, all dispatched troops are lost. Conquered holds zero out vanilla `CrimeFaction*` gold to establish independent jurisdiction.
 - **Evidence**: `research/findings/law-and-stability.md`
 - **Related**: M24, M15, M21, M22, M27
+
+## Savegame Persistence & Self-Healing Architecture
+- **Status**: CONFIRMED
+- **Finding**: State persists across 1,275 globals, 238 running quests, and 88 reference aliases in `.ess` save files. Volatile 3D and string state is repaired on `OnPlayerLoadGame` via coordinated self-healing scripts: `CS_CheckVersion` (version migrations, timer restarts), `CS_UpdateFactionName` (container-proxy text re-attachment), `CS_UpdateGovOutfitsOnLoadGame` (Jarl/cabinet attire refresh), `CS_TroopEquipUpdateLoad` (armory list re-evaluation), and `CS_PlayerSurrenderLoadGame` (forces stage 100 to clear captive scene stalls). Saving mid-siege is highly vulnerable to barricade and wave counter desynchronization; mid-game uninstallation causes permanent hold broken states and orphaned Papyrus thread locks.
+- **Evidence**: `research/findings/persistence.md`
+- **Related**: M26, M08, M10, M12, M16, M28
