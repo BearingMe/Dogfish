@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 17 | 0 | 0 | 45 |
+| 62 | 15 | 0 | 0 | 47 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -76,8 +76,8 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M43** | Adversarial Specification Audit | Phase 11 | COMPLETE | M36, M42 | Coordinator | `research/findings/adversarial-audit.md` | PASS | None | `49dc44d` |
 | **M44** | Final Specification Integrity Gate | Phase 11 | COMPLETE | M43 | Coordinator | `docs/specification-integrity-report.md` | PASS | None | `f5c3164` |
 | **M45** | Research Policy Transition | Phase 12 | COMPLETE | None | Coordinator | `guardrails.md`, `AGENTS.md` | PASS | None | `e40d1ff` |
-| **M46** | Behavioral Contract Inventory | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/behavioral-contracts.md` | Pending | None | — |
-| **M47** | Reconstruction Validation Strategy | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/reconstruction-testing.md` | Pending | None | — |
+| **M46** | Behavioral Contract Inventory | Phase 12 | COMPLETE | M45 | Coordinator | `docs/behavioral-contracts.md` | PASS | None | `6d13c5a` |
+| **M47** | Reconstruction Validation Strategy | Phase 12 | COMPLETE | M45 | Coordinator | `docs/reconstruction-testing.md` | PASS | None | Pending |
 | **M48** | Skyrim Integration Environment Survey | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/integration-survey.md` | Pending | None | — |
 | **M49** | Minimal Rust Simulation Core | Phase 13 | NOT STARTED | M46, M47, Phase 12 Gate | Unassigned | `reconstruction/` | Pending | None | — |
 | **M50** | Faction & Territory Reconstruction | Phase 13 | NOT STARTED | M49 | Unassigned | `reconstruction/` | Pending | None | — |

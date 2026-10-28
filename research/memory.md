@@ -275,3 +275,10 @@
 - **Finding**: Reconciles the historical 51 vs 55 feature discrepancy: mathematically proves the actual inventory contains exactly 55 unique features across 18 domains (historical "51" was an off-by-4 counting artifact prior to adding respawn timers, settlement garrisons, and coronation ceremony sub-entries). M46 maps all 55 features into a formal reconstruction matrix in `docs/behavioral-contracts.md` with primary sources, inputs/outputs, difficulty ratings, and integration dependencies. Establishes that 48 features are directly reconstructible in standalone Rust simulation (`reconstruction/`), 3 are incomplete/unknown stubs, and 4 are engine-tied UI/visual elements.
 - **Evidence**: `docs/behavioral-contracts.md`
 - **Related**: M46, M03, M45, M47, M49, M50-M54
+
+## Reconstruction Validation Strategy & Testing Tiers
+- **Status**: CONFIRMED
+- **Finding**: Authoritative testing architecture established in `docs/reconstruction-testing.md` across 7 validation tiers: Tier 1 Contract Tests (preconditions/types), Tier 2 State Transition Tests (domain state mutations), Tier 3 Numerical Equivalence (hand-calculated mathematical tests), Tier 4 Scenario Integration (multi-day economic/military loops), Tier 5 Persistence (serialization round-trip), Tier 6 Differential Comparisons, and Tier 7 In-Game Integration. Enforces strict non-circular validation (expected outcomes must derive independently from primary code/records, not self-generated implementation outputs). Defines the 6-tier fidelity classification system (`EXACT`, `COMPATIBLE`, `APPROXIMATE`, `INCOMPLETE`, `UNKNOWN`, `CONTRADICTED`) and formally separates automated non-engine simulation suites from human-dependent playtesting.
+- **Evidence**: `docs/reconstruction-testing.md`
+- **Related**: M47, M45, M46, M48, M49, M55
+
