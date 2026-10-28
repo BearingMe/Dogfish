@@ -17,6 +17,7 @@ use dogfish_reconstruction::{
 fn test_case_01_save_load_with_active_siege() {
     let mut state = GameState::new(101);
     state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+    state.reinforce_division(DivisionId(0), 50).unwrap();
 
     // Start siege on Falkreath and advance to UrbanStreetCombat
     state.start_siege(HoldingId::FALKREATH, true, true).unwrap();

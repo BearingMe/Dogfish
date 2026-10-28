@@ -237,6 +237,24 @@ impl SiegeOperation {
         }
     }
 
+    /// Calculate casualty mitigation factor from siege artillery (DEF-FIDEL-03).
+    pub fn attacker_casualty_factor(&self) -> f64 {
+        if self.artillery_enabled {
+            0.5 // 50% casualty reduction during gate breach operations
+        } else {
+            1.0
+        }
+    }
+
+    /// Calculate defender casualty multiplier from pincer assault flanking (DEF-FIDEL-03).
+    pub fn defender_casualty_factor(&self) -> f64 {
+        if self.pincer_assault {
+            1.25 // 25% increased defender casualties from two-pronged assault
+        } else {
+            1.0
+        }
+    }
+
     /// Advance siege to next tactical phase.
     pub fn advance_phase(&mut self) -> Result<SiegePhase> {
         let next = match self.phase {

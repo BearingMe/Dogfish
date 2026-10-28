@@ -438,6 +438,13 @@
 - **Evidence**: `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
 - **Related**: M73, M72, M71, M66, M51, M74, M76
 
+## Military, Siege & Strategic AI Fidelity Repair (12/12 Adversarial Regressions Passing)
+- **Status**: CONFIRMED
+- **Finding**: Siege and strategic warfare models hardened in `reconstruction/src/military.rs` and `reconstruction/src/state.rs` (40/40 lib tests, 12/12 adversarial tests passing): (1) Resolved DEF-INVAR-04: `start_siege` rejects concurrent siege launches while an active siege is underway (adversarial case 06 PASS); (2) Resolved DEF-INVAR-03: `advance_siege` strictly requires living soldiers in field forces, eliminating the instant 0-troop siege victory exploit (adversarial case 07 PASS); (3) Resolved DEF-FIDEL-03: implemented tactical casualty scaling for `artillery_enabled` (50% gate casualty reduction) and `pincer_assault` (25% flanking damage bonus); (4) Successfully brought the entire adversarial regression test suite in `adversarial_regressions.rs` to 100% passing (all 12 failure scenarios now resolved).
+- **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/state.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M74, M65, M66, M69, M70, M52, M76
+
+
 
 
 

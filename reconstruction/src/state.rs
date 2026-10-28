@@ -414,13 +414,19 @@ impl GameState {
         self.military.reinforce_division(div_id, count)
     }
 
-    /// Launch a siege operation against a target holding.
+    /// Launch a siege operation against a target holding (resolves DEF-INVAR-04).
     pub fn start_siege(
         &mut self,
         target_id: HoldingId,
         pincer: bool,
         artillery: bool,
     ) -> Result<()> {
+        if self.military.active_siege.is_some() {
+            return Err(SimulationError::InvalidStateTransition(
+                "A siege operation is already active; conclude or abandon it before launching another",
+            ));
+        }
+
         if !target_id.is_capital() {
             return Err(SimulationError::InvalidStateTransition(
                 "Siege operations can only target Hold Capitals",
@@ -436,15 +442,27 @@ impl GameState {
         Ok(())
     }
 
-    /// Advance active siege to next phase.
+    /// Advance active siege to next phase (resolves DEF-INVAR-03).
     pub fn advance_siege(&mut self) -> Result<SiegePhase> {
-        let siege = self.military.active_siege.as_mut().ok_or(
-            SimulationError::InvalidStateTransition("No active siege operation underway"),
-        )?;
+        // MILITARY PREREQUISITE CHECK (DEF-INVAR-03):
+        // Advancing a siege requires active participating troops in the player's military force!
+        if self.military.total_soldiers() == 0 {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot advance siege: no active soldiers remaining in field forces",
+            ));
+        }
 
-        let next_phase = siege.advance_phase()?;
-        if next_phase == SiegePhase::Capitulated {
+        let (next_phase, target) = {
+            let siege = self.military.active_siege.as_mut().ok_or(
+                SimulationError::InvalidStateTransition("No active siege operation underway"),
+            )?;
+            let next_phase = siege.advance_phase()?;
             let target = siege.target_holding;
+            (next_phase, target)
+        };
+
+        if next_phase == SiegePhase::Capitulated {
+            self.military.active_siege = None;
             self.transfer_holding(target, FactionId::Player, true)?;
         }
 

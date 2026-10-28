@@ -369,6 +369,7 @@ mod tests {
     #[test]
     fn test_siege_operation_phases_and_reinforcement_waves() {
         let mut state = GameState::new(909);
+        state.reinforce_division(DivisionId(0), 50).unwrap();
         assert!(state.start_siege(HoldingId::WINDHELM, true, true).is_ok());
 
         let siege = state.military.active_siege.as_mut().unwrap();
