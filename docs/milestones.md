@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 6 | 0 | 0 | 56 |
+| 62 | 5 | 0 | 0 | 57 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -87,7 +87,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M54** | Persistence & Scenario Execution | Phase 13 | COMPLETE | M49–M53 | Coordinator | `reconstruction/` | PASS | None | `e127cb7` |
 | **M55** | Differential Behavior Testing | Phase 14 | COMPLETE | M54, Phase 13 Gate | Coordinator | `research/findings/differential-testing.md` | PASS | None | `090ed46` |
 | **M56** | Targeted Source Probing | Phase 14 | COMPLETE | M55 | Coordinator | `research/findings/targeted-source-probing.md` | PASS | None | `a2ca099` |
-| **M57** | Reconstruction Corrections | Phase 14 | NOT STARTED | M56 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M57** | Reconstruction Corrections | Phase 14 | COMPLETE | M56 | Coordinator | `reconstruction/` | PASS | None | Pending |
 | **M58** | Fidelity & Coverage Audit | Phase 14 | NOT STARTED | M57 | Unassigned | `docs/reconstruction-coverage.md` | Pending | None | — |
 | **M59** | Engine Boundary Mapping | Phase 15 | NOT STARTED | M48, Phase 14 Gate | Unassigned | `docs/engine-boundary-map.md` | Pending | None | — |
 | **M60** | Minimal In-Game Vertical Slice | Phase 15 | NOT STARTED | M59 | Unassigned | `integration/` | Pending | None | — |

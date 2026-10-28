@@ -322,3 +322,73 @@ impl Default for MilitaryManager {
         Self::new()
     }
 }
+
+/// Standard soldier capacity per army division in the strategic AI model (cs_tmscript.psc:1512).
+pub const DIVISION_SOLDIER_CAPACITY: i32 = 20;
+
+/// Calculate surviving vs dead division blocks from surviving troop counts (cs_tmscript.psc:1511-1520).
+///
+/// Recovered Formula:
+/// RemainingArmies = ceil(TroopsRemaining / 20)
+/// DeadArmies = InitialArmies - RemainingArmies
+pub fn calculate_surviving_divisions(troops_remaining: i32, initial_armies: i32) -> (i32, i32) {
+    if troops_remaining <= 0 {
+        return (0, initial_armies);
+    }
+    let remaining = ((troops_remaining as f64) / DIVISION_SOLDIER_CAPACITY as f64).ceil() as i32;
+    let dead = (initial_armies - remaining).max(0);
+    (remaining, dead)
+}
+
+/// Calculate strategic campaign aggressiveness for background AI factions (cs_tmscript.psc:991-1008).
+///
+/// Recovered Rules:
+/// - If active commanders < total commanders: drops to 0 (defensive recovery).
+/// - If priority hold has land superiority: maximized to 5.
+/// - Otherwise: CityCount + MinorCityCount, clamped to max 5.
+pub fn calculate_ai_aggressiveness(
+    active_commanders: i32,
+    total_commanders: i32,
+    has_land_superiority: bool,
+    city_count: i32,
+    minor_city_count: i32,
+) -> u8 {
+    if active_commanders < total_commanders {
+        0
+    } else if has_land_superiority {
+        5
+    } else {
+        let total_cities = city_count + minor_city_count;
+        total_cities.max(0).min(5) as u8
+    }
+}
+
+/// Calculate hold invasion priority weight for AI campaign targeting (cs_tmscript.psc:1030-1045).
+///
+/// Recovered Formula:
+/// - If faction reduced to 1 city and this is their capital: 100 (desperate defense).
+/// - If not superior or no bordering holds: 0.
+/// - Base = 1 + OwnHoldsBordering + RandomInt(0, 3).
+/// - If ArmiesPatrolling == 0: +10 vulnerability bonus.
+pub fn calculate_hold_invasion_priority(
+    has_land_superiority: bool,
+    own_bordering_holds: i32,
+    armies_patrolling: i32,
+    total_cities_owned: i32,
+    is_own_capital: bool,
+    rng: &mut DeterministicRng,
+) -> u32 {
+    if has_land_superiority && total_cities_owned == 1 && is_own_capital {
+        return 100;
+    }
+    if !has_land_superiority || own_bordering_holds <= 0 {
+        return 0;
+    }
+
+    let mut chance = 1 + own_bordering_holds + rng.gen_range_i32(0, 3);
+    if armies_patrolling == 0 {
+        chance += 10;
+    }
+
+    chance.max(0) as u32
+}

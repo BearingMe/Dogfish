@@ -21,7 +21,11 @@ pub use diplomacy::{calculate_truce_acceptance_chance, DiplomacyManager, Foreign
 pub use economy::{calculate_gross_production, EconomyManager, FacilityType};
 pub use faction::{BannerColor, FactionProfile, GovernmentDoctrine};
 pub use government::{CabinetMinister, CabinetRole, GovernmentManager, JudicialSentence, LegalOffense, MootOutcome};
-pub use military::{simulate_bounty_combat, ArmyOrder, CombatResult, Division, MilitaryManager, SiegeOperation, SiegePhase, TroopClass};
+pub use military::{
+    calculate_ai_aggressiveness, calculate_hold_invasion_priority, calculate_surviving_divisions,
+    simulate_bounty_combat, ArmyOrder, CombatResult, Division, MilitaryManager, SiegeOperation,
+    SiegePhase, TroopClass, DIVISION_SOLDIER_CAPACITY,
+};
 pub use persistence::{JsonParser, SimpleJson, StatePersistence};
 pub use population::{allocate_holding_labor, calculate_population_growth, conscript_troops, LaborAllocationResult};
 pub use scenario::{run_mid_siege_interruption_scenario, run_outlaw_to_high_king_campaign, ScenarioReport};
@@ -522,5 +526,63 @@ mod tests {
         let result = run_mid_siege_interruption_scenario(888);
         assert!(result.is_ok());
         assert!(result.unwrap());
+    }
+
+    // --- MILESTONE M57 REGRESSION TESTS ---
+
+    #[test]
+    fn test_ai_division_sizing_and_casualty_conversion() {
+        assert_eq!(DIVISION_SOLDIER_CAPACITY, 20);
+
+        // 3 initial armies (60 max soldiers)
+        // 45 soldiers survive -> ceil(45/20) = 3 surviving, 0 dead
+        assert_eq!(calculate_surviving_divisions(45, 3), (3, 0));
+
+        // 21 soldiers survive -> ceil(21/20) = 2 surviving, 1 dead
+        assert_eq!(calculate_surviving_divisions(21, 3), (2, 1));
+
+        // 20 soldiers survive -> ceil(20/20) = 1 surviving, 2 dead
+        assert_eq!(calculate_surviving_divisions(20, 3), (1, 2));
+
+        // 1 soldier survives -> ceil(1/20) = 1 surviving, 2 dead
+        assert_eq!(calculate_surviving_divisions(1, 3), (1, 2));
+
+        // 0 soldiers survive -> 0 surviving, 3 dead
+        assert_eq!(calculate_surviving_divisions(0, 3), (0, 3));
+    }
+
+    #[test]
+    fn test_ai_aggressiveness_calculation_rules() {
+        // Rule 1: Under-strength active commanders drops to 0
+        assert_eq!(calculate_ai_aggressiveness(8, 10, true, 3, 2), 0);
+
+        // Rule 2: Land superiority in priority target maximizes to 5
+        assert_eq!(calculate_ai_aggressiveness(10, 10, true, 1, 0), 5);
+
+        // Rule 3: No superiority scales with owned city counts
+        assert_eq!(calculate_ai_aggressiveness(10, 10, false, 2, 1), 3);
+        assert_eq!(calculate_ai_aggressiveness(10, 10, false, 4, 3), 5); // Clamped to 5 max
+    }
+
+    #[test]
+    fn test_ai_hold_invasion_priority_math() {
+        let mut rng = DeterministicRng::new(555);
+
+        // No land superiority -> 0
+        assert_eq!(calculate_hold_invasion_priority(false, 3, 2, 5, false, &mut rng), 0);
+
+        // No bordering holds -> 0
+        assert_eq!(calculate_hold_invasion_priority(true, 0, 2, 5, false, &mut rng), 0);
+
+        // Superiority + 2 bordering holds, patrolled (armies_patrolling = 2) -> 1 + 2 + [0..3] = 3..6
+        let weight_patrolled = calculate_hold_invasion_priority(true, 2, 2, 5, false, &mut rng);
+        assert!(weight_patrolled >= 3 && weight_patrolled <= 6);
+
+        // Superiority + 2 bordering holds, UNPATROLLED -> +10 bonus -> 13..16
+        let weight_unpatrolled = calculate_hold_invasion_priority(true, 2, 0, 5, false, &mut rng);
+        assert!(weight_unpatrolled >= 13 && weight_unpatrolled <= 16);
+
+        // Desperate capital defense (down to 1 city and this is own capital) -> 100
+        assert_eq!(calculate_hold_invasion_priority(true, 0, 0, 1, true, &mut rng), 100);
     }
 }

@@ -336,6 +336,13 @@
 - **Evidence**: `research/findings/targeted-source-probing.md`, `cs_tmscript.psc`, `cs_troopmanagemenuscript.psc`, `cs_checkversion.psc`
 - **Related**: M56, M55, M52, M46, M57, M58
 
+## Reconstruction Corrections & Strategic AI Warfare Implementation
+- **Status**: CONFIRMED
+- **Finding**: Mathematical models in `reconstruction/src/military.rs` corrected using primary source findings from M56 (31/31 tests passing): (1) Enforced `DIVISION_SOLDIER_CAPACITY = 20` constant across division sizing and casualty calculations; (2) Implemented `calculate_surviving_divisions()` converting troop casualties into destroyed division blocks and commander attrition; (3) Implemented `calculate_ai_aggressiveness()` replicating the 0..5 aggressiveness bounds and under-strength defensive drops; (4) Implemented `calculate_hold_invasion_priority()` replicating the unpatrolled holding vulnerability bonus (+10) and desperate capital defense overrides (100). Validated with 3 dedicated regression unit tests in `reconstruction/src/lib.rs`.
+- **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/lib.rs`
+- **Related**: M57, M56, M55, M52, M46, M58
+
+
 
 
 
