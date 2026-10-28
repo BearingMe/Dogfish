@@ -215,3 +215,9 @@
 - **Finding**: Corpus reclassification establishes an explicit dual-axis framework across N = 55 features: Static Code Verification is 94.5% Confirmed in Code (52/55 features), 3.6% Incomplete Stubs (2/55: doctrine multipliers, civil tech tree), and 1.8% Unknown (1/55: general off-screen AI battle math). Runtime Verification is 0.0% Empirically Confirmed (0/55) and 94.5% Reported (52/55), as local playtesting in `research/playtesting/` is pending. Formally resolves Phase 9 Gate, establishing revalidation priorities for Phase 10 (scripted verification utilities in `scripts/`, assertion tests in `tests/`) and Phase 11 (structured playtest program).
 - **Evidence**: `research/findings/confidence-audit.md`
 - **Related**: M36, M03, M31, M34, M35, M37, M41, M44
+
+## Reproducible Binary & Structural Verification
+- **Status**: CONFIRMED
+- **Finding**: Automated verification using persistent script `scripts/verify_structure.py` and unit test suite `tests/test_structure.py` (6/6 tests passing) independently reproduces 100% of the structural claims from M05–M08 with zero discrepancies: 3,779 files (521.93 MB), 1,539 compiled `.pex` scripts matching 1,539 source `.psc` scripts 1:1, `conquerskyrim.esp` Form Version 44 with 22,690 records, 5 official DLC masters in strict order, 47 top-level GRUP types, and exactly 83 overridden vanilla records from `Skyrim.esm` (including `CWCampaignObj` `0x00026F45`, Tullius, Ulfric, and 57 `LCTN` locations).
+- **Evidence**: `research/findings/verified-structure.md`, `tests/test_structure.py`
+- **Related**: M37, M05, M06, M07, M27, M38

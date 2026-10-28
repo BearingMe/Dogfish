@@ -18,7 +18,13 @@ Scripts in this directory automate technical tasks, such as:
 
 ## Script Registry
 
-When adding a reusable script, document it below using this format:
+### `verify_structure.py`
+- **Purpose**: Reproducibly inspects and verifies package file counts, uncompressed size, script 1:1 matching, ESP header, master dependencies, top-level GRUP counts, and vanilla record overrides.
+- **Required Inputs**: Path to mod Data directory (`--data-dir`, defaults to `references/local/conquest-of-skyrim/Data`).
+- **Invocation**: `python -I scripts/verify_structure.py [--output artifacts/structure-audit.json]`
+- **Generated Outputs**: Formatted console metrics and optional structured JSON report.
+- **Dependencies**: Python standard library (`hashlib`, `struct`, `pathlib`, `json`).
+- **Relevant Milestone**: M05, M06, M37.
 
 ### `script_name.ext` *(Template)*
 - **Purpose**: Short description of what the script does.
