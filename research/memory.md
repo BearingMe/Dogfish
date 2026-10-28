@@ -89,3 +89,9 @@
 - **Finding**: Combat engagements throttle concurrent in-cell actor spawns via `CS_BattleSize` (default: 40) to prevent engine memory crashes, while attrition scales by `CS_BattleSpeed` on `OnDying` events. Reinforcements spawn in coordinated waves at casualty milestones (20, 40, 60, 80, 100 defender deaths) rather than continuous trickles. When defeated, surviving enemies receive `RetreatFaction` AI packages to flee, and captives are converted to POWs via `PrisonerScript.PlayerTakePrisoner()`. Off-screen non-player battle resolution formulas remain unverified.
 - **Evidence**: `research/findings/battles.md`
 - **Related**: M15, M13, M14, M16, M28
+
+## Siege Warfare Architecture & Capitulation Sequences
+- **Status**: CONFIRMED
+- **Finding**: Sieges execute through `CS_AttackCitySiegeScript` across 6 phases: (1) Precondition validation (land contiguity and military superiority); (2) Staging camp setup (`CampMarker1`/`CampMarker2` added to world map); (3) Outer gate assault with optional pincer flanking (`DoubleAttack`) and artillery (`CatapultsList`, `BatteringRamEnabled`); (4) Urban street combat balancing melee, ranged, healers, and buffers; (5) Palace breach into the seat of government triggering `JarlConfrontScene` and `JarlSurrenderScene`; and (6) Atomic holding transfer (`TransferOwnershipCity` to faction 69) and victory parade.
+- **Evidence**: `research/findings/sieges.md`
+- **Related**: M16, M10, M14, M15, M22, M27
