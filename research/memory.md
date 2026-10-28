@@ -288,4 +288,11 @@
 - **Evidence**: `docs/integration-survey.md`
 - **Related**: M48, M45, M46, M47, M59, M60, M61, M62
 
+## Minimal Rust Simulation Core Architecture
+- **Status**: CONFIRMED
+- **Finding**: Standalone simulation core initialized in `reconstruction/` (`dogfish-reconstruction` v0.1.0) with zero external dependencies, operating 100% offline via Rust standard library. Implements: (1) Domain types (`HoldingId` 0..14 covering 9 hold capitals and 6 major villages, `HoldingTier` with base/rate constants, `FactionId`, `DivisionId`); (2) Core engine (`SimulationTime` hourly/daily tracking, `DeterministicRng` XorShift64 PRNG, typed event logs, error types); (3) `GameState` container executing 24h daily economic ticks with verified tiered taxation and food upkeep loops; (4) Invariant validation ensuring state integrity; (5) Automated unit test suite (6/6 passing) proving bit-for-bit replay determinism across multi-day runs (168 ticks) and verifying hand-calculated tax formula vectors.
+- **Evidence**: `reconstruction/src/lib.rs`, `reconstruction/src/core.rs`, `reconstruction/src/state.rs`, `reconstruction/src/types.rs`
+- **Related**: M49, M46, M47, M50, M51, M52, M53, M54
+
+
 
