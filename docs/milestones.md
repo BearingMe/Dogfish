@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 8 | 0 | 0 | 24 |
+| 32 | 4 | 0 | 0 | 28 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,7 +22,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-Phase 1 (External Reconnaissance), Phase 2 (Technical Reconnaissance), Phase 3 (Core Gameplay Specification), Phase 4 (Military and Warfare), Phase 5 (Economy, Population, and Development), and Phase 6 (Politics, Diplomacy, and Administration) are COMPLETE (M01–M24 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 7 Integration, Persistence, and Failure Analysis is unlocked.
+Phases 1 through 7 are COMPLETE (M01–M28 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 8 Specification Reconstruction is unlocked.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
@@ -52,10 +52,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M22** | Jarls & Hold Administration | Phase 6 | COMPLETE | M21, M10 | Coordinator | `research/findings/jarls.md` | PASS | None | `80da2db` |
 | **M23** | Diplomacy | Phase 6 | COMPLETE | M21, M22 | Coordinator | `research/findings/diplomacy.md` | PASS | None | `f1764aa` |
 | **M24** | Law, Crime & Stability | Phase 6 | COMPLETE | M21, M22 | Coordinator | `research/findings/law-and-stability.md` | PASS | None | `68eb1f4` |
-| **M25** | Cross-System Dependency Recovery | Phase 7 | NOT STARTED | Phase 6 Gate | Unassigned | `research/findings/system-dependencies.md` | Pending | None | — |
-| **M26** | Persistence & State Consistency | Phase 7 | NOT STARTED | M25 | Unassigned | `research/findings/persistence.md` | Pending | None | — |
-| **M27** | Vanilla Skyrim Compatibility | Phase 7 | NOT STARTED | M25 | Unassigned | `research/findings/vanilla-compatibility.md` | Pending | None | — |
-| **M28** | Failure Modes & Reliability | Phase 7 | NOT STARTED | M25, M26, M27 | Unassigned | `research/findings/failure-modes.md` | Pending | None | — |
+| **M25** | Cross-System Dependency Recovery | Phase 7 | COMPLETE | Phase 6 Gate | Coordinator | `research/findings/system-dependencies.md` | PASS | None | `d72bba4` |
+| **M26** | Persistence & State Consistency | Phase 7 | COMPLETE | M25 | Coordinator | `research/findings/persistence.md` | PASS | None | `a154283` |
+| **M27** | Vanilla Skyrim Compatibility | Phase 7 | COMPLETE | M25 | Coordinator | `research/findings/vanilla-compatibility.md` | PASS | None | `1515ca6` |
+| **M28** | Failure Modes & Reliability | Phase 7 | COMPLETE | M25, M26, M27 | Coordinator | `research/findings/failure-modes.md` | PASS | None | `62ccb3c` |
 | **M29** | Behavioral Specification | Phase 8 | NOT STARTED | Phase 7 Gate | Unassigned | `docs/behavioral-specification.md` | Pending | None | — |
 | **M30** | Recovered System Model | Phase 8 | NOT STARTED | M29 | Unassigned | `docs/system-model.md` | Pending | None | — |
 | **M31** | Completeness & Uncertainty Audit | Phase 8 | NOT STARTED | M29, M30 | Unassigned | `docs/research-gaps.md` | Pending | None | — |
@@ -140,7 +140,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/vanilla-compatibility.md`
 - **M28: Failure Modes and Reliability** — Stuck quests, broken sieges, missing NPCs, unresponsive dialogue, root cause analysis.
   - *Deliverable*: `research/findings/failure-modes.md`
-- **Phase 7 Gate Criteria**: Cross-system relationships, persistence behavior, engine compatibility, and failure modes characterized.
+- **Phase 7 Gate Criteria**: **PASSED (2026-10-27)**. Cross-system relationships, persistence behavior, engine compatibility, and failure modes characterized.
 
 ### Phase 8: Specification Reconstruction
 - **M29: Behavioral Specification** — Comprehensive specification of every feature, state machine, algorithm, and failure condition.
