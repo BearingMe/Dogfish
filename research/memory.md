@@ -185,3 +185,9 @@
 - **Finding**: Audit reconciles 100% of the 51 inventoried features (`docs/research-gaps.md`) across 94% Confirmed, 4% Observed, and 2% Inferred/Unknown confidence. Formally resolves key community contradictions (proves mutual exclusion with vanilla Civil War, proves bilateral truces rather than mutual defense alliances, proves Moot deadlock stems from unassigned Jarl aliases in `GetJarls()`). Uncovers an unreleased v0.4.0 developmental stub for `SetUpInitialJarlLoyalties()` commented out in `cs_checkversion.psc`.
 - **Evidence**: `docs/research-gaps.md`
 - **Related**: M31, M03, M28, M29, M32
+
+## Final Recovered Specification Package
+- **Status**: CONFIRMED
+- **Finding**: The final recovered specification package (`docs/recovered-specification.md`) completes the 32-milestone research program. It consolidates all 20 required domains into an authoritative master document: 51-feature catalog, 6-tier progression loop from outlaw to High King coronation, 4-tier holding hierarchy, 10-division army architecture with Task Barrel AI anchors and battle size throttling, exact economic production/conscription formulas, 4-tier facility upgrades, 7-member cabinet with Spymaster covert coups and judicial trials, bilateral non-aggression truces, savegame persistence self-healing suite, 83 overridden vanilla records, and failure mode diagnosis.
+- **Evidence**: `docs/recovered-specification.md`
+- **Related**: M32, M01-M31
