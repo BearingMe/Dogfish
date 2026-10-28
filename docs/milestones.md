@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 3 | 0 | 0 | 79 |
+| 82 | 2 | 0 | 1 | 79 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -111,7 +111,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | COMPLETE | M63, Phase 17 Gate | Coordinator | `integration/` | PASS | None | `80b5a1d` |
 | **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | COMPLETE | M77 | Coordinator | `integration/` | PASS | None | `f730564` |
 | **M79** | SKSE Save/Load & State Synchronization | Phase 19 | COMPLETE | M67, M68, M78 | Coordinator | `integration/` | PASS | None | `ded135f` |
-| **M80** | Real Skyrim Vertical Slice | Phase 19 | NOT STARTED | M78, M79 | Unassigned | `integration/` | Pending | None | — |
+| **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | — |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | NOT STARTED | Phase 18 Gate, M76, M80 | Unassigned | `docs/reconstruction-coverage.md` | Pending | None | — |
 | **M82** | Final Reconstruction Quality Gate | Phase 20 | NOT STARTED | M81 | Unassigned | `docs/reconstruction-repair-report.md` | Pending | None | — |
 
@@ -300,7 +300,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `integration/`
 - **M80: Real Skyrim Vertical Slice** — Perform genuine runtime integration test where an isolated Skyrim-side action updates Rust state and produces observable feedback.
   - *Deliverable*: `integration/`
-- **Phase 19 Gate Criteria**: Pass only when the minimal Skyrim integration path has been demonstrated in an actual game session (record BLOCKED if manual testing unavailable).
+- **Phase 19 Gate Criteria**: **BLOCKED (Awaiting Human In-Game Execution)**. Native C-ABI plugin compiled, exported symbols verified, Papyrus script sources authored (`integration/scripts/source/`), and test plugin recipe specified (`integration/records/dogfish_test_recipe.md`). In strict compliance with Rule 1.4, actual Skyrim SE engine execution cannot be satisfied by mock tests and requires manual human playtest execution in-game. Zero runtime execution fabricated. Unblocks Phase 20 claims reconciliation (M81).
 
 ### Phase 20: Final Validation and Documentation Repair
 - **Objective**: Reconcile all fidelity claims and deliver the final quality-gated repair report.
