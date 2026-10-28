@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 4 | 0 | 0 | 28 |
+| 32 | 0 | 0 | 0 | 32 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,7 +22,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-Phases 1 through 7 are COMPLETE (M01–M28 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 8 Specification Reconstruction is unlocked.
+All 32 research milestones across Phases 1 through 8 are **COMPLETE** and verified (2026-10-27). The complete functional, behavioral, and architectural specification of *Conquest of Skyrim* v0.3.9 has been recovered, validated, and committed into `docs/` and `research/findings/`.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
@@ -56,10 +56,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M26** | Persistence & State Consistency | Phase 7 | COMPLETE | M25 | Coordinator | `research/findings/persistence.md` | PASS | None | `a154283` |
 | **M27** | Vanilla Skyrim Compatibility | Phase 7 | COMPLETE | M25 | Coordinator | `research/findings/vanilla-compatibility.md` | PASS | None | `1515ca6` |
 | **M28** | Failure Modes & Reliability | Phase 7 | COMPLETE | M25, M26, M27 | Coordinator | `research/findings/failure-modes.md` | PASS | None | `62ccb3c` |
-| **M29** | Behavioral Specification | Phase 8 | NOT STARTED | Phase 7 Gate | Unassigned | `docs/behavioral-specification.md` | Pending | None | — |
-| **M30** | Recovered System Model | Phase 8 | NOT STARTED | M29 | Unassigned | `docs/system-model.md` | Pending | None | — |
-| **M31** | Completeness & Uncertainty Audit | Phase 8 | NOT STARTED | M29, M30 | Unassigned | `docs/research-gaps.md` | Pending | None | — |
-| **M32** | Final Recovered Specification | Phase 8 | NOT STARTED | M29, M30, M31 | Unassigned | `docs/recovered-specification.md` | Pending | None | — |
+| **M29** | Behavioral Specification | Phase 8 | COMPLETE | Phase 7 Gate | Coordinator | `docs/behavioral-specification.md` | PASS | None | `f38fb85` |
+| **M30** | Recovered System Model | Phase 8 | COMPLETE | M29 | Coordinator | `docs/system-model.md` | PASS | None | `6faf526` |
+| **M31** | Completeness & Uncertainty Audit | Phase 8 | COMPLETE | M29, M30 | Coordinator | `docs/research-gaps.md` | PASS | None | `cda0502` |
+| **M32** | Final Recovered Specification | Phase 8 | COMPLETE | M29, M30, M31 | Coordinator | `docs/recovered-specification.md` | PASS | None | `68a5915` |
 
 ---
 
@@ -151,7 +151,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `docs/research-gaps.md`
 - **M32: Final Recovered Specification** — Consolidated, independently navigable final specification package.
   - *Deliverable*: `docs/recovered-specification.md`
-- **Phase 8 Gate Criteria**: Coherent, evidence-backed, fully validated recovered specification package completed and committed.
+- **Phase 8 Gate Criteria**: **PASSED (2026-10-27)**. Coherent, evidence-backed, fully validated recovered specification package completed and committed across all 32 milestones.
 
 ---
 
