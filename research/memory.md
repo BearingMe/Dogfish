@@ -324,6 +324,13 @@
 - **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/scenario.rs`, `reconstruction/src/lib.rs`
 - **Related**: M54, M49, M50, M51, M52, M53, M55
 
+## Differential Behavior Testing & Subsystem Fidelity
+- **Status**: CONFIRMED
+- **Finding**: Systematic differential evaluation (`research/findings/differential-testing.md`) compares the standalone Rust simulation (`dogfish-reconstruction` v0.1.0) against original *Conquest of Skyrim* v0.3.9 evidence across 8 scenarios: (1) Territorial Transfer evaluated as `COMPATIBLE` (resolves M40 split-brain desync via atomic state transaction); (2) Regional Taxation evaluated as `EXACT` (0.00% variance across Major, Minor, and Village formulas); (3) Labor Waterfall & Conscription evaluated as `EXACT` (identical 4-stage priority and draft deductions); (4) Famine Cascade evaluated as `EXACT` (10 loyalty/day penalty and 40-loyalty unrest threshold); (5) Off-Screen Combat evaluated as `EXACT` (identical casualty margin equation); (6) Truce Diplomacy evaluated as `EXACT` (identical 25% coefficients and 60/100 leverage thresholds); (7) The Moot Convocation evaluated as `COMPATIBLE` (explicitly enforces the 8 appointed non-capital Jarl invariant, preventing the Papyrus null-pointer deadlock); (8) Mid-Siege Interruption evaluated as `COMPATIBLE` (decoupled JSON persistence avoids Havok gate barricade desynchronization). Formulates M56 probing priorities for background AI battle math in `cs_tmscript.psc`.
+- **Evidence**: `research/findings/differential-testing.md`, `reconstruction/src/lib.rs`
+- **Related**: M55, M50, M51, M52, M53, M54, M56, M57, M58
+
+
 
 
 
