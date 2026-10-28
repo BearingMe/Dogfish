@@ -378,6 +378,13 @@
 - **Evidence**: `research/investigations/build-and-test-baseline.md`
 - **Related**: M63, M60, M62, M64, M65, M66
 
+## Contract-to-Code Traceability Audit & Fidelity Recalibration
+- **Status**: CONFIRMED
+- **Finding**: Critical traceability audit (`research/investigations/contract-traceability-audit.md`) maps all 55 features to code and uncovers significant fidelity overstatements in prior reports: (1) 14 features labeled EXACT actually contain only boolean flags (`pincer_assault`, `artillery_enabled`), integer counters (`prisoners_in_dungeon`), or simplified abstractions (`power_level` instead of 71 perks); (2) Uncovers invented mechanics: `GovernmentDoctrine` modifiers (+15%/-15%) in `faction.rs` have no source basis in Papyrus; (3) Uncovers critical persistence omissions: `persistence.rs` completely omits active sieges, divisions, governors, relations, cooldowns, and RNG state; (4) Uncovers missing invariants: `upgrade_facility` and `appoint_governor` lack ownership checks, and `advance_siege` allows instant victory without troops; (5) Recalibrates honest fidelity breakdown across N = 55 features: 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%).
+- **Evidence**: `research/investigations/contract-traceability-audit.md`, `reconstruction/src/`
+- **Related**: M64, M63, M65, M66, M67, M69, M72, M74
+
+
 
 
 
