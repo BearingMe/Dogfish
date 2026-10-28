@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 24 | 0 | 0 | 8 |
+| 32 | 20 | 0 | 0 | 12 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,7 +22,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-Phase 1 (External Reconnaissance) and Phase 2 (Technical Reconnaissance) are COMPLETE (M01–M08 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 3 Core Gameplay Specification is unlocked.
+Phase 1 (External Reconnaissance), Phase 2 (Technical Reconnaissance), and Phase 3 (Core Gameplay Specification) are COMPLETE (M01–M12 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 4 Military and Warfare is unlocked.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
@@ -36,10 +36,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M06** | Creation Engine Integration | Phase 2 | COMPLETE | M05 | Coordinator | `research/findings/skyrim-integration.md` | PASS | None | `660fb67` |
 | **M07** | Static Structure Recovery | Phase 2 | COMPLETE | M05, M06 | Coordinator | `research/findings/static-structure.md` | PASS | None | `ef03ca4` |
 | **M08** | Initialization & Runtime Lifecycle | Phase 2 | COMPLETE | M05, M06 | Coordinator | `research/findings/runtime-lifecycle.md` | PASS | None | `90c2f86` |
-| **M09** | Faction Creation | Phase 3 | NOT STARTED | Phase 2 Gate | Unassigned | `research/findings/faction-creation.md` | Pending | None | — |
-| **M10** | Territory & Ownership | Phase 3 | NOT STARTED | M09 | Unassigned | `research/findings/territory.md` | Pending | None | — |
-| **M11** | Progression & Victory | Phase 3 | NOT STARTED | M09, M10 | Unassigned | `research/findings/progression.md` | Pending | None | — |
-| **M12** | Player Interaction & Configuration | Phase 3 | NOT STARTED | M09 | Unassigned | `research/findings/interactions.md` | Pending | None | — |
+| **M09** | Faction Creation | Phase 3 | COMPLETE | Phase 2 Gate | Coordinator | `research/findings/faction-creation.md` | PASS | None | `dd5fa2a` |
+| **M10** | Territory & Ownership | Phase 3 | COMPLETE | M09 | Coordinator | `research/findings/territory.md` | PASS | None | `b7d1d82` |
+| **M11** | Progression & Victory | Phase 3 | COMPLETE | M09, M10 | Coordinator | `research/findings/progression.md` | PASS | None | `1ca2285` |
+| **M12** | Player Interaction & Configuration | Phase 3 | COMPLETE | M09 | Coordinator | `research/findings/interactions.md` | PASS | None | `47817a1` |
 | **M13** | Army & Recruitment Systems | Phase 4 | NOT STARTED | Phase 3 Gate | Unassigned | `research/findings/military-organization.md` | Pending | None | — |
 | **M14** | Orders, Movement & Deployment | Phase 4 | NOT STARTED | M13 | Unassigned | `research/findings/military-orders.md` | Pending | None | — |
 | **M15** | Combat Simulation | Phase 4 | NOT STARTED | M13, M14 | Unassigned | `research/findings/battles.md` | Pending | None | — |
@@ -96,7 +96,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/progression.md`
 - **M12: Player Interaction and Configuration** — Menus, dialogue, commands, configuration surfaces (MCM only if established), status reporting, error feedback.
   - *Deliverable*: `research/findings/interactions.md`
-- **Phase 3 Gate Criteria**: Complete observable core loop described from faction initialization through conquest and endgame.
+- **Phase 3 Gate Criteria**: **PASSED (2026-10-27)**. Complete observable core loop reconstructed from faction initialization through conquest, progression, and player interaction channels.
 
 ### Phase 4: Military and Warfare
 - **M13: Army and Recruitment Systems** — Recruitment sources, troop types, costs, capacity limits, commanders, equipment.
