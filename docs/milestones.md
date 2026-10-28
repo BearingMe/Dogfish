@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 12 | 0 | 0 | 20 |
+| 32 | 8 | 0 | 0 | 24 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,7 +22,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-Phase 1 (External Reconnaissance), Phase 2 (Technical Reconnaissance), Phase 3 (Core Gameplay Specification), Phase 4 (Military and Warfare), and Phase 5 (Economy, Population, and Development) are COMPLETE (M01–M20 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 6 Politics, Diplomacy, and Administration is unlocked.
+Phase 1 (External Reconnaissance), Phase 2 (Technical Reconnaissance), Phase 3 (Core Gameplay Specification), Phase 4 (Military and Warfare), Phase 5 (Economy, Population, and Development), and Phase 6 (Politics, Diplomacy, and Administration) are COMPLETE (M01–M24 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 7 Integration, Persistence, and Failure Analysis is unlocked.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
@@ -48,10 +48,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M18** | Population & Employment | Phase 5 | COMPLETE | M17 | Coordinator | `research/findings/population.md` | PASS | None | `7ee082a` |
 | **M19** | Buildings & Infrastructure | Phase 5 | COMPLETE | M17, M18 | Coordinator | `research/findings/infrastructure.md` | PASS | None | `da990e7` |
 | **M20** | Technology & Research | Phase 5 | COMPLETE | M17, M19 | Coordinator | `research/findings/technology.md` | PASS | None | `9792f7e` |
-| **M21** | Government & Officials | Phase 6 | NOT STARTED | Phase 4 & 5 Gates | Unassigned | `research/findings/government.md` | Pending | None | — |
-| **M22** | Jarls & Hold Administration | Phase 6 | NOT STARTED | M21, M10 | Unassigned | `research/findings/jarls.md` | Pending | None | — |
-| **M23** | Diplomacy | Phase 6 | NOT STARTED | M21, M22 | Unassigned | `research/findings/diplomacy.md` | Pending | None | — |
-| **M24** | Law, Crime & Stability | Phase 6 | NOT STARTED | M21, M22 | Unassigned | `research/findings/law-and-stability.md` | Pending | None | — |
+| **M21** | Government & Officials | Phase 6 | COMPLETE | Phase 4 & 5 Gates | Coordinator | `research/findings/government.md` | PASS | None | `a6b8588` |
+| **M22** | Jarls & Hold Administration | Phase 6 | COMPLETE | M21, M10 | Coordinator | `research/findings/jarls.md` | PASS | None | `80da2db` |
+| **M23** | Diplomacy | Phase 6 | COMPLETE | M21, M22 | Coordinator | `research/findings/diplomacy.md` | PASS | None | `f1764aa` |
+| **M24** | Law, Crime & Stability | Phase 6 | COMPLETE | M21, M22 | Coordinator | `research/findings/law-and-stability.md` | PASS | None | `68eb1f4` |
 | **M25** | Cross-System Dependency Recovery | Phase 7 | NOT STARTED | Phase 6 Gate | Unassigned | `research/findings/system-dependencies.md` | Pending | None | — |
 | **M26** | Persistence & State Consistency | Phase 7 | NOT STARTED | M25 | Unassigned | `research/findings/persistence.md` | Pending | None | — |
 | **M27** | Vanilla Skyrim Compatibility | Phase 7 | NOT STARTED | M25 | Unassigned | `research/findings/vanilla-compatibility.md` | Pending | None | — |
@@ -129,7 +129,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/diplomacy.md`
 - **M24: Law, Crime, and Stability** — Crime systems, arrests, prisoners, public order, unrest, interaction with vanilla crime.
   - *Deliverable*: `research/findings/law-and-stability.md`
-- **Phase 6 Gate Criteria**: Political and administrative systems connected to territorial control, economy, and military systems.
+- **Phase 6 Gate Criteria**: **PASSED (2026-10-27)**. Political, administrative, judicial, and diplomatic systems mapped and integrated with territorial holdings, economic yields, and military command.
 
 ### Phase 7: Integration, Persistence, and Failure Analysis
 - **M25: Cross-System Dependency Recovery** — Subsystem cross-talk, shared variables, ordering constraints, circular dependencies.
