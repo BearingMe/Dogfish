@@ -15,7 +15,7 @@ The original 32-milestone program produced comprehensive documentation (M01–M3
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 44 | 8 | 0 | 0 | 36 |
+| 44 | 4 | 0 | 0 | 40 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -69,10 +69,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M34** | Evidence Traceability Audit | Phase 9 | COMPLETE | M33 | Coordinator | `research/findings/evidence-audit.md` | PASS | None | `f426be7` |
 | **M35** | Research Execution & Harness Compliance Audit | Phase 9 | COMPLETE | M33 | Coordinator | `research/findings/execution-audit.md` | PASS | None | `2c47d30` |
 | **M36** | Confidence Reclassification | Phase 9 | COMPLETE | M33, M34, M35 | Coordinator | `research/findings/confidence-audit.md` | PASS | None | `1b2665c` |
-| **M37** | Binary & Structural Verification | Phase 10 | NOT STARTED | M33, Phase 9 Gate | Unassigned | `research/findings/verified-structure.md` | Pending | None | — |
-| **M38** | Papyrus Claim Verification | Phase 10 | NOT STARTED | M37 | Unassigned | `research/findings/verified-papyrus-behavior.md` | Pending | None | — |
-| **M39** | Numerical Mechanics & Formula Verification | Phase 10 | NOT STARTED | M38 | Unassigned | `research/findings/verified-mechanics.md` | Pending | None | — |
-| **M40** | State, Persistence & Integration Verification | Phase 10 | NOT STARTED | M38 | Unassigned | `research/findings/verified-state-and-integration.md` | Pending | None | — |
+| **M37** | Binary & Structural Verification | Phase 10 | COMPLETE | M33, Phase 9 Gate | Coordinator | `research/findings/verified-structure.md` | PASS | None | `7fad1ce` |
+| **M38** | Papyrus Claim Verification | Phase 10 | COMPLETE | M37 | Coordinator | `research/findings/verified-papyrus-behavior.md` | PASS | None | `365b8a8` |
+| **M39** | Numerical Mechanics & Formula Verification | Phase 10 | COMPLETE | M38 | Coordinator | `research/findings/verified-mechanics.md` | PASS | None | `eff2d0e` |
+| **M40** | State, Persistence & Integration Verification | Phase 10 | COMPLETE | M38 | Coordinator | `research/findings/verified-state-and-integration.md` | PASS | None | `a343b8a` |
 | **M41** | Controlled Playtesting Program | Phase 11 | NOT STARTED | M36 | Unassigned | `research/playtesting/test-plan.md` | Pending | None | — |
 | **M42** | Static & Runtime Evidence Reconciliation | Phase 11 | NOT STARTED | M39, M40, M41 | Unassigned | `research/findings/behavior-reconciliation.md` | Pending | None | — |
 | **M43** | Adversarial Specification Audit | Phase 11 | NOT STARTED | M36, M42 | Unassigned | `research/findings/adversarial-audit.md` | Pending | None | — |
@@ -194,7 +194,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/verified-mechanics.md`
 - **M40: State, Persistence, and Engine Integration Verification** — Re-verify state ownership, quest lifecycles, save/load handling, and vanilla Civil War/Main Quest integration.
   - *Deliverable*: `research/findings/verified-state-and-integration.md`
-- **Phase 10 Gate Criteria**: Complete when major technical claims have been independently checked against reproducible primary evidence.
+- **Phase 10 Gate Criteria**: **PASSED (2026-10-28)**. Major technical claims independently verified against reproducible primary evidence using persistent tools in `scripts/` and automated assertion tests in `tests/`. Phase 11 Empirical Validation unlocked.
 
 ### Phase 11: Empirical Validation and Final Recovery Audit
 - **Objective**: Reconcile technical inspection with actual gameplay and produce an audited, trustworthy final specification.
