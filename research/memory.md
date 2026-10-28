@@ -179,3 +179,9 @@
 - **Finding**: The recovered system model (`docs/system-model.md`) synthesizes the investigated architecture across 7 subsystems (Governance Hub, Territorial Engine, Economic Engine, Military Command, Siege/Battle Simulator, Diplomatic Engine, Judicial System) bound to a domain ERD, 4 core state machines (Territorial Holdings, Bilateral Diplomacy, Combat Waves, Stability Cascades), and an event scheduling model (24h daily economic ticks, OnCellAttach dynamic streaming, OnDying attrition hooks, and Scaleform ModEvents). Engine integration directly overrides 83 master forms in `Skyrim.esm` (including `CWCampaignObj` `0x00026F45`, Tullius, Ulfric, and 57 locations).
 - **Evidence**: `docs/system-model.md`
 - **Related**: M30, M06, M07, M25, M27, M32
+
+## Completeness & Uncertainty Audit
+- **Status**: CONFIRMED
+- **Finding**: Audit reconciles 100% of the 51 inventoried features (`docs/research-gaps.md`) across 94% Confirmed, 4% Observed, and 2% Inferred/Unknown confidence. Formally resolves key community contradictions (proves mutual exclusion with vanilla Civil War, proves bilateral truces rather than mutual defense alliances, proves Moot deadlock stems from unassigned Jarl aliases in `GetJarls()`). Uncovers an unreleased v0.4.0 developmental stub for `SetUpInitialJarlLoyalties()` commented out in `cs_checkversion.psc`.
+- **Evidence**: `docs/research-gaps.md`
+- **Related**: M31, M03, M28, M29, M32
