@@ -384,6 +384,13 @@
 - **Evidence**: `research/investigations/contract-traceability-audit.md`, `reconstruction/src/`
 - **Related**: M64, M63, M65, M66, M67, M69, M72, M74
 
+## Adversarial Regression Baseline & Defect Reproduction
+- **Status**: CONFIRMED
+- **Finding**: Automated adversarial test suite in `reconstruction/tests/adversarial_regressions.rs` executes 12 failure scenarios against current code, reproducing 9 concrete defects (3 passed, 9 failed): (1) Active sieges lost on save/load; (2) Army divisions and appointed governors lost on save/load; (3) Quotes/backslashes in strings break unescaped JSON parser; (4) Facilities in enemy holdings can be upgraded by player; (5) Governors in enemy capitals can be appointed by player; (6) Starting second siege silently overwrites active siege; (7) Sieges advance to capitulation with 0 soldiers; (8) Negative judicial fines corrupt treasury; (9) Treasury additions cause unhandled integer overflow panic. All 9 failures preserved as actionable work for Phase 17–19 repairs.
+- **Evidence**: `reconstruction/tests/adversarial_regressions.rs`, `research/investigations/adversarial-regression-baseline.md`
+- **Related**: M65, M64, M66, M67, M68, M69, M70, M74
+
+
 
 
 
