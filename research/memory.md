@@ -330,6 +330,13 @@
 - **Evidence**: `research/findings/differential-testing.md`, `reconstruction/src/lib.rs`
 - **Related**: M55, M50, M51, M52, M53, M54, M56, M57, M58
 
+## Strategic AI Warfare Math & Division Architecture Discovery
+- **Status**: CONFIRMED
+- **Finding**: Targeted source probing (`research/findings/targeted-source-probing.md`) resolves high-priority research gaps directly from Papyrus code: (1) Resolves general AI off-screen combat math in `cs_tmscript.psc:1511-1520`: every AI division represents exactly 20 soldiers (`math.ceiling(troopsremaining / 20)`), and dead divisions decrement `ActiveCommanderCount` directly; (2) Traces AI hold invasion priority formula (`cs_tmscript.psc:1030-1045`): $\text{ChanceToInvade}[i] = 1 + \text{OwnHoldsBordering}[i] + \text{random}(0, 3) + 10\,(\text{if unpatrolled}) + 100\,(\text{if desperate defense})$; (3) Explains division alias architecture in `cs_troopmanagemenuscript.psc:2170-2188`: 19 total alias arrays exist in the engine (`ArmyTroops1..19`), where 1..10 are assigned to the player and 11..19 are reserved for AI commanders; (4) Confirms v0.4.0 Jarl loyalty initialization was an unreleased stub commented out in `cs_checkversion.psc:92-102`. Formally closes the `UNKNOWN` gap on `FEAT-BAT-04`.
+- **Evidence**: `research/findings/targeted-source-probing.md`, `cs_tmscript.psc`, `cs_troopmanagemenuscript.psc`, `cs_checkversion.psc`
+- **Related**: M56, M55, M52, M46, M57, M58
+
+
 
 
 
