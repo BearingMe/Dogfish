@@ -1,6 +1,8 @@
 //! Global simulation state container and deterministic execution loop.
 
 use crate::core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
+use crate::faction::FactionProfile;
+use crate::territory::TerritoryManager;
 use crate::types::{FactionId, HoldingId, HoldingTier};
 
 /// National resource stockpiles pooled across holdings.
@@ -143,6 +145,8 @@ impl HoldingState {
 pub struct GameState {
     pub time: SimulationTime,
     pub rng: DeterministicRng,
+    pub faction: FactionProfile,
+    pub territory: TerritoryManager,
     pub treasury: i64,
     pub stockpile: ResourceStockpile,
     pub holdings: Vec<HoldingState>,
@@ -170,6 +174,8 @@ impl GameState {
         Self {
             time: SimulationTime::new(),
             rng: DeterministicRng::new(seed),
+            faction: FactionProfile::new_player(),
+            territory: TerritoryManager::new(),
             treasury: 10000,
             stockpile: ResourceStockpile::new(),
             holdings,
@@ -189,6 +195,7 @@ impl GameState {
     /// Execute the complete 24-hour daily economic and demographic simulation cycle.
     pub fn tick_day(&mut self) {
         self.events.push(SimulationEvent::DayAdvanced { day: self.time.day });
+        self.territory.advance_day();
 
         let mut daily_tax_revenue = 0i64;
         let mut total_food_consumed = 0i32;
@@ -213,6 +220,38 @@ impl GameState {
             total_consumed: total_food_consumed,
             net_surplus: self.stockpile.food,
         });
+    }
+
+    /// Transfer ownership of a holding atomically.
+    pub fn transfer_holding(
+        &mut self,
+        target_id: HoldingId,
+        new_owner: FactionId,
+        has_staging_camp: bool,
+    ) -> Result<()> {
+        self.territory.transfer_ownership(
+            &mut self.holdings,
+            target_id,
+            new_owner,
+            has_staging_camp,
+        )?;
+
+        self.events.push(SimulationEvent::HoldingCaptured {
+            holding_id: target_id.0,
+            new_owner: new_owner.name(),
+        });
+
+        Ok(())
+    }
+
+    /// Appoint a governor / Jarl to a held capital.
+    pub fn appoint_governor(
+        &mut self,
+        holding_id: HoldingId,
+        governor_name: impl Into<String>,
+    ) -> Result<()> {
+        let day = self.time.day;
+        self.territory.appoint_governor(holding_id, governor_name, day)
     }
 
     /// Assert core domain invariants. Returns Err if invariants are violated.

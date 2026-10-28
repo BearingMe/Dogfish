@@ -294,5 +294,12 @@
 - **Evidence**: `reconstruction/src/lib.rs`, `reconstruction/src/core.rs`, `reconstruction/src/state.rs`, `reconstruction/src/types.rs`
 - **Related**: M49, M46, M47, M50, M51, M52, M53, M54
 
+## Faction & Territorial State Reconstruction
+- **Status**: CONFIRMED
+- **Finding**: Independent domain modules authored in `reconstruction/src/faction.rs` and `reconstruction/src/territory.rs` (11/11 tests passing). Reconstructs: (1) Faction declaration protocol with custom naming, heraldic colors, and political doctrines (`Autocracy`, `Feudalism`, `Republic`, `Meritocracy`); (2) 9-hold geographic adjacency matrix enforcing contiguous land campaigns; (3) Staging camp assault mechanics allowing overseas/deep inland invasions; (4) Atomic territory transfers solving the original mod's M40 split-brain desync vulnerability (`CWOwner = 69` vs `AllHoldings = 1`) by encapsulating holding ownership, crime gold reset, and governor invalidation in a single transaction; (5) Provincial Jarl appointment tracking for The Moot convocation; (6) Wilderness camp 24h respawn recovery cooldowns.
+- **Evidence**: `reconstruction/src/faction.rs`, `reconstruction/src/territory.rs`, `reconstruction/src/lib.rs`
+- **Related**: M50, M40, M46, M49, M51, M52, M53
+
+
 
 

@@ -4,11 +4,15 @@
 //! and tested under the validation strategy in `docs/reconstruction-testing.md`.
 
 pub mod core;
+pub mod faction;
 pub mod state;
+pub mod territory;
 pub mod types;
 
 pub use core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
+pub use faction::{BannerColor, FactionProfile, GovernmentDoctrine};
 pub use state::{FacilityLevels, GameState, HoldingState, ResourceStockpile};
+pub use territory::{AppointedGovernor, TerritoryManager};
 pub use types::{DiplomaticStance, DivisionId, FactionId, HoldingId, HoldingTier, ResourceType};
 
 #[cfg(test)]
@@ -98,8 +102,8 @@ mod tests {
         assert_eq!(state.holdings.len(), 15);
         assert_eq!(state.treasury, 10000);
 
-        // Give player Falkreath
-        state.holdings[1].owner = FactionId::Player;
+        // Transfer Falkreath to Player directly
+        assert!(state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, true).is_ok());
         state.holdings[1].tax_rate = 1; // 13,500 tax
         let initial_food = state.stockpile.food;
         let food_needed = state.holdings[1].food_required(); // 30 pop + 10 guards = 40
@@ -132,5 +136,109 @@ mod tests {
         assert_eq!(sim1.holdings, sim2.holdings);
         assert_eq!(sim1.events.len(), sim2.events.len());
         assert_eq!(sim1.events, sim2.events);
+    }
+
+    // --- MILESTONE M50 TESTS ---
+
+    #[test]
+    fn test_faction_declaration_and_doctrine() {
+        let mut state = GameState::new(101);
+        assert!(!state.faction.is_declared);
+
+        state.faction.declare_faction(
+            "The Free Holds",
+            "Sons of the North",
+            BannerColor::Crimson,
+            GovernmentDoctrine::Republic,
+            state.time.day,
+        );
+
+        assert!(state.faction.is_declared);
+        assert_eq!(state.faction.name, "The Free Holds");
+        assert_eq!(state.faction.army_name, "Sons of the North");
+        assert_eq!(state.faction.banner_color, BannerColor::Crimson);
+        assert_eq!(state.faction.doctrine.tax_modifier_pct(), 20);
+        assert_eq!(state.faction.doctrine.conscription_modifier_pct(), -15);
+    }
+
+    #[test]
+    fn test_spatial_adjacency_matrix() {
+        // Whiterun (0) shares borders with Falkreath (1), Windhelm (3), Dawnstar (4), Riften (5), Morthal (6), Markarth (7)
+        assert!(territory::are_capitals_adjacent(HoldingId::WHITERUN, HoldingId::FALKREATH));
+        assert!(territory::are_capitals_adjacent(HoldingId::WHITERUN, HoldingId::WINDHELM));
+        assert!(territory::are_capitals_adjacent(HoldingId::WHITERUN, HoldingId::DAWNSTAR));
+        assert!(territory::are_capitals_adjacent(HoldingId::WHITERUN, HoldingId::RIFTEN));
+        assert!(territory::are_capitals_adjacent(HoldingId::WHITERUN, HoldingId::MORTHAL));
+        assert!(territory::are_capitals_adjacent(HoldingId::WHITERUN, HoldingId::MARKARTH));
+
+        // Solitude (2) only directly borders Morthal (6)
+        assert!(territory::are_capitals_adjacent(HoldingId::SOLITUDE, HoldingId::MORTHAL));
+        assert!(!territory::are_capitals_adjacent(HoldingId::SOLITUDE, HoldingId::WHITERUN));
+        assert!(!territory::are_capitals_adjacent(HoldingId::SOLITUDE, HoldingId::RIFTEN));
+
+        // Winterhold (8) only borders Windhelm (3) and Dawnstar (4)
+        assert!(territory::are_capitals_adjacent(HoldingId::WINTERHOLD, HoldingId::WINDHELM));
+        assert!(territory::are_capitals_adjacent(HoldingId::WINTERHOLD, HoldingId::DAWNSTAR));
+        assert!(!territory::are_capitals_adjacent(HoldingId::WINTERHOLD, HoldingId::FALKREATH));
+    }
+
+    #[test]
+    fn test_atomic_holding_transfer_and_split_brain_protection() {
+        let mut state = GameState::new(202);
+        assert_eq!(state.holdings[0].owner, FactionId::Imperial);
+
+        // Player captures first hold (Whiterun) via staging camp
+        assert!(state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).is_ok());
+
+        // Assert atomic updates:
+        assert_eq!(state.holdings[0].owner, FactionId::Player);
+        assert_eq!(state.territory.crime_gold[0], 0);
+        assert_eq!(state.holdings[0].loyalty, 60);
+        assert!(!state.territory.has_appointed_governor(HoldingId::WHITERUN));
+
+        // Appoint governor
+        assert!(state.appoint_governor(HoldingId::WHITERUN, "Vignar Gray-Mane").is_ok());
+        assert!(state.territory.has_appointed_governor(HoldingId::WHITERUN));
+
+        // Adjacent hold Falkreath (1) can now be conquered without staging camp because it borders Whiterun (0)
+        assert!(state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, false).is_ok());
+        assert_eq!(state.holdings[1].owner, FactionId::Player);
+    }
+
+    #[test]
+    fn test_invalid_non_adjacent_invasion_blocked() {
+        let mut state = GameState::new(303);
+        // Give player Falkreath (1)
+        assert!(state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, true).is_ok());
+
+        // Player attempts to invade Winterhold (8) without staging camp - MUST BE BLOCKED
+        // Falkreath does not border Winterhold!
+        let result = state.transfer_holding(HoldingId::WINTERHOLD, FactionId::Player, false);
+        assert!(matches!(result, Err(SimulationError::HoldingNotAdjacent { .. })));
+        assert_eq!(state.holdings[8].owner, FactionId::Stormcloak); // Preserved intact
+
+        // But with a staging camp established, deep assault is permitted (FEAT-SIEG-01)
+        let camp_result = state.transfer_holding(HoldingId::WINTERHOLD, FactionId::Player, true);
+        assert!(camp_result.is_ok());
+        assert_eq!(state.holdings[8].owner, FactionId::Player);
+    }
+
+    #[test]
+    fn test_wilderness_camp_respawn_cooldown() {
+        let mut state = GameState::new(404);
+        state.territory.trigger_camp_cooldown(HoldingId::RIVERWOOD, 2);
+        assert_eq!(state.territory.camp_cooldowns[9], 2);
+
+        // Advance 1 day (24 hours)
+        for _ in 0..24 {
+            state.tick_hour();
+        }
+        assert_eq!(state.territory.camp_cooldowns[9], 1);
+
+        // Advance another day
+        for _ in 0..24 {
+            state.tick_hour();
+        }
+        assert_eq!(state.territory.camp_cooldowns[9], 0);
     }
 }
