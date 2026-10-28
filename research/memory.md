@@ -426,6 +426,13 @@
 - **Evidence**: `reconstruction/src/state.rs`, `reconstruction/src/persistence.rs`, `reconstruction/src/lib.rs`
 - **Related**: M71, M67, M68, M69, M70, M72, M74
 
+## Faction & Doctrine Fidelity Repair (Isolation of Non-Canonical Modifiers)
+- **Status**: CONFIRMED
+- **Finding**: Faction governance module repaired in `reconstruction/src/faction.rs` (38/38 tests passing): (1) Resolved DEF-FIDEL-01 by removing invented percentage multipliers (+15%/-15%) from canonical simulation execution, ensuring baseline economy operates strictly on verified Papyrus tiered formulas; (2) Isolated experimental doctrine modifiers (`experimental_tax_modifier_pct`, `experimental_conscription_modifier_pct`) with explicit documentation labeling them as non-canonical extensions; (3) Verified initial world data, 15-holding endowments, and 9-hold capital alignments against primary sources.
+- **Evidence**: `reconstruction/src/faction.rs`, `cs_factiongovernmentscript.psc`
+- **Related**: M72, M71, M66, M50, M73, M74
+
+
 
 
 

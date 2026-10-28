@@ -44,8 +44,22 @@ pub enum GovernmentDoctrine {
 }
 
 impl GovernmentDoctrine {
-    /// Tax multiplier modifier (percentage points, e.g. +10% or -5%).
+    /// Canonical source-verified tax modifier (0% distortion).
+    ///
+    /// NOTE (DEF-FIDEL-01): In Conquest of Skyrim v0.3.9, doctrine yield modifiers were
+    /// unreleased stubs in cs_factiongovernmentscript.psc. Canonical simulation runs
+    /// strictly on verified tiered taxation without artificial distortion.
     pub fn tax_modifier_pct(&self) -> i32 {
+        0
+    }
+
+    /// Canonical source-verified conscription modifier (0% distortion).
+    pub fn conscription_modifier_pct(&self) -> i32 {
+        0
+    }
+
+    /// Experimental non-canonical tax multiplier modifier (isolated for research testing).
+    pub fn experimental_tax_modifier_pct(&self) -> i32 {
         match self {
             GovernmentDoctrine::Autocracy => 15,
             GovernmentDoctrine::Feudalism => 0,
@@ -54,8 +68,8 @@ impl GovernmentDoctrine {
         }
     }
 
-    /// Conscription rate modifier (percentage points).
-    pub fn conscription_modifier_pct(&self) -> i32 {
+    /// Experimental non-canonical conscription modifier (isolated for research testing).
+    pub fn experimental_conscription_modifier_pct(&self) -> i32 {
         match self {
             GovernmentDoctrine::Autocracy => 25,
             GovernmentDoctrine::Feudalism => 0,

@@ -162,8 +162,10 @@ mod tests {
         assert_eq!(state.faction.name, "The Free Holds");
         assert_eq!(state.faction.army_name, "Sons of the North");
         assert_eq!(state.faction.banner_color, BannerColor::Crimson);
-        assert_eq!(state.faction.doctrine.tax_modifier_pct(), 20);
-        assert_eq!(state.faction.doctrine.conscription_modifier_pct(), -15);
+        assert_eq!(state.faction.doctrine.tax_modifier_pct(), 0);
+        assert_eq!(state.faction.doctrine.conscription_modifier_pct(), 0);
+        assert_eq!(state.faction.doctrine.experimental_tax_modifier_pct(), 20);
+        assert_eq!(state.faction.doctrine.experimental_conscription_modifier_pct(), -15);
     }
 
     #[test]
