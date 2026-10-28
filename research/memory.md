@@ -155,3 +155,9 @@
 - **Finding**: State persists across 1,275 globals, 238 running quests, and 88 reference aliases in `.ess` save files. Volatile 3D and string state is repaired on `OnPlayerLoadGame` via coordinated self-healing scripts: `CS_CheckVersion` (version migrations, timer restarts), `CS_UpdateFactionName` (container-proxy text re-attachment), `CS_UpdateGovOutfitsOnLoadGame` (Jarl/cabinet attire refresh), `CS_TroopEquipUpdateLoad` (armory list re-evaluation), and `CS_PlayerSurrenderLoadGame` (forces stage 100 to clear captive scene stalls). Saving mid-siege is highly vulnerable to barricade and wave counter desynchronization; mid-game uninstallation causes permanent hold broken states and orphaned Papyrus thread locks.
 - **Evidence**: `research/findings/persistence.md`
 - **Related**: M26, M08, M10, M12, M16, M28
+
+## Vanilla Skyrim Master Overrides & Compatibility Invariants
+- **Status**: CONFIRMED
+- **Finding**: `conquerskyrim.esp` directly overrides 83 vanilla records, prominently `CWCampaignObj` (FormID `0x00026F45`), `CWChangeLocationScenes` (FormID `0x000D5176`), General Tullius (`0x0001336B`), Ulfric Stormcloak (`0x0010F9B9`), and 57 `LCTN` locations. A verified game-breaking conflict occurs if the player captures holds before resolving the Main Quest council summit *Season Unending* (`MQ302`) or *Dragon Rising* (`MQ104`), or if run alongside *Open Civil War* or *CWO*. Managing faction officers through third-party follower frameworks (AFT/NFF) breaks their `TaskBarrel` AI package stack.
+- **Evidence**: `research/findings/vanilla-compatibility.md`
+- **Related**: M27, M04, M06, M10, M14, M28
