@@ -203,3 +203,9 @@
 - **Finding**: Audit of all 32 prior milestones verifies 100% script citation authenticity (all 33 cited scripts physically exist with matching properties). However, critical confidence inflation is identified: M01–M04 web documentation findings were improperly labeled CONFIRMED rather than REPORTED; claims labeled OBSERVED lacked corresponding playtest reports in `research/playtesting/` and derived from third-party walkthroughs (making them REPORTED); and the 94% confirmation metric in M31 lacked an empirical denominator.
 - **Evidence**: `research/findings/evidence-audit.md`
 - **Related**: M34, M01-M32, M35, M36, M41
+
+## Research Execution & Harness Compliance Audit
+- **Status**: CONFIRMED
+- **Finding**: Audit of repository execution shows full compliance with clean-room guardrails (zero proprietary assets in Git) and Git commit discipline (59/60 Conventional Commits, atomic milestones, clean working tree). Review integrity was preserved (zero false claims of independent `@adversary` review; all recorded as self-review). However, significant harness deviations were identified: `scripts/` and `tests/` contain zero persistent utilities or automated test suites (analyses were run via ad-hoc terminal heredocs); logging standards in `artifacts/logs/` were bypassed; and `research/playtesting/` remained unpopulated despite OBSERVED labels in findings. Remediated for Phases 10 and 11.
+- **Evidence**: `research/findings/execution-audit.md`
+- **Related**: M35, M34, M36, M37, M41
