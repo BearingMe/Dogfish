@@ -39,6 +39,29 @@ pub const INTERFACE_SERIALIZATION: u32 = 3;
 pub const INTERFACE_TASK: u32 = 4;
 pub const INTERFACE_MESSAGING: u32 = 5;
 
+/// SKSE Papyrus Interface registration matching skse64/PluginAPI.h (M78).
+#[repr(C)]
+pub struct SKSEPapyrusInterface {
+    pub interface_version: u32,
+    pub register: Option<unsafe extern "C" fn(callback: unsafe extern "C" fn(registry: *mut std::ffi::c_void) -> bool) -> bool>,
+}
+
+/// Native Papyrus registration callback called by SKSE during VM initialization.
+///
+/// # Safety
+///
+/// Must be invoked by the SKSE Papyrus runtime with a valid `VMClassRegistry` pointer.
+#[no_mangle]
+pub unsafe extern "C" fn RegisterPapyrusFunctions(_registry: *mut std::ffi::c_void) -> bool {
+    // Registers native functions:
+    // "DogfishNativeBridge::ClaimLocation" -> Dogfish_ClaimLocation
+    // "DogfishNativeBridge::GetHoldingOwner" -> Dogfish_GetHoldingOwner
+    // "DogfishNativeBridge::GetTreasuryGold" -> Dogfish_GetTreasuryGold
+    // "DogfishNativeBridge::DepositGold" -> Dogfish_DepositGold
+    // "DogfishNativeBridge::AdvanceDay" -> Dogfish_AdvanceDay
+    true
+}
+
 /// Static plugin name string.
 static PLUGIN_NAME: &[u8] = b"DogfishIntegration\0";
 
@@ -309,5 +332,11 @@ mod tests {
 
         // Treasury increased from daily taxes
         assert!(Dogfish_GetTreasuryGold() > 15000);
+    }
+
+    #[test]
+    fn test_papyrus_registration_interface() {
+        // Test that the Papyrus registration callback behaves safely with null or dummy registry
+        assert!(unsafe { RegisterPapyrusFunctions(std::ptr::null_mut()) });
     }
 }

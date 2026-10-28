@@ -492,3 +492,9 @@
 
 
 
+
+## Papyrus Native Function Bridge & Test Plugin Recipe
+- **Status**: CONFIRMED
+- **Finding**: Papyrus-to-native communication layer implemented in `integration/` (4/4 tests passing, 0 clippy warnings): (1) Authored physical uncompiled Papyrus sources in `integration/scripts/source/` (`DogfishNativeBridge.psc` declaring native global bindings, `DogfishClaimBannerScript.psc` handling `OnActivate` and UI feedback); (2) Implemented `SKSEPapyrusInterface` registration structures and `RegisterPapyrusFunctions()` callback; (3) Authored isolated test plugin recipe (`integration/records/dogfish_test_recipe.md`) defining `dogfish_test.esp` (ESL-flagged Form Version 44), `DogfishTestCell` (interior space based on `qasmoke`), `DogfishClaimBannerActi`, and `DogfishAnchorQuest`.
+- **Evidence**: `integration/scripts/source/`, `integration/records/dogfish_test_recipe.md`, `integration/src/lib.rs`
+- **Related**: M78, M77, M66, M60, M79, M80

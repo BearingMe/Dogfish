@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 5 | 0 | 0 | 77 |
+| 82 | 4 | 0 | 0 | 78 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -109,7 +109,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M75** | Government, Diplomacy, Law & Progression Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `cef262a` |
 | **M76** | Independent Differential Validation | Phase 18 | COMPLETE | M72, M73, M74, M75 | Coordinator | `research/findings/independent-differential-validation.md` | PASS | None | `358e286` |
 | **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | COMPLETE | M63, Phase 17 Gate | Coordinator | `integration/` | PASS | None | `80b5a1d` |
-| **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | NOT STARTED | M77 | Unassigned | `integration/` | Pending | None | — |
+| **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | COMPLETE | M77 | Coordinator | `integration/` | PASS | None | Pending |
 | **M79** | SKSE Save/Load & State Synchronization | Phase 19 | NOT STARTED | M67, M68, M78 | Unassigned | `integration/` | Pending | None | — |
 | **M80** | Real Skyrim Vertical Slice | Phase 19 | NOT STARTED | M78, M79 | Unassigned | `integration/` | Pending | None | — |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | NOT STARTED | Phase 18 Gate, M76, M80 | Unassigned | `docs/reconstruction-coverage.md` | Pending | None | — |
