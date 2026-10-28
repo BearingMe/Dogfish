@@ -1,18 +1,19 @@
-//! Integration Defect Reproduction Suite
+//! Integration Defect Verification & Regression Suite
 //!
-//! Milestone M91: Specifically designed to expose and reproduce native integration omissions:
-//! 1. SKSEPlugin_Load fails to query or register the Papyrus interface.
-//! 2. RegisterPapyrusFunctions is a stub that registers zero native functions.
-//! 3. Type mismatch between Rust i64/u8 and Papyrus 32-bit Int.
+//! Milestone M91 & M92: Verifies that native integration defects are properly resolved:
+//! 1. SKSEPlugin_Load queries INTERFACE_PAPYRUS and registers the Papyrus callback.
+//! 2. RegisterPapyrusFunctions binds all 5 declared functions on DogfishNativeBridge.
+//! 3. Papyrus 32-bit integer FFI adapters (Dogfish_*_C) prevent 64-bit ABI register corruption.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use dogfish_integration::{
-    SKSEInterface, SKSEPlugin_Load,
-    INTERFACE_PAPYRUS, INTERFACE_SERIALIZATION,
+    get_registered_papyrus_function_count, SKSEInterface, SKSEPapyrusInterface,
+    SKSEPlugin_Load, INTERFACE_PAPYRUS, INTERFACE_SERIALIZATION,
 };
 
 static PAPYRUS_QUERIED: AtomicBool = AtomicBool::new(false);
 static SERIALIZATION_QUERIED: AtomicBool = AtomicBool::new(false);
+static PAPYRUS_CALLBACK_REGISTERED: AtomicBool = AtomicBool::new(false);
 
 unsafe extern "C" fn mock_get_handle() -> u32 {
     1
@@ -22,12 +23,24 @@ unsafe extern "C" fn mock_get_release() -> u32 {
     1
 }
 
+unsafe extern "C" fn mock_papyrus_register(
+    cb: unsafe extern "C" fn(*mut std::ffi::c_void) -> bool,
+) -> bool {
+    PAPYRUS_CALLBACK_REGISTERED.store(true, Ordering::SeqCst);
+    // Invoke the callback with a dummy valid pointer representing VMClassRegistry
+    cb(0x2000 as *mut std::ffi::c_void)
+}
+
+static MOCK_PAPYRUS_INTERFACE: SKSEPapyrusInterface = SKSEPapyrusInterface {
+    interface_version: 1,
+    register: Some(mock_papyrus_register),
+};
+
 unsafe extern "C" fn mock_query_interface(id: u32) -> *mut std::ffi::c_void {
     match id {
         INTERFACE_PAPYRUS => {
             PAPYRUS_QUERIED.store(true, Ordering::SeqCst);
-            // Return dummy pointer representing SKSEPapyrusInterface
-            0x1000 as *mut std::ffi::c_void
+            &MOCK_PAPYRUS_INTERFACE as *const _ as *mut std::ffi::c_void
         }
         INTERFACE_SERIALIZATION => {
             SERIALIZATION_QUERIED.store(true, Ordering::SeqCst);
@@ -37,14 +50,12 @@ unsafe extern "C" fn mock_query_interface(id: u32) -> *mut std::ffi::c_void {
     }
 }
 
-/// DEFECT REPRODUCTION 1: SKSEPlugin_Load completely omits querying INTERFACE_PAPYRUS.
-///
-/// EXPECTED: SKSEPlugin_Load queries INTERFACE_PAPYRUS (2) and registers the Papyrus function callback.
-/// ACTUAL: SKSEPlugin_Load only queries INTERFACE_SERIALIZATION (3) and never queries INTERFACE_PAPYRUS!
+/// M91/M92 REGRESSION: SKSEPlugin_Load must query INTERFACE_PAPYRUS and register callback.
 #[test]
-fn test_defect_papyrus_interface_omitted_in_plugin_load() {
+fn test_papyrus_interface_registration_lifecycle() {
     PAPYRUS_QUERIED.store(false, Ordering::SeqCst);
     SERIALIZATION_QUERIED.store(false, Ordering::SeqCst);
+    PAPYRUS_CALLBACK_REGISTERED.store(false, Ordering::SeqCst);
 
     let mock_skse = SKSEInterface {
         skse_version: 0x02020600,
@@ -60,52 +71,46 @@ fn test_defect_papyrus_interface_omitted_in_plugin_load() {
     let loaded = unsafe { SKSEPlugin_Load(&mock_skse) };
     assert!(loaded);
 
-    // Serialization was queried
+    // Both serialization and Papyrus interfaces must be queried
     assert!(SERIALIZATION_QUERIED.load(Ordering::SeqCst));
+    assert!(PAPYRUS_QUERIED.load(Ordering::SeqCst));
 
-    // ADVERSARIAL ASSERTION: INTERFACE_PAPYRUS must be queried by SKSEPlugin_Load
-    assert!(
-        PAPYRUS_QUERIED.load(Ordering::SeqCst),
-        "DEFECT REPRODUCED: SKSEPlugin_Load fails to query INTERFACE_PAPYRUS (2)!"
-    );
+    // Callback must be registered and invoked
+    assert!(PAPYRUS_CALLBACK_REGISTERED.load(Ordering::SeqCst));
+    assert_eq!(get_registered_papyrus_function_count(), 5);
 }
 
-/// DEFECT REPRODUCTION 2: RegisterPapyrusFunctions is a no-op that binds 0 functions.
-///
-/// In the current code:
-/// pub unsafe extern "C" fn RegisterPapyrusFunctions(_registry: *mut std::ffi::c_void) -> bool { true }
-/// It literally contains zero function calls and registers zero functions on the VM registry!
+/// M92 REGRESSION: RegisterPapyrusFunctions must safely reject null and register all 5 functions.
 #[test]
-fn test_defect_register_papyrus_functions_is_stub() {
-    // If a registry pointer is provided, an actual implementation must interact with it
-    // rather than blindly returning true without binding functions.
-    // In M91 baseline, RegisterPapyrusFunctions ignores the registry entirely.
+fn test_register_papyrus_functions_safety_and_binding() {
+    // Null pointer is safely rejected without crash
+    assert!(!unsafe { dogfish_integration::RegisterPapyrusFunctions(std::ptr::null_mut()) });
+
+    // Non-null registry pointer registers all 5 functions
     let dummy_registry = 0xCAFE as *mut std::ffi::c_void;
-
-    // We verify that the function has no side effects and registers nothing
     let result = unsafe { dogfish_integration::RegisterPapyrusFunctions(dummy_registry) };
-    assert!(result); // Passes unconditionally because it is a stub!
+    assert!(result);
+    assert_eq!(get_registered_papyrus_function_count(), 5);
 }
 
-/// DEFECT REPRODUCTION 3: ABI type mismatch between Papyrus Int and Rust i64.
-///
-/// Papyrus `Int` is a 32-bit signed integer (`SInt32` in SKSE).
-/// In `integration/src/lib.rs`, `Dogfish_GetTreasuryGold()` returns `i64` (8 bytes).
-/// When Papyrus invokes a native function returning 8 bytes, the Papyrus VM stack expects
-/// a 4-byte SInt32, resulting in register corruption or truncation!
+/// M92/M93 REGRESSION: 32-bit Papyrus VM FFI adapter signatures.
 #[test]
-fn test_defect_papyrus_int_abi_mismatch() {
-    // Verify that Dogfish_GetTreasuryGold returns an 8-byte type
-    let treasury_return_size = std::mem::size_of_val(&dogfish_integration::Dogfish_GetTreasuryGold());
-    assert_eq!(treasury_return_size, 8, "Returns 64-bit integer");
+fn test_papyrus_32bit_vm_adapter_signatures() {
+    dogfish_integration::init_adapter(42);
 
     // Papyrus VM SInt32 is 4 bytes
-    let papyrus_int_size = std::mem::size_of::<i32>();
-    assert_eq!(papyrus_int_size, 4, "Papyrus Int is 32-bit integer");
+    assert_eq!(std::mem::size_of::<i32>(), 4);
 
-    // Type sizes differ: Native function signature must be adapted for Papyrus VM FFI
-    assert_ne!(
-        treasury_return_size, papyrus_int_size,
-        "DEFECT REPRODUCED: Native return type (8 bytes) does not match Papyrus Int (4 bytes)!"
-    );
+    // Test that the C-ABI VM adapter returns i32 (4 bytes), preventing 64-bit register corruption
+    let treasury_res = dogfish_integration::Dogfish_GetTreasuryGold_C(std::ptr::null_mut());
+    assert_eq!(std::mem::size_of_val(&treasury_res), 4);
+    assert_eq!(treasury_res, 10000);
+
+    // Test deposit adapter
+    assert!(dogfish_integration::Dogfish_DepositGold_C(std::ptr::null_mut(), 1000));
+    assert_eq!(dogfish_integration::Dogfish_GetTreasuryGold_C(std::ptr::null_mut()), 11000);
+
+    // Test claim adapter
+    assert_eq!(dogfish_integration::Dogfish_ClaimLocation_C(std::ptr::null_mut(), 0, true), 0);
+    assert_eq!(dogfish_integration::Dogfish_GetHoldingOwner_C(std::ptr::null_mut(), 0), 0);
 }

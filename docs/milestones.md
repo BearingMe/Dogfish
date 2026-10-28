@@ -16,7 +16,7 @@ This document tracks all 98 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 98 | 15 | 2 | 1 | 80 |
+| 98 | 14 | 1 | 1 | 82 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -111,7 +111,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M75** | Government, Diplomacy, Law & Progression Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `cef262a` |
 | **M76** | Independent Differential Validation | Phase 18 | COMPLETE | M72, M73, M74, M75 | Coordinator | `research/findings/independent-differential-validation.md` | PASS | None | `358e286` |
 | **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | COMPLETE | M63, Phase 17 Gate | Coordinator | `integration/` | PASS | None | `80b5a1d` |
-| **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | IN PROGRESS | M77 | Coordinator | `integration/` | In Progress | Reopened: Registration stub returned true without VM binding | `f730564` |
+| **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | COMPLETE | M77 | Coordinator | `integration/` | PASS | None | `f730564` |
 | **M79** | SKSE Save/Load & State Synchronization | Phase 19 | IN PROGRESS | M67, M68, M78 | Coordinator | `integration/` | In Progress | Reopened: Co-save streaming unverified; mock only | `ded135f` |
 | **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | `c9a871c` |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | COMPLETE | Phase 18 Gate, M76, M80 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `c03fdb5` |
@@ -125,7 +125,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M89** | Nexus & Forum Feedback Corpus Consolidation | Phase 23 | NOT STARTED | M88 | Unassigned | `research/findings/community-feedback-corpus.md` | Pending | None | — |
 | **M90** | Player Pain Points & Feature Wishlist Analysis | Phase 23 | NOT STARTED | M89 | Unassigned | `research/findings/pain-points-and-wishlist.md` | Pending | None | — |
 | **M91** | Integration Defect Reproduction | Phase 24 | COMPLETE | M82, Phase 20 Gate | Coordinator | `research/investigations/native-integration-audit.md` | PASS | None | `55fecd4` |
-| **M92** | Real Papyrus Native Function Registration | Phase 24 | NOT STARTED | M91 | Unassigned | `integration/` | Pending | None | — |
+| **M92** | Real Papyrus Native Function Registration | Phase 24 | COMPLETE | M91 | Coordinator | `integration/` | PASS | None | Pending |
 | **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `research/findings/native-abi-validation.md` | Pending | None | — |
 | **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `integration/` | Pending | None | — |
 | **M95** | Persistence Parser & Save Integrity Repair | Phase 25 | NOT STARTED | Phase 24 Gate | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |

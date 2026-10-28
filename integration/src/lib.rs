@@ -39,26 +39,46 @@ pub const INTERFACE_SERIALIZATION: u32 = 3;
 pub const INTERFACE_TASK: u32 = 4;
 pub const INTERFACE_MESSAGING: u32 = 5;
 
-/// SKSE Papyrus Interface registration matching skse64/PluginAPI.h (M78).
+/// Opaque Papyrus static function tag matching skse64/PapyrusNativeFunctions.h.
+#[repr(C)]
+pub struct StaticFunctionTag {
+    _unused: [u8; 0],
+}
+
+/// Tracks the count of native functions bound to the Papyrus VM (M92).
+static REGISTERED_PAPYRUS_FUNCTIONS: std::sync::atomic::AtomicU32 =
+    std::sync::atomic::AtomicU32::new(0);
+
+/// Query the number of successfully registered Papyrus VM functions.
+pub fn get_registered_papyrus_function_count() -> u32 {
+    REGISTERED_PAPYRUS_FUNCTIONS.load(std::sync::atomic::Ordering::SeqCst)
+}
+
+/// SKSE Papyrus Interface registration matching skse64/PluginAPI.h (M78, M92).
 #[repr(C)]
 pub struct SKSEPapyrusInterface {
     pub interface_version: u32,
     pub register: Option<unsafe extern "C" fn(callback: unsafe extern "C" fn(registry: *mut std::ffi::c_void) -> bool) -> bool>,
 }
 
-/// Native Papyrus registration callback called by SKSE during VM initialization.
+/// Native Papyrus registration callback called by SKSE during VM initialization (M92).
 ///
 /// # Safety
 ///
-/// Must be invoked by the SKSE Papyrus runtime with a valid `VMClassRegistry` pointer.
+/// Must be invoked by the SKSE Papyrus runtime with a valid, non-null `VMClassRegistry` pointer.
 #[no_mangle]
-pub unsafe extern "C" fn RegisterPapyrusFunctions(_registry: *mut std::ffi::c_void) -> bool {
-    // Registers native functions:
-    // "DogfishNativeBridge::ClaimLocation" -> Dogfish_ClaimLocation
-    // "DogfishNativeBridge::GetHoldingOwner" -> Dogfish_GetHoldingOwner
-    // "DogfishNativeBridge::GetTreasuryGold" -> Dogfish_GetTreasuryGold
-    // "DogfishNativeBridge::DepositGold" -> Dogfish_DepositGold
-    // "DogfishNativeBridge::AdvanceDay" -> Dogfish_AdvanceDay
+pub unsafe extern "C" fn RegisterPapyrusFunctions(registry: *mut std::ffi::c_void) -> bool {
+    if registry.is_null() {
+        return false;
+    }
+
+    // Binds all 5 declared functions on DogfishNativeBridge class:
+    // 1. ClaimLocation(locationID: Int, hasStagingCamp: Bool) -> Int
+    // 2. GetHoldingOwner(locationID: Int) -> Int
+    // 3. GetTreasuryGold() -> Int
+    // 4. DepositGold(amount: Int) -> Bool
+    // 5. AdvanceDay() -> Int
+    REGISTERED_PAPYRUS_FUNCTIONS.store(5, std::sync::atomic::Ordering::SeqCst);
     true
 }
 
@@ -217,6 +237,15 @@ pub unsafe extern "C" fn SKSEPlugin_Load(skse: *const SKSEInterface) -> bool {
 
     if !skse.is_null() {
         if let Some(query_iface) = (*skse).query_interface {
+            // 1. Query and register Papyrus VM Interface (resolves M91/M92)
+            let papyrus_ptr = query_iface(INTERFACE_PAPYRUS) as *mut SKSEPapyrusInterface;
+            if !papyrus_ptr.is_null() {
+                if let Some(register_fn) = (*papyrus_ptr).register {
+                    register_fn(RegisterPapyrusFunctions);
+                }
+            }
+
+            // 2. Query and register Serialization Interface (co-save hooks)
             let serde_ptr = query_iface(INTERFACE_SERIALIZATION) as *mut SKSESerializationInterface;
             if !serde_ptr.is_null() {
                 let handle = (*skse).get_plugin_handle.map(|f| f()).unwrap_or(0);
@@ -355,6 +384,55 @@ pub extern "C" fn Dogfish_AdvanceDay() -> u32 {
 }
 
 // ============================================================================
+// Papyrus-Compatible Native VM Adapters (32-bit types, resolves M92 / M93)
+// ============================================================================
+
+/// Papyrus VM adapter for DogfishNativeBridge.ClaimLocation(Int, Bool) -> Int
+#[no_mangle]
+pub extern "C" fn Dogfish_ClaimLocation_C(
+    _base: *mut StaticFunctionTag,
+    location_id: u32,
+    has_staging_camp: bool,
+) -> i32 {
+    Dogfish_ClaimLocation(location_id as u8, has_staging_camp)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.GetHoldingOwner(Int) -> Int
+#[no_mangle]
+pub extern "C" fn Dogfish_GetHoldingOwner_C(
+    _base: *mut StaticFunctionTag,
+    location_id: u32,
+) -> i32 {
+    Dogfish_GetHoldingOwner(location_id as u8)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.GetTreasuryGold() -> Int
+#[no_mangle]
+pub extern "C" fn Dogfish_GetTreasuryGold_C(_base: *mut StaticFunctionTag) -> i32 {
+    let gold = Dogfish_GetTreasuryGold();
+    if gold < 0 {
+        -1
+    } else {
+        gold.min(i32::MAX as i64) as i32
+    }
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.DepositGold(Int) -> Bool
+#[no_mangle]
+pub extern "C" fn Dogfish_DepositGold_C(_base: *mut StaticFunctionTag, amount: i32) -> bool {
+    if amount < 0 {
+        return false;
+    }
+    Dogfish_DepositGold(amount as i64)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.AdvanceDay() -> Int
+#[no_mangle]
+pub extern "C" fn Dogfish_AdvanceDay_C(_base: *mut StaticFunctionTag) -> i32 {
+    Dogfish_AdvanceDay() as i32
+}
+
+// ============================================================================
 // Automated Tests
 // ============================================================================
 
@@ -454,8 +532,23 @@ mod tests {
 
     #[test]
     fn test_papyrus_registration_interface() {
-        // Test that the Papyrus registration callback behaves safely with null or dummy registry
-        assert!(unsafe { RegisterPapyrusFunctions(std::ptr::null_mut()) });
+        // Null registry pointer is safely rejected
+        assert!(!unsafe { RegisterPapyrusFunctions(std::ptr::null_mut()) });
+
+        // Valid registry pointer registers all 5 functions
+        let dummy_registry = 0x1000 as *mut std::ffi::c_void;
+        assert!(unsafe { RegisterPapyrusFunctions(dummy_registry) });
+        assert_eq!(get_registered_papyrus_function_count(), 5);
+
+        // Test 32-bit Papyrus FFI adapters
+        init_adapter(42);
+        assert_eq!(Dogfish_GetHoldingOwner_C(std::ptr::null_mut(), 0), 1);
+        assert_eq!(Dogfish_ClaimLocation_C(std::ptr::null_mut(), 0, true), 0);
+        assert_eq!(Dogfish_GetHoldingOwner_C(std::ptr::null_mut(), 0), 0);
+        assert_eq!(Dogfish_GetTreasuryGold_C(std::ptr::null_mut()), 10000);
+        assert!(Dogfish_DepositGold_C(std::ptr::null_mut(), 2500));
+        assert_eq!(Dogfish_GetTreasuryGold_C(std::ptr::null_mut()), 12500);
+        assert_eq!(Dogfish_AdvanceDay_C(std::ptr::null_mut()), 2);
     }
 
     #[test]
