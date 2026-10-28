@@ -113,7 +113,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M79** | SKSE Save/Load & State Synchronization | Phase 19 | COMPLETE | M67, M68, M78 | Coordinator | `integration/` | PASS | None | `ded135f` |
 | **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | `c9a871c` |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | COMPLETE | Phase 18 Gate, M76, M80 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `c03fdb5` |
-| **M82** | Final Reconstruction Quality Gate | Phase 20 | COMPLETE | M81 | Coordinator | `docs/reconstruction-repair-report.md` | PASS | None | Pending |
+| **M82** | Final Reconstruction Quality Gate | Phase 20 | COMPLETE | M81 | Coordinator | `docs/reconstruction-repair-report.md` | PASS | None | `c1b527d` |
 
 ---
 
