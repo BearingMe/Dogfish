@@ -119,3 +119,9 @@
 - **Finding**: Technology advances across 71 `PERK` records in 4 branches: Martial (10 levels for Soldier, Warrior, Archer, Crossbow, Guard), Arcane (Levels 1-5 for Destruction Fire/Frost/Shock), Dwemer Engineering (4 automaton tiers), and Dragon Mastery (`CS_SpeakToTamedDragonPerk`). Martial upgrade costs scale linearly: $\text{CostGold} = 5000 + (\text{Level}-1) \times 10000$ and $\text{CostMetal} = 50 + (\text{Level}-1) \times 100$, immediately incrementing `TroopPowerLevels` and unlocking tier gear in `UnlocksHeavy[]`/`UnlocksLight[]`.
 - **Evidence**: `research/findings/technology.md`
 - **Related**: M20, M13, M17, M19, M29
+
+## Royal Cabinet & Judicial Administration Framework
+- **Status**: CONFIRMED
+- **Finding**: Sovereign government operates through a central cabinet (Steward for civil/treasury, Second-in-Command for warfare, Spymaster for covert spy networks and coups in `CS_IntelReportScript`, Blacksmith for armory supply, Court Mage for arcane wards, Court Bard for ceremonies, Executioner for capital trials) and provincial Jarls across the 9 holds. Judicial administration in `CS_CourtScript` allows convening court from royal thrones to judge seven legal categories (Theft, Assault, Murder, Speaking Out, Worship, Treason, Contraband) resulting in fines, dungeon imprisonment, or chopping block executions (`ExecutionQuest`).
+- **Evidence**: `research/findings/government.md`
+- **Related**: M21, M09, M22, M23, M24
