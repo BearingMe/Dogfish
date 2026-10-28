@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 12 | 0 | 0 | 70 |
+| 82 | 11 | 0 | 0 | 71 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -102,7 +102,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M68** | Serialization Safety & Data Validation | Phase 17 | COMPLETE | M67 | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `11d3faf` |
 | **M69** | Domain Invariants & Authorization | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/` | PASS | None | `8673fcf` |
 | **M70** | Transactional Consistency & Resource Safety | Phase 17 | COMPLETE | M69 | Coordinator | `reconstruction/src/` | PASS | None | `ced81d0` |
-| **M71** | Time, Randomness & Long-Running Simulation | Phase 17 | NOT STARTED | M67, M69, M70 | Unassigned | `reconstruction/src/` | Pending | None | — |
+| **M71** | Time, Randomness & Long-Running Simulation | Phase 17 | COMPLETE | M67, M69, M70 | Coordinator | `reconstruction/src/` | PASS | None | Pending |
 | **M72** | Faction, World Model & Territory Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M73** | Economy, Population & Infrastructure Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
 | **M74** | Military, Strategic AI & Siege Fidelity | Phase 18 | NOT STARTED | Phase 17 Gate, M72 | Unassigned | `reconstruction/src/` | Pending | None | — |
@@ -274,7 +274,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `reconstruction/src/`
 - **M71: Time, Randomness, and Long-Running Simulation** — Test long-running multi-day simulations, tick boundaries, RNG continuation, and unbounded event growth.
   - *Deliverable*: `reconstruction/src/`
-- **Phase 17 Gate Criteria**: Pass when the standalone Rust state model is internally consistent, persists completely, and rejects invalid operations.
+- **Phase 17 Gate Criteria**: **PASSED (2026-10-28)**. Standalone Rust state model is internally consistent, persists completely (all gameplay state, divisions, sieges, relations, RNG continuation), enforces domain invariants and authorization, uses checked arithmetic, and maintains bounded memory across 1,000-day campaigns (38/38 tests passing, 0 clippy warnings). All M67–M71 COMPLETE. Unblocks Phase 18 (M72).
 
 ### Phase 18: Gameplay Fidelity Repair
 - **Objective**: Replace approximations and unsupported mechanics with behavior justified by original source analysis.

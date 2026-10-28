@@ -44,7 +44,7 @@ pub fn calculate_truce_acceptance_chance(
         }
     }
 
-    chance.max(5).min(95) as u32
+    chance.clamp(5, 95) as u32
 }
 
 /// Bilateral diplomatic relationship between Player and a foreign faction.

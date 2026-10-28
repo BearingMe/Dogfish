@@ -26,6 +26,7 @@ pub struct LaborAllocationResult {
 /// 2. Docks (Maritime): `DocksLevel * DocksChange` jobs
 /// 3. Wood (Lumber Mills): `LumberMillLevel * WoodChange` jobs
 /// 4. Metal (Mines): `MineLevel * MetalChange` jobs
+///
 /// Any remaining citizens become Unemployed.
 pub fn allocate_holding_labor(holding: &HoldingState) -> LaborAllocationResult {
     let mut available_labor = holding.population;

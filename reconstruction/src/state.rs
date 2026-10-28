@@ -176,8 +176,7 @@ impl GameState {
             holdings.push(HoldingState::new(hid, owner));
         }
 
-        let mut events = Vec::new();
-        events.push(SimulationEvent::SimulationStarted { day: 1 });
+        let events = vec![SimulationEvent::SimulationStarted { day: 1 }];
 
         Self {
             time: SimulationTime::new(),
@@ -194,6 +193,17 @@ impl GameState {
         }
     }
 
+    /// Maximum number of events retained in memory log (resolves DEF-FIDEL-04).
+    pub const MAX_EVENT_LOG_CAPACITY: usize = 500;
+
+    /// Record an event in the memory log, ensuring bounded capacity.
+    pub fn record_event(&mut self, event: SimulationEvent) {
+        if self.events.len() >= Self::MAX_EVENT_LOG_CAPACITY {
+            self.events.remove(0);
+        }
+        self.events.push(event);
+    }
+
     /// Advance simulation by one hour. If day boundary crossed, executes daily tick.
     pub fn tick_hour(&mut self) -> bool {
         let new_day = self.time.advance_hour();
@@ -205,7 +215,7 @@ impl GameState {
 
     /// Execute the complete 24-hour daily economic, demographic, and diplomatic simulation cycle.
     pub fn tick_day(&mut self) {
-        self.events.push(SimulationEvent::DayAdvanced { day: self.time.day });
+        self.record_event(SimulationEvent::DayAdvanced { day: self.time.day });
         self.territory.advance_day();
         self.diplomacy.advance_day();
 
@@ -217,6 +227,8 @@ impl GameState {
         let mut total_docks_produced = 0i32;
 
         total_food_consumed += self.military.total_soldiers();
+
+        let mut holding_events = Vec::new();
 
         for holding in &mut self.holdings {
             if holding.owner == FactionId::Player {
@@ -268,12 +280,16 @@ impl GameState {
                 );
                 if pop_increase > 0 {
                     holding.population += pop_increase;
-                    self.events.push(SimulationEvent::PopulationGrown {
+                    holding_events.push(SimulationEvent::PopulationGrown {
                         holding_id: holding.id.0,
                         increase: pop_increase,
                     });
                 }
             }
+        }
+
+        for ev in holding_events {
+            self.record_event(ev);
         }
 
         let tax_mod_pct = self.faction.doctrine.tax_modifier_pct();
@@ -286,26 +302,30 @@ impl GameState {
         self.stockpile.trade_docks += total_docks_produced;
 
         if self.stockpile.food < 0 {
+            let mut unrest_events = Vec::new();
             for holding in &mut self.holdings {
                 if holding.owner == FactionId::Player {
                     holding.loyalty = (holding.loyalty - 10).max(0);
                     if holding.loyalty < 40 {
-                        self.events.push(SimulationEvent::UnrestTriggered {
+                        unrest_events.push(SimulationEvent::UnrestTriggered {
                             holding_id: holding.id.0,
                             loyalty: holding.loyalty,
                         });
                     }
                 }
             }
+            for ev in unrest_events {
+                self.record_event(ev);
+            }
         }
 
         if adjusted_tax > 0 {
-            self.events.push(SimulationEvent::TaxesCollected {
+            self.record_event(SimulationEvent::TaxesCollected {
                 total_gold: adjusted_tax,
             });
         }
 
-        self.events.push(SimulationEvent::FoodDistributed {
+        self.record_event(SimulationEvent::FoodDistributed {
             total_consumed: total_food_consumed,
             net_surplus: self.stockpile.food,
         });
@@ -354,11 +374,11 @@ impl GameState {
         }
 
         let doc_mod = self.faction.doctrine.conscription_modifier_pct() as f64 / 100.0;
-        let effective_pct = (percentage + doc_mod).max(0.0).min(1.0);
+        let effective_pct = (percentage + doc_mod).clamp(0.0, 1.0);
 
         let recruits = conscript_troops(&mut self.holdings[idx], effective_pct);
         if recruits > 0 {
-            self.events.push(SimulationEvent::TroopsRecruited {
+            self.record_event(SimulationEvent::TroopsRecruited {
                 holding_id: holding_id.0,
                 count: recruits,
             });
@@ -468,7 +488,7 @@ impl GameState {
             &mut self.rng,
         )?;
         if success {
-            self.events.push(SimulationEvent::TreatySigned {
+            self.record_event(SimulationEvent::TreatySigned {
                 other_faction: target_faction.name(),
                 duration_days: truce_days,
             });
@@ -506,7 +526,7 @@ impl GameState {
             has_staging_camp,
         )?;
 
-        self.events.push(SimulationEvent::HoldingCaptured {
+        self.record_event(SimulationEvent::HoldingCaptured {
             holding_id: target_id.0,
             new_owner: new_owner.name(),
         });

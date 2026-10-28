@@ -36,6 +36,8 @@ pub enum SimpleJson {
     Null,
     Bool(bool),
     Number(f64),
+    Integer(i64),
+    Unsigned(u64),
     String(String),
     Array(Vec<SimpleJson>),
     Object(BTreeMap<String, SimpleJson>),
@@ -52,28 +54,40 @@ impl SimpleJson {
     pub fn as_f64(&self) -> Option<f64> {
         match self {
             SimpleJson::Number(n) => Some(*n),
+            SimpleJson::Integer(i) => Some(*i as f64),
+            SimpleJson::Unsigned(u) => Some(*u as f64),
             _ => None,
         }
     }
 
     pub fn as_i64(&self) -> Option<i64> {
-        self.as_f64().map(|n| n as i64)
+        match self {
+            SimpleJson::Integer(i) => Some(*i),
+            SimpleJson::Unsigned(u) => Some(*u as i64),
+            SimpleJson::Number(n) => Some(*n as i64),
+            _ => None,
+        }
     }
 
     pub fn as_i32(&self) -> Option<i32> {
-        self.as_f64().map(|n| n as i32)
+        self.as_i64().map(|n| n as i32)
     }
 
     pub fn as_u32(&self) -> Option<u32> {
-        self.as_f64().map(|n| n as u32)
+        self.as_u64().map(|n| n as u32)
     }
 
     pub fn as_u8(&self) -> Option<u8> {
-        self.as_f64().map(|n| n as u8)
+        self.as_u64().map(|n| n as u8)
     }
 
     pub fn as_u64(&self) -> Option<u64> {
-        self.as_f64().map(|n| n as u64)
+        match self {
+            SimpleJson::Unsigned(u) => Some(*u),
+            SimpleJson::Integer(i) if *i >= 0 => Some(*i as u64),
+            SimpleJson::Number(n) if *n >= 0.0 => Some(*n as u64),
+            _ => None,
+        }
     }
 
     pub fn as_bool(&self) -> Option<bool> {
@@ -257,6 +271,13 @@ impl<'a> JsonParser<'a> {
                 s.push(self.chars.next().unwrap());
             } else {
                 break;
+            }
+        }
+        if !s.contains('.') && !s.contains('e') && !s.contains('E') {
+            if let Ok(u) = s.parse::<u64>() {
+                return Ok(SimpleJson::Unsigned(u));
+            } else if let Ok(i) = s.parse::<i64>() {
+                return Ok(SimpleJson::Integer(i));
             }
         }
         let num: f64 = s

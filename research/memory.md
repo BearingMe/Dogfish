@@ -420,6 +420,13 @@
 - **Evidence**: `reconstruction/src/economy.rs`, `reconstruction/src/government.rs`, `reconstruction/src/diplomacy.rs`, `reconstruction/tests/adversarial_regressions.rs`
 - **Related**: M70, M65, M66, M69, M71, M51, M53
 
+## Simulation Time, Bounded Memory & Phase 17 Gate Closure
+- **Status**: CONFIRMED
+- **Finding**: Long-running simulation stability and PRNG continuation hardened in `reconstruction/` (38/38 tests passing): (1) Implemented bounded event log retention policy (`MAX_EVENT_LOG_CAPACITY = 500`) with `record_event()`, resolving DEF-FIDEL-04 and preventing memory growth across 1,000+ day campaigns; (2) Fixed 64-bit integer precision in JSON parser via `SimpleJson::Unsigned` and `SimpleJson::Integer`, guaranteeing bit-for-bit PRNG continuation across save/reload cycles (`test_deterministic_prng_save_load_continuation` PASS); (3) Eliminated all 8 Clippy linter warnings across `reconstruction/` (resolves DEF-CODE-01). Formally closes Phase 17 Gate: the standalone Rust model is internally consistent, persists completely, and rejects invalid operations.
+- **Evidence**: `reconstruction/src/state.rs`, `reconstruction/src/persistence.rs`, `reconstruction/src/lib.rs`
+- **Related**: M71, M67, M68, M69, M70, M72, M74
+
+
 
 
 

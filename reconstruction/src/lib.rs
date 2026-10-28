@@ -718,4 +718,55 @@ mod tests {
             assert!(res.is_err(), "Input should be rejected: {}", input);
         }
     }
+
+    // --- MILESTONE M71 TIME & SIMULATION CONTINUATION TESTS ---
+
+    #[test]
+    fn test_long_running_simulation_memory_bounded() {
+        let mut state = GameState::new(1001);
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+
+        // Run 1,000 full days (24,000 ticks)
+        for _ in 0..(1000 * 24) {
+            state.tick_hour();
+        }
+
+        assert_eq!(state.time.day, 1001);
+        // Event log must remain bounded at MAX_EVENT_LOG_CAPACITY
+        assert!(state.events.len() <= GameState::MAX_EVENT_LOG_CAPACITY);
+        assert_eq!(state.events.len(), GameState::MAX_EVENT_LOG_CAPACITY);
+        assert!(state.check_invariants().is_ok());
+    }
+
+    #[test]
+    fn test_deterministic_prng_save_load_continuation() {
+        // Sim 1 runs 60 days straight
+        let mut sim1 = GameState::new(4242);
+        sim1.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        for _ in 0..(60 * 24) {
+            sim1.tick_hour();
+        }
+
+        // Sim 2 runs 30 days, saves, restores, then runs 30 days
+        let mut sim2 = GameState::new(4242);
+        sim2.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        for _ in 0..(30 * 24) {
+            sim2.tick_hour();
+        }
+
+        let saved_json = StatePersistence::serialize(&sim2);
+        let mut sim2_restored = StatePersistence::deserialize(&saved_json, 4242).unwrap();
+
+        for _ in 0..(30 * 24) {
+            sim2_restored.tick_hour();
+        }
+
+        // Verify exact continuation parity
+        assert_eq!(sim1.time.day, sim2_restored.time.day);
+        assert_eq!(sim1.time.hour, sim2_restored.time.hour);
+        assert_eq!(sim1.time.total_ticks, sim2_restored.time.total_ticks);
+        assert_eq!(sim1.treasury, sim2_restored.treasury);
+        assert_eq!(sim1.stockpile, sim2_restored.stockpile);
+        assert_eq!(sim1.rng.state(), sim2_restored.rng.state());
+    }
 }

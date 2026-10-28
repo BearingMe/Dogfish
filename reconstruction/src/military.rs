@@ -148,7 +148,7 @@ pub fn simulate_bounty_combat(
     if roll < chance {
         // Victory: partial casualties based on margin of victory
         let margin_pct = (chance - roll) as f64 / 100.0;
-        let dead_ratio = (1.0 - margin_pct).max(0.0).min(1.0);
+        let dead_ratio = (1.0 - margin_pct).clamp(0.0, 1.0);
         let casualties = (dead_ratio * troops as f64).floor() as i32;
         let surviving = (troops - casualties).max(1);
 
@@ -359,7 +359,7 @@ pub fn calculate_ai_aggressiveness(
         5
     } else {
         let total_cities = city_count + minor_city_count;
-        total_cities.max(0).min(5) as u8
+        total_cities.clamp(0, 5) as u8
     }
 }
 
