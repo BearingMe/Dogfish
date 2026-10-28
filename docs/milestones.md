@@ -13,7 +13,7 @@ This document tracks all 62 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 9 | 0 | 0 | 53 |
+| 62 | 8 | 0 | 0 | 54 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -84,7 +84,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M51** | Economy & Population Reconstruction | Phase 13 | COMPLETE | M49, M50 | Coordinator | `reconstruction/` | PASS | None | `e889494` |
 | **M52** | Military & Warfare Reconstruction | Phase 13 | COMPLETE | M49, M50 | Coordinator | `reconstruction/` | PASS | None | `a055c1c` |
 | **M53** | Government & Diplomacy Reconstruction | Phase 13 | COMPLETE | M50, M51, M52 | Coordinator | `reconstruction/` | PASS | None | `176b593` |
-| **M54** | Persistence & Scenario Execution | Phase 13 | NOT STARTED | M49–M53 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M54** | Persistence & Scenario Execution | Phase 13 | COMPLETE | M49–M53 | Coordinator | `reconstruction/` | PASS | None | Pending |
 | **M55** | Differential Behavior Testing | Phase 14 | NOT STARTED | M54, Phase 13 Gate | Unassigned | `research/findings/differential-testing.md` | Pending | None | — |
 | **M56** | Targeted Source Probing | Phase 14 | NOT STARTED | M55 | Unassigned | `research/findings/targeted-source-probing.md` | Pending | None | — |
 | **M57** | Reconstruction Corrections | Phase 14 | NOT STARTED | M56 | Unassigned | `reconstruction/` | Pending | None | — |
@@ -203,7 +203,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `reconstruction/`
 - **M54: Persistence and Scenario Execution** — Create standalone model serialization/deserialization, scenario execution harnesses, and cross-system consistency checks.
   - *Deliverable*: `reconstruction/`
-- **Phase 13 Gate Criteria**: Pass when the independently written simulation can reproduce the major strategic gameplay loops under deterministic test conditions without Skyrim engine dependencies.
+- **Phase 13 Gate Criteria**: **PASSED (2026-10-28)**. Independent Rust simulation core (`reconstruction/`) successfully reproduces all major strategic gameplay loops (Faction declaration, 9-hold territorial expansion with atomic transfer, 4-stage demographic labor allocation, tiered taxation, facility construction, 10 field divisions, combat simulation, 5-stage siege operations with reinforcement waves, cabinet governance, judicial court hearings, truce diplomacy, and The Moot coronation) under deterministic test conditions (28/28 tests passing) with zero Skyrim engine dependencies. All M49–M54 COMPLETE. Unblocks Phase 14 (M55).
 
 ### Phase 14: Differential Probing and Gap Closure
 - **Objective**: Execute differential comparisons between reconstructed models and original mod behavior, using discrepancies to drive targeted source probing.

@@ -9,7 +9,9 @@ pub mod economy;
 pub mod faction;
 pub mod government;
 pub mod military;
+pub mod persistence;
 pub mod population;
+pub mod scenario;
 pub mod state;
 pub mod territory;
 pub mod types;
@@ -20,7 +22,9 @@ pub use economy::{calculate_gross_production, EconomyManager, FacilityType};
 pub use faction::{BannerColor, FactionProfile, GovernmentDoctrine};
 pub use government::{CabinetMinister, CabinetRole, GovernmentManager, JudicialSentence, LegalOffense, MootOutcome};
 pub use military::{simulate_bounty_combat, ArmyOrder, CombatResult, Division, MilitaryManager, SiegeOperation, SiegePhase, TroopClass};
+pub use persistence::{JsonParser, SimpleJson, StatePersistence};
 pub use population::{allocate_holding_labor, calculate_population_growth, conscript_troops, LaborAllocationResult};
+pub use scenario::{run_mid_siege_interruption_scenario, run_outlaw_to_high_king_campaign, ScenarioReport};
 pub use state::{FacilityLevels, GameState, HoldingState, ResourceStockpile};
 pub use territory::{AppointedGovernor, TerritoryManager};
 pub use types::{DiplomaticStance, DivisionId, FactionId, HoldingId, HoldingTier, ResourceType};
@@ -386,15 +390,12 @@ mod tests {
         let mut state = GameState::new(1001);
         state.treasury = 50000;
 
-        // Attempting coup without Spymaster is rejected
         let no_spymaster = state.attempt_covert_coup(HoldingId::MARKARTH);
         assert!(no_spymaster.is_err());
 
-        // Appoint Spymaster
         state.appoint_cabinet_minister(CabinetRole::Spymaster, "Malborn");
         assert!(state.government.has_minister(CabinetRole::Spymaster));
 
-        // Attempt coup with Spymaster and sufficient funds
         let initial_gold = state.treasury;
         let coup_res = state.attempt_covert_coup(HoldingId::MARKARTH);
         assert!(coup_res.is_ok());
@@ -406,12 +407,10 @@ mod tests {
         let mut state = GameState::new(1102);
         let initial_treasury = state.treasury;
 
-        // Sentence fine of 500 gold for Theft
         let collected = state.judge_court_case(LegalOffense::Theft, JudicialSentence::Fine(500)).unwrap();
         assert_eq!(collected, 500);
         assert_eq!(state.treasury, initial_treasury + 500);
 
-        // Sentence 30 days dungeon for Assault
         assert_eq!(state.government.prisoners_in_dungeon, 0);
         assert!(state.judge_court_case(LegalOffense::Assault, JudicialSentence::DungeonImprisonment { days: 30 }).is_ok());
         assert_eq!(state.government.prisoners_in_dungeon, 1);
@@ -419,14 +418,8 @@ mod tests {
 
     #[test]
     fn test_truce_negotiation_probability_math() {
-        // Hand-calculated test vectors:
-        // Vector A: Friendly (+25) + Compatible (+25) + Leverage >= 100 (+25) + Base (25) = 100 -> clamped to 95%
         assert_eq!(calculate_truce_acceptance_chance(50, true, 150, 100), 95);
-
-        // Vector B: Hostile (-25) + Opposing (-25) + Leverage < 60 (-25) + Base (25) = -50 -> clamped to 5%
         assert_eq!(calculate_truce_acceptance_chance(-50, false, 50, 150), 5);
-
-        // Vector C: Neutral (0) + Compatible (+25) + Leverage equal (+25) + Base (25) = 75%
         assert_eq!(calculate_truce_acceptance_chance(0, true, 100, 100), 75);
     }
 
@@ -434,17 +427,14 @@ mod tests {
     fn test_the_moot_deadlock_prevention_and_election() {
         let mut state = GameState::new(1203);
 
-        // 1. Owning only Falkreath fails Moot convocation
         assert!(state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, true).is_ok());
         let early_moot = state.convene_the_moot(HoldingId::FALKREATH);
         assert!(early_moot.is_err());
 
-        // 2. Give player all 9 hold capitals (0..8)
         for i in 0..9u8 {
             state.holdings[i as usize].owner = FactionId::Player;
         }
 
-        // But leave Jarls unappointed -> MUST BE BLOCKED BY MOOT DEADLOCK PREVENTION
         let unappointed_moot = state.convene_the_moot(HoldingId::WHITERUN);
         assert!(unappointed_moot.is_err());
         assert!(matches!(
@@ -452,13 +442,11 @@ mod tests {
             Err(SimulationError::InvalidStateTransition(msg)) if msg.contains("Moot Deadlock Prevention")
         ));
 
-        // 3. Appoint Jarls for all 8 other non-capital holds with high loyalty (80)
         for i in 1..9u8 {
             assert!(state.appoint_governor(HoldingId(i), format!("Jarl-{}", i)).is_ok());
             state.territory.governors[i as usize].as_mut().unwrap().loyalty = 80;
         }
 
-        // Convene The Moot with Whiterun as Player seat
         let moot_res = state.convene_the_moot(HoldingId::WHITERUN);
         assert!(moot_res.is_ok());
         let outcome = moot_res.unwrap();
@@ -468,5 +456,71 @@ mod tests {
         assert!(outcome.is_elected);
         assert!(state.government.is_high_king);
         assert_eq!(state.government.coronation_day, Some(state.time.day));
+    }
+
+    // --- MILESTONE M54 TESTS ---
+
+    #[test]
+    fn test_state_serialization_round_trip() {
+        let mut state = GameState::new(1304);
+        state.treasury = 45000;
+        state.stockpile.food = 350;
+        state.faction.declare_faction(
+            "Kingdom of the North",
+            "Northern Watch",
+            BannerColor::RoyalBlue,
+            GovernmentDoctrine::Feudalism,
+            state.time.day,
+        );
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, false).unwrap();
+
+        // Serialize state to JSON
+        let json_str = StatePersistence::serialize(&state);
+        assert!(json_str.contains("\"version\": 1"));
+        assert!(json_str.contains("\"treasury\": 45000"));
+
+        // Deserialize state from JSON
+        let restored = StatePersistence::deserialize(&json_str, 1304).unwrap();
+
+        // Assert equivalence
+        assert_eq!(restored.time.day, state.time.day);
+        assert_eq!(restored.time.hour, state.time.hour);
+        assert_eq!(restored.treasury, state.treasury);
+        assert_eq!(restored.stockpile.food, state.stockpile.food);
+        assert_eq!(restored.faction.name, state.faction.name);
+        assert_eq!(restored.faction.is_declared, state.faction.is_declared);
+        assert_eq!(restored.holdings[0].owner, FactionId::Player);
+        assert_eq!(restored.holdings[1].owner, FactionId::Player);
+    }
+
+    #[test]
+    fn test_invalid_savegame_rejection() {
+        // Corrupted negative treasury
+        let corrupted_treasury_json = "{\"day\": 5, \"hour\": 12, \"treasury\": -5000}";
+        let res1 = StatePersistence::deserialize(corrupted_treasury_json, 42);
+        assert!(matches!(res1, Err(SimulationError::InsufficientFunds { .. })));
+
+        // Missing fields
+        let missing_fields_json = "{\"version\": 1}";
+        let res2 = StatePersistence::deserialize(missing_fields_json, 42);
+        assert!(res2.is_err());
+    }
+
+    #[test]
+    fn test_scenario_outlaw_to_high_king_full_campaign() {
+        let report = run_outlaw_to_high_king_campaign(777).unwrap();
+        assert_eq!(report.scenario_name, "Outlaw to High King Campaign");
+        assert_eq!(report.holds_conquered, 9);
+        assert!(report.is_high_king);
+        assert!(report.total_days > 20);
+        assert!(report.events_count > 0);
+    }
+
+    #[test]
+    fn test_scenario_mid_siege_interruption_and_recovery() {
+        let result = run_mid_siege_interruption_scenario(888);
+        assert!(result.is_ok());
+        assert!(result.unwrap());
     }
 }

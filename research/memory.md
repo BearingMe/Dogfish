@@ -318,6 +318,13 @@
 - **Evidence**: `reconstruction/src/government.rs`, `reconstruction/src/diplomacy.rs`, `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
 - **Related**: M53, M31, M38, M46, M49, M50, M51, M52, M54
 
+## Persistence, Scenario Harness & Phase 13 Completion
+- **Status**: CONFIRMED
+- **Finding**: Independent persistence and scenario execution modules authored in `reconstruction/src/persistence.rs` and `reconstruction/src/scenario.rs` (28/28 tests passing). Reconstructs: (1) Zero-dependency recursive-descent JSON parser and state serializer operating 100% offline via Rust standard library; (2) Invariant validation detecting corrupted states (negative treasury, invalid holding IDs, negative population, invalid holding counts); (3) Decoupled persistence model without claiming binary `.ess` compatibility; (4) End-to-end Outlaw to High King Grand Campaign scenario (`run_outlaw_to_high_king_campaign`) demonstrating complete strategic gameplay loops from founding through conquest, Jarl appointments, and Moot coronation; (5) Mid-siege savegame interruption and seamless recovery. Formally closes Phase 13 Gate with all 6 reconstruction milestones (M49–M54) complete.
+- **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/scenario.rs`, `reconstruction/src/lib.rs`
+- **Related**: M54, M49, M50, M51, M52, M53, M55
+
+
 
 
 
