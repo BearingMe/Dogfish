@@ -263,3 +263,9 @@
 - **Finding**: Final integrity report (`docs/specification-integrity-report.md`) closes the extended 44-milestone specification recovery program with 100% of milestones verified and validated. Codifies the definitive 5-tier epistemological framework separating implemented code, observable gameplay, reported documentation, technical inferences, and unknown heuristics. Reconciles master documents (`docs/recovered-specification.md`, `docs/behavioral-specification.md`, `docs/system-model.md`, `docs/research-gaps.md`) and leaves behind automated test suites in `tests/` and utilities in `scripts/`.
 - **Evidence**: `docs/specification-integrity-report.md`, `docs/milestones.md`
 - **Related**: M44, M01-M43
+
+## Research Policy Transition & Reconstruction Foundations
+- **Status**: CONFIRMED
+- **Finding**: Project policy transitioned from pure specification recovery into experimental reconstruction, probing, and Skyrim runtime integration (Phases 12–15, M45–M62) in `guardrails.md` and `AGENTS.md`. Explicitly authorizes independent behavioral reference modeling (preferring Rust under `reconstruction/`), minimal engine integration adapters, and controlled technical experiments while strictly maintaining IP protections (no verbatim code copying, no asset redistribution, read-only reference isolation). Codifies mandatory 8-step source querying protocol against `references/local/conquest-of-skyrim/Data/` and clean-room separation between Researcher and Implementer responsibilities.
+- **Evidence**: `guardrails.md`, `AGENTS.md`, `docs/milestones.md`
+- **Related**: M45, M46, M47, M48, M49

@@ -2,24 +2,22 @@
 
 ## 1. Overview & Roadmap Status
 
-This document tracks all 44 milestones of the *Conquest of Skyrim* specification recovery project across 11 phases. It serves as the authoritative operational roadmap for the research program.
+This document tracks all 62 milestones of the *Conquest of Skyrim* specification recovery, probing, and experimental reconstruction program across 15 phases. It serves as the authoritative operational roadmap.
 
-The original 32-milestone program produced comprehensive documentation (M01–M32, closed historically in commit `00323d9`). A subsequent repository audit identified critical evidence-integrity concerns, specifically the need to systematically verify all claims against primary sources, audit evidence traceability, eliminate confidence inflation, and establish reproducible technical inspection.
-
-**Program Extension Principle**:
-- **Preserve M01–M32**: Existing historical completion records, deliverables, and commits are preserved.
-- **Add M33–M44**: 12 new milestones across 3 phases (Phase 9: Evidence Integrity & Provenance, Phase 10: Reproducible Technical Verification, Phase 11: Empirical Validation & Final Recovery Audit).
-- **Audit & Revalidation**: Findings from Phase 9 will audit previous claims without silently rewriting history, establishing clear revalidation priorities for Phases 10 and 11.
+### Program Progression
+- **Phases 1–8 (M01–M32)**: Initial specification recovery, architectural reverse engineering, and master specification synthesis (COMPLETE, commit `00323d9`).
+- **Phases 9–11 (M33–M44)**: Evidence integrity audit, reproducible binary and script verification, numerical formula test suites, and empirical playtesting protocol (COMPLETE, commit `b935278`).
+- **Phases 12–15 (M45–M62)**: Experimental reconstruction foundations, independent Rust simulation model, differential probing, and Skyrim runtime integration experiments.
 
 ### Roadmap Summary
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 44 | 0 | 0 | 0 | 44 |
+| 62 | 17 | 1 | 0 | 44 |
 
 ### Allowed Status Values
-- **NOT STARTED**: Research has not yet begun.
-- **IN PROGRESS**: Active investigation or playtesting underway.
+- **NOT STARTED**: Task has not yet begun.
+- **IN PROGRESS**: Active research, probing, or reconstruction underway.
 - **BLOCKED**: Execution halted by external dependencies or environmental constraints.
 - **COMPLETE**: Deliverable created, evidence verified, review passed, and changes committed.
 
@@ -27,7 +25,7 @@ The original 32-milestone program produced comprehensive documentation (M01–M3
 
 ## 2. Master Milestone Registry
 
-Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M32 historical records are preserved. For Phase 9 (M33–M36), independent audit investigations can proceed concurrently; integrate their results before closing the Phase 9 gate.
+Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M44 historical records and commits are preserved. Independent tasks in Phases 12–15 proceed whenever their specific inputs are available. Shared roadmap and configuration changes remain coordinator-owned.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths are created only when their milestone begins.
 
@@ -77,136 +75,159 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M42** | Static & Runtime Evidence Reconciliation | Phase 11 | COMPLETE | M39, M40, M41 | Coordinator | `research/findings/behavior-reconciliation.md` | PASS | None | `017828d` |
 | **M43** | Adversarial Specification Audit | Phase 11 | COMPLETE | M36, M42 | Coordinator | `research/findings/adversarial-audit.md` | PASS | None | `49dc44d` |
 | **M44** | Final Specification Integrity Gate | Phase 11 | COMPLETE | M43 | Coordinator | `docs/specification-integrity-report.md` | PASS | None | `f5c3164` |
+| **M45** | Research Policy Transition | Phase 12 | IN PROGRESS | None | Coordinator | `guardrails.md`, `AGENTS.md` | In Progress | None | — |
+| **M46** | Behavioral Contract Inventory | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/behavioral-contracts.md` | Pending | None | — |
+| **M47** | Reconstruction Validation Strategy | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/reconstruction-testing.md` | Pending | None | — |
+| **M48** | Skyrim Integration Environment Survey | Phase 12 | NOT STARTED | M45 | Unassigned | `docs/integration-survey.md` | Pending | None | — |
+| **M49** | Minimal Rust Simulation Core | Phase 13 | NOT STARTED | M46, M47, Phase 12 Gate | Unassigned | `reconstruction/` | Pending | None | — |
+| **M50** | Faction & Territory Reconstruction | Phase 13 | NOT STARTED | M49 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M51** | Economy & Population Reconstruction | Phase 13 | NOT STARTED | M49, M50 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M52** | Military & Warfare Reconstruction | Phase 13 | NOT STARTED | M49, M50 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M53** | Government & Diplomacy Reconstruction | Phase 13 | NOT STARTED | M50, M51, M52 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M54** | Persistence & Scenario Execution | Phase 13 | NOT STARTED | M49–M53 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M55** | Differential Behavior Testing | Phase 14 | NOT STARTED | M54, Phase 13 Gate | Unassigned | `research/findings/differential-testing.md` | Pending | None | — |
+| **M56** | Targeted Source Probing | Phase 14 | NOT STARTED | M55 | Unassigned | `research/findings/targeted-source-probing.md` | Pending | None | — |
+| **M57** | Reconstruction Corrections | Phase 14 | NOT STARTED | M56 | Unassigned | `reconstruction/` | Pending | None | — |
+| **M58** | Fidelity & Coverage Audit | Phase 14 | NOT STARTED | M57 | Unassigned | `docs/reconstruction-coverage.md` | Pending | None | — |
+| **M59** | Engine Boundary Mapping | Phase 15 | NOT STARTED | M48, Phase 14 Gate | Unassigned | `docs/engine-boundary-map.md` | Pending | None | — |
+| **M60** | Minimal In-Game Vertical Slice | Phase 15 | NOT STARTED | M59 | Unassigned | `integration/` | Pending | None | — |
+| **M61** | Persistence & Compatibility Probe | Phase 15 | NOT STARTED | M60 | Unassigned | `research/findings/integration-persistence-probe.md` | Pending | None | — |
+| **M62** | Reconstruction Feasibility Report | Phase 15 | NOT STARTED | M58, M61 | Unassigned | `docs/reconstruction-feasibility.md` | Pending | None | — |
 
 ---
 
 ## 3. Phase Details & Validation Gates
 
 ### Phase 1: External Reconnaissance
-- **M01: Project Identity and History** — Author, contributors, release chronology, Skyrim versions, distribution channels, known forks.
-  - *Deliverable*: `research/findings/project-overview.md`
-- **M02: Documentation Recovery** — Nexus description, installation docs, changelogs, author statements, community guides.
-  - *Deliverable*: `research/findings/documentation-inventory.md`
-- **M03: Comprehensive Feature Inventory** — Structured catalogue of all advertised/documented features across all domains.
-  - *Deliverable*: `research/findings/feature-inventory.md`
-- **M04: Issues and Compatibility Inventory** — Documented bugs, crashes, quest breakages, compatibility issues, and author warnings.
-  - *Deliverable*: `research/findings/known-issues.md`
-- **Phase 1 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Primary investigation version established (v0.3.9); documentation sources indexed; feature inventory comprehensive; known issues categorized; research gaps identified.
+- **M01: Project Identity and History** — `research/findings/project-overview.md`
+- **M02: Documentation Recovery** — `research/findings/documentation-inventory.md`
+- **M03: Comprehensive Feature Inventory** — `research/findings/feature-inventory.md`
+- **M04: Issues and Compatibility Inventory** — `research/findings/known-issues.md`
+- **Phase 1 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 2: Technical Reconnaissance
-- **M05: Distribution and Dependency Analysis** — Package layout, plugin records, scripts, assets, required/optional dependencies.
-  - *Deliverable*: `research/findings/file-inventory.md`
-- **M06: Creation Engine Integration** — Engine hooks (quests, factions, locations, NPCs, AI packages, global variables, Papyrus/SKSE).
-  - *Deliverable*: `research/findings/skyrim-integration.md`
-- **M07: Static Structure Recovery** — Plugin record relationships, script attachment, event registrations, data dependencies.
-  - *Deliverable*: `research/findings/static-structure.md`
-- **M08: Initialization and Runtime Lifecycle** — Quest startup, background updates, save/load behavior, shutdown, recovery.
-  - *Deliverable*: `research/findings/runtime-lifecycle.md`
-- **Phase 2 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Technical surface sufficiently mapped to support focused subsystem investigation.
+- **M05: Distribution and Dependency Analysis** — `research/findings/file-inventory.md`
+- **M06: Creation Engine Integration** — `research/findings/skyrim-integration.md`
+- **M07: Static Structure Recovery** — `research/findings/static-structure.md`
+- **M08: Initialization and Runtime Lifecycle** — `research/findings/runtime-lifecycle.md`
+- **Phase 2 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 3: Core Gameplay Specification
-- **M09: Faction Creation** — Workflow, prerequisites, initial resources, customization, failure behavior, persistence.
-  - *Deliverable*: `research/findings/faction-creation.md`
-- **M10: Territory and Ownership** — Hierarchy, holds, settlements, forts, capture requirements, ownership transitions.
-  - *Deliverable*: `research/findings/territory.md`
-- **M11: Progression and Victory** — Progression stages, unlock loops, political progression, The Moot, High King status, victory conditions.
-  - *Deliverable*: `research/findings/progression.md`
-- **M12: Player Interaction and Configuration** — Menus, dialogue, commands, configuration surfaces (MCM only if established), status reporting, error feedback.
-  - *Deliverable*: `research/findings/interactions.md`
-- **Phase 3 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Complete observable core loop described from faction initialization through conquest and endgame.
+- **M09: Faction Creation** — `research/findings/faction-creation.md`
+- **M10: Territory and Ownership** — `research/findings/territory.md`
+- **M11: Progression and Victory** — `research/findings/progression.md`
+- **M12: Player Interaction and Configuration** — `research/findings/interactions.md`
+- **Phase 3 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 4: Military and Warfare
-- **M13: Army and Recruitment Systems** — Recruitment sources, troop types, costs, capacity limits, commanders, equipment.
-  - *Deliverable*: `research/findings/military-organization.md`
-- **M14: Orders, Movement, and Deployment** — Command hierarchy, movement logic, patrols, garrisons, camps, order transitions.
-  - *Deliverable*: `research/findings/military-orders.md`
-- **M15: Combat Simulation** — Battle initialization, participant selection, casualties, retreat, victory/defeat thresholds, post-battle cleanup.
-  - *Deliverable*: `research/findings/battles.md`
-- **M16: Siege Warfare** — Siege initiation, assault mechanics, defender behavior, garrison integration, settlement transfer.
-  - *Deliverable*: `research/findings/sieges.md`
-- **Phase 4 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Complete military lifecycle documented across recruitment, division hierarchy, spatial movement, combat simulation, and siege capitulation.
+- **M13: Army and Recruitment Systems** — `research/findings/military-organization.md`
+- **M14: Orders, Movement, and Deployment** — `research/findings/military-orders.md`
+- **M15: Combat Simulation** — `research/findings/battles.md`
+- **M16: Siege Warfare** — `research/findings/sieges.md`
+- **Phase 4 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 5: Economy, Population, and Development
-- **M17: Resource and Treasury Systems** — Resource types, production, storage, trade, treasury flows, taxes, shortages, update rates.
-  - *Deliverable*: `research/findings/economy.md`
-- **M18: Population and Employment** — Population models, growth, labor requirements, conscription, settlement differences.
-  - *Deliverable*: `research/findings/population.md`
-- **M19: Buildings and Infrastructure** — Construction options, prerequisites, costs, production facilities, settlement upgrades.
-  - *Deliverable*: `research/findings/infrastructure.md`
-- **M20: Technology and Research** — Categories, prerequisites, research progression, persistent upgrades, limitations.
-  - *Deliverable*: `research/findings/technology.md`
-- **Phase 5 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Full economic loop recovered: Population -> Labor -> Production -> Resources -> Development and Resources -> Military Capacity -> Expansion.
+- **M17: Resource and Treasury Systems** — `research/findings/economy.md`
+- **M18: Population and Employment** — `research/findings/population.md`
+- **M19: Buildings and Infrastructure** — `research/findings/infrastructure.md`
+- **M20: Technology and Research** — `research/findings/technology.md`
+- **Phase 5 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 6: Politics, Diplomacy, and Administration
-- **M21: Government and Officials** — Administrative hierarchy, official appointments, authority, delegation, removal.
-  - *Deliverable*: `research/findings/government.md`
-- **M22: Jarls and Hold Administration** — Jarl appointments, hold ownership, loyalty, rebellions, interaction with vanilla Jarls.
-  - *Deliverable*: `research/findings/jarls.md`
-- **M23: Diplomacy** — Diplomatic states, negotiations, peace treaties, alliances, ransoms, relationship changes.
-  - *Deliverable*: `research/findings/diplomacy.md`
-- **M24: Law, Crime, and Stability** — Crime systems, arrests, prisoners, public order, unrest, interaction with vanilla crime.
-  - *Deliverable*: `research/findings/law-and-stability.md`
-- **Phase 6 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Political, administrative, judicial, and diplomatic systems mapped and integrated with territorial holdings, economic yields, and military command.
+- **M21: Government and Officials** — `research/findings/government.md`
+- **M22: Jarls and Hold Administration** — `research/findings/jarls.md`
+- **M23: Diplomacy** — `research/findings/diplomacy.md`
+- **M24: Law, Crime, and Stability** — `research/findings/law-and-stability.md`
+- **Phase 6 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 7: Integration, Persistence, and Failure Analysis
-- **M25: Cross-System Dependency Recovery** — Subsystem cross-talk, shared variables, ordering constraints, circular dependencies.
-  - *Deliverable*: `research/findings/system-dependencies.md`
-- **M26: Persistence and State Consistency** — Save serialization, reload behavior, persistent state synchronization, recovery after reload.
-  - *Deliverable*: `research/findings/persistence.md`
-- **M27: Vanilla Skyrim Compatibility** — Civil War integration, Main Quest compatibility, vanilla holds/Jarls, AI package conflicts.
-  - *Deliverable*: `research/findings/vanilla-compatibility.md`
-- **M28: Failure Modes and Reliability** — Stuck quests, broken sieges, missing NPCs, unresponsive dialogue, root cause analysis.
-  - *Deliverable*: `research/findings/failure-modes.md`
-- **Phase 7 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Cross-system relationships, persistence behavior, engine compatibility, and failure modes characterized.
+- **M25: Cross-System Dependency Recovery** — `research/findings/system-dependencies.md`
+- **M26: Persistence and State Consistency** — `research/findings/persistence.md`
+- **M27: Vanilla Skyrim Compatibility** — `research/findings/vanilla-compatibility.md`
+- **M28: Failure Modes and Reliability** — `research/findings/failure-modes.md`
+- **Phase 7 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
 
 ### Phase 8: Specification Reconstruction
-- **M29: Behavioral Specification** — Comprehensive specification of every feature, state machine, algorithm, and failure condition.
-  - *Deliverable*: `docs/behavioral-specification.md`
-- **M30: Recovered System Model** — Descriptive conceptual model of the investigated mod, subsystem/lifecycle boundaries, entity relationships, and useful diagrams; not replacement architecture.
-  - *Deliverable*: `docs/system-model.md`
-- **M31: Completeness and Uncertainty Audit** — Cross-check feature inventory against specification; catalog unknowns and contradictions.
-  - *Deliverable*: `docs/research-gaps.md`
-- **M32: Final Recovered Specification** — Consolidated, independently navigable final specification package.
-  - *Deliverable*: `docs/recovered-specification.md`
-- **Phase 8 Gate Criteria**: **PASSED (Historical 2026-10-27)**. Coherent specification package completed and committed across initial 32 milestones.
+- **M29: Behavioral Specification** — `docs/behavioral-specification.md`
+- **M30: Recovered System Model** — `docs/system-model.md`
+- **M31: Completeness and Uncertainty Audit** — `docs/research-gaps.md`
+- **M32: Final Recovered Specification** — `docs/recovered-specification.md`
+- **Phase 8 Gate Criteria**: **PASSED (Historical 2026-10-27)**.
+
+### Phase 9: Evidence Integrity and Provenance
+- **M33: Source Availability and Provenance Audit** — `research/findings/source-provenance-audit.md`
+- **M34: Evidence Traceability Audit** — `research/findings/evidence-audit.md`
+- **M35: Research Execution and Harness Compliance Audit** — `research/findings/execution-audit.md`
+- **M36: Confidence Reclassification** — `research/findings/confidence-audit.md`
+- **Phase 9 Gate Criteria**: **PASSED (2026-10-28)**.
+
+### Phase 10: Reproducible Technical Verification
+- **M37: Binary and Structural Verification** — `research/findings/verified-structure.md`
+- **M38: Papyrus Claim Verification** — `research/findings/verified-papyrus-behavior.md`
+- **M39: Numerical Mechanics and Formula Verification** — `research/findings/verified-mechanics.md`
+- **M40: State, Persistence, and Engine Integration Verification** — `research/findings/verified-state-and-integration.md`
+- **Phase 10 Gate Criteria**: **PASSED (2026-10-28)**.
+
+### Phase 11: Empirical Validation and Final Recovery Audit
+- **M41: Controlled Playtesting Program** — `research/playtesting/test-plan.md`
+- **M42: Static and Runtime Evidence Reconciliation** — `research/findings/behavior-reconciliation.md`
+- **M43: Adversarial Specification Audit** — `research/findings/adversarial-audit.md`
+- **M44: Final Specification Integrity Gate** — `docs/specification-integrity-report.md`
+- **Phase 11 Gate Criteria**: **PASSED (2026-10-28)**.
 
 ---
 
-### Phase 9: Evidence Integrity and Provenance
-- **Objective**: Determine which existing findings are supported by primary evidence, which require revalidation, and which lack credible evidence.
-- **M33: Source Availability and Provenance Audit** — Verify physical availability of original mod package in `references/local/conquest-of-skyrim/Data/`, layout completeness, reference repos, version authenticity, and flag unsupported inspection claims.
-  - *Deliverable*: `research/findings/source-provenance-audit.md`
-- **M34: Evidence Traceability Audit** — Audit corpus technical claims against verifiable sources (file, record ID, line, offset); identify unsupported CONFIRMED labels.
-  - *Deliverable*: `research/findings/evidence-audit.md`
-- **M35: Research Execution and Harness Compliance Audit** — Audit whether previous research followed discipline (validation records, review evidence, commit history, checkpoint consistency).
-  - *Deliverable*: `research/findings/execution-audit.md`
-- **M36: Confidence Reclassification** — Reassess confidence labels across all domains; eliminate ungrounded confidence percentages; establish revalidation priorities.
-  - *Deliverable*: `research/findings/confidence-audit.md`
-- **Phase 9 Gate Criteria**: **PASSED (2026-10-28)**. The project reliably distinguishes verified knowledge, reported knowledge, technical inferences, incomplete stubs, and missing evidence under a calibrated dual-axis framework. Phase 10 Technical Verification unlocked.
+### Phase 12: Reconstruction Foundations
+- **Objective**: Establish legal permissions, behavioral contract inventories, testing frameworks, and integration prerequisites for independent reconstruction.
+- **M45: Research Policy Transition** — Update `AGENTS.md` and `guardrails.md` to permit independent behavioral reconstruction, mandatory source querying, and role separation while keeping IP protections intact.
+  - *Deliverable*: `guardrails.md`, `AGENTS.md`
+- **M46: Behavioral Contract Inventory** — Review recovered specification; reconcile 51 vs 55 feature count discrepancy; map inputs/outputs, difficulty, and integration dependencies into a formal reconstruction coverage matrix.
+  - *Deliverable*: `docs/behavioral-contracts.md`
+- **M47: Reconstruction Validation Strategy** — Define evaluation criteria for reconstructed systems (contract tests, state transition tests, numerical equivalence, differential testing, non-circular validation).
+  - *Deliverable*: `docs/reconstruction-testing.md`
+- **M48: Skyrim Integration Environment Survey** — Survey Creation Kit, ESP records, Papyrus, SKSE, native DLL loading, Rust interoperability, C++ bridges, and identify manual creation requirements.
+  - *Deliverable*: `docs/integration-survey.md`
+- **Phase 12 Gate Criteria**: Pass when reconstruction can begin with clear behavioral contracts, legal boundaries, validation criteria, and a preliminary understanding of integration constraints.
 
-### Phase 10: Reproducible Technical Verification
-- **Objective**: Independently verify recovered technical claims using controlled, reproducible inspection of the original mod.
-- **M37: Binary and Structural Verification** — Reproduce file counts, extensions, directory structure, ESP header, master dependencies, FormIDs, and record counts.
-  - *Deliverable*: `research/findings/verified-structure.md`
-- **M38: Papyrus Claim Verification** — Audit script declarations, properties, event handlers, function signatures, and state transitions against primary source code.
-  - *Deliverable*: `research/findings/verified-papyrus-behavior.md`
-- **M39: Numerical Mechanics and Formula Verification** — Verify claimed formulas (taxation, production, growth, conscription, battle attrition, diplomatic success).
-  - *Deliverable*: `research/findings/verified-mechanics.md`
-- **M40: State, Persistence, and Engine Integration Verification** — Re-verify state ownership, quest lifecycles, save/load handling, and vanilla Civil War/Main Quest integration.
-  - *Deliverable*: `research/findings/verified-state-and-integration.md`
-- **Phase 10 Gate Criteria**: **PASSED (2026-10-28)**. Major technical claims independently verified against reproducible primary evidence using persistent tools in `scripts/` and automated assertion tests in `tests/`. Phase 11 Empirical Validation unlocked.
+### Phase 13: Independent System Reconstruction
+- **Objective**: Build an independent, executable Rust simulation core modeling recovered strategic gameplay loops under deterministic test conditions.
+- **M49: Minimal Rust Simulation Core** — Initialize `reconstruction/` Rust crate; establish domain state, explicit transitions, deterministic execution, and reproducible build commands.
+  - *Deliverable*: `reconstruction/`
+- **M50: Faction and Territory Reconstruction** — Reconstruct faction creation, identity proxies, territorial hierarchy (Hold Capitals 0..8, Forts, Villages), capture prerequisites, and ownership state transitions.
+  - *Deliverable*: `reconstruction/`
+- **M51: Economy and Population Reconstruction** — Reconstruct treasury, resource generation (Food, Metal, Wood, Docks), demographic labor allocation waterfall, tiered taxation, and facility upgrades (1..4).
+  - *Deliverable*: `reconstruction/`
+- **M52: Military and Warfare Reconstruction** — Reconstruct 10-division army management, Task Barrel order dispatching, recruitment, battle throttling, reinforcement waves, and siege mechanics.
+  - *Deliverable*: `reconstruction/`
+- **M53: Government and Diplomacy Reconstruction** — Reconstruct 7-member cabinet, Spymaster coups, judicial trials, Jarl fealty, bilateral non-aggression truces, and The Moot election loop.
+  - *Deliverable*: `reconstruction/`
+- **M54: Persistence and Scenario Execution** — Create standalone model serialization/deserialization, scenario execution harnesses, and cross-system consistency checks.
+  - *Deliverable*: `reconstruction/`
+- **Phase 13 Gate Criteria**: Pass when the independently written simulation can reproduce the major strategic gameplay loops under deterministic test conditions without Skyrim engine dependencies.
 
-### Phase 11: Empirical Validation and Final Recovery Audit
-- **Objective**: Reconcile technical inspection with actual gameplay and produce an audited, trustworthy final specification.
-- **M41: Controlled Playtesting Program** — Design reproducible playtest experiment plan covering critical paths (founding, territory, warfare, economy, Moot).
-  - *Deliverable*: `research/playtesting/test-plan.md`
-- **M42: Static and Runtime Evidence Reconciliation** — Compare recovered technical behavior with runtime observations, community bug reports, and engine constraints.
-  - *Deliverable*: `research/findings/behavior-reconciliation.md`
-- **M43: Adversarial Specification Audit** — Systematic skeptical review challenging unsupported mechanics, fabricated formulas, and unverified thresholds.
-  - *Deliverable*: `research/findings/adversarial-audit.md`
-- **M44: Final Specification Integrity Gate** — Reconcile audited findings with core documentation (`behavioral-specification.md`, `system-model.md`, `recovered-specification.md`, `milestones.md`).
-  - *Deliverable*: `docs/specification-integrity-report.md`
-- **Phase 11 Gate Criteria**: **PASSED (2026-10-28)**. Complete. Documentation clearly distinguishes implemented code, observable gameplay, reported claims, technical inferences, and unknown heuristics across all 44 milestones. Specification recovery program fully audited and finished.
+### Phase 14: Differential Probing and Gap Closure
+- **Objective**: Execute differential comparisons between reconstructed models and original mod behavior, using discrepancies to drive targeted source probing.
+- **M55: Differential Behavior Testing** — Construct comparative scenarios evaluating preconditions, state transitions, numerical outputs, and failure conditions against original mod findings.
+  - *Deliverable*: `research/findings/differential-testing.md`
+- **M56: Targeted Source Probing** — Deeply inspect original Papyrus code and ESP records for discovered gaps and discrepancies; update behavioral contracts.
+  - *Deliverable*: `research/findings/targeted-source-probing.md`
+- **M57: Reconstruction Corrections** — Correct independent Rust simulation using verified contracts; add regression tests for discovered discrepancies.
+  - *Deliverable*: `reconstruction/`
+- **M58: Fidelity and Coverage Audit** — Subsystem-by-subsystem evaluation measuring feature coverage, functional fidelity, behavioral fidelity, and integration dependencies with explicit denominators.
+  - *Deliverable*: `docs/reconstruction-coverage.md`
+- **Phase 14 Gate Criteria**: Pass when the project can explain which major systems have been faithfully reconstructed, which remain approximate, and what evidence is missing.
+
+### Phase 15: Skyrim Integration Probing
+- **Objective**: Map integration boundaries, prototype a minimal in-game vertical slice, and assess full reconstruction feasibility.
+- **M59: Engine Boundary Mapping** — Detail the exact boundary between simulation-owned state and Skyrim engine-owned state across Papyrus, SKSE, native forms, and manual CK assets.
+  - *Deliverable*: `docs/engine-boundary-map.md`
+- **M60: Minimal In-Game Vertical Slice** — Create one independent Skyrim integration experiment (e.g. claiming a single test location and reflecting ownership in the standalone model) with isolated test records.
+  - *Deliverable*: `integration/`
+- **M61: Persistence and Compatibility Probe** — Probe Skyrim save/load behavior, native state restoration, Papyrus state sync, and incomplete operation recovery using the vertical slice.
+  - *Deliverable*: `research/findings/integration-persistence-probe.md`
+- **M62: Reconstruction Feasibility Report** — Master evaluation synthesizing M45–M61 answering the 10 core feasibility questions and assessing technical viability of complete independent reconstruction.
+  - *Deliverable*: `docs/reconstruction-feasibility.md`
+- **Phase 15 Gate Criteria**: Pass when the project has demonstrated, or clearly identified blockers to demonstrating, a minimal path from independent simulation to Skyrim integration.
 
 ---
 
@@ -215,45 +236,46 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 ### Dependency Graph
 
 ```text
-PHASE 9: EVIDENCE INTEGRITY
+PHASE 12: RECONSTRUCTION FOUNDATIONS
 
-M33 ─────────┐
-M34 ─────────┼──> M36
-M35 ─────────┘
+M45 ──> M46 ──┐
+     ├──> M47 ──┼──> Phase 12 Gate
+     └──> M48 ──┘
 
-PHASE 10: TECHNICAL VERIFICATION
+PHASE 13: INDEPENDENT RECONSTRUCTION
 
-M33 ──> M37 ──> M38 ──> M39
-                  │
-                  └────────> M40
+Phase 12 Gate ──> M49 ──> M50 ──┬──> M51 ──┐
+                                ├──> M52 ──┼──> M53 ──> M54 ──> Phase 13 Gate
+                                └──────────┘
 
-PHASE 11: EMPIRICAL VALIDATION
+PHASE 14: DIFFERENTIAL PROBING & GAP CLOSURE
 
-M36 ──────────────> M41
-M39 + M40 + M41 ──> M42
-M36 + M42 ────────> M43
-M43 ──────────────> M44
+Phase 13 Gate ──> M55 ──> M56 ──> M57 ──> M58 ──> Phase 14 Gate
+
+PHASE 15: SKYRIM INTEGRATION PROBING
+
+M48 + Phase 14 Gate ──> M59 ──> M60 ──> M61 ──> M62 (Feasibility Report)
 ```
 
-### Parallel Execution Groups
+### Workstream Tracks & Parallel Execution Groups
+
+| Track | Primary Responsibilities | Target Outputs |
+| :--- | :--- | :--- |
+| **Track A: Reconstruction** | Independent Rust implementation, model unit tests, scenario execution, fidelity measurements. Works strictly from reviewed contracts. | `reconstruction/` |
+| **Track B: Probing** | Original source inspection, primary evidence recovery, gap investigation, contract clarification. Never passes raw code as instructions. | `research/findings/` |
+| **Track C: Integration** | Skyrim runtime interface investigation, SKSE/C++ bridge research, manual Creation Kit experiment procedures. | `docs/`, `integration/` |
 
 | Group | Milestones | Primary Focus | Coordination Notes |
 | :--- | :--- | :--- | :--- |
-| **Group A** | M01, M02, M03, M04 | External Reconnaissance | Historical baseline (Complete) |
-| **Group B** | M05, M06, M07, M08 | Technical Foundations | Historical baseline (Complete) |
-| **Group C** | M09, M10, M11, M12 | Core Gameplay | Historical baseline (Complete) |
-| **Group D** | M13, M14, M15, M16 | Military & Warfare | Historical baseline (Complete) |
-| **Group E** | M17, M18, M19, M20 | Economy & Development | Historical baseline (Complete) |
-| **Group F** | M21, M22, M23, M24 | Politics & Governance | Historical baseline (Complete) |
-| **Group G** | M25, M26, M27, M28 | Integration & Failure Modes | Historical baseline (Complete) |
-| **Group H** | M29, M30, M31, M32 | Specification Reconstruction | Historical baseline (Complete) |
-| **Group I** | M33, M34, M35, M36 | Evidence Integrity & Provenance | M33, M34, M35 can execute concurrently; M36 synthesizes |
-| **Group J** | M37, M38, M39, M40 | Technical Verification | M37 -> M38; M39 and M40 can execute concurrently once M38 completes |
-| **Group K** | M41, M42, M43, M44 | Empirical Validation & Final Audit | M41 prepares test plan; M42 reconciles; M43 audits; M44 finalizes |
+| **Groups A–K** | M01–M44 | Historical Specification Recovery & Audits | Complete (`b935278`) |
+| **Group L** | M45, M46, M47, M48 | Reconstruction Foundations | M45 unblocks M46, M47, M48 in parallel |
+| **Group M** | M49, M50, M51, M52, M53, M54 | Independent System Reconstruction | Sequential domain modeling in Rust |
+| **Group N** | M55, M56, M57, M58 | Differential Probing & Gap Closure | Comparative testing and contract refinement |
+| **Group O** | M59, M60, M61, M62 | Skyrim Integration Probing & Feasibility | Vertical slice prototyping and final report |
 
 ---
 
-## 5. Milestone Validation Gates
+## 5. Milestone Validation Gates (M01–M62)
 
 | ID | Required validation before completion |
 | :--- | :--- |
@@ -301,3 +323,21 @@ M43 ──────────────> M44
 | M42 | Available human observations reconciled; significant contradictions recorded; unverified runtime behavior remains clearly labeled; no unperformed experiments treated as evidence; unresolved test dependencies preserved. |
 | M43 | Important claims challenged; major unsupported assertions addressed; contradictions identified; review findings classified by severity; material errors corrected or explicitly unresolved; no false independent-review claims. |
 | M44 | M33–M43 reviewed; significant unsupported claims corrected; final documents consistent; evidence traceability audited; unresolved gaps preserved; validation results accurately reported; milestone statuses reconciled; adversarial review completed or fallback documented; changes committed. |
+| M45 | Reconstruction explicitly permitted; mandatory source querying documented; original-code copying remains prohibited; reference isolation preserved; existing disciplines remain coherent; changes reviewed and committed. |
+| M46 | Feature inventory reconciled (51 vs 55); every feature assigned a reconstruction status; major dependencies identified; missing contracts explicitly recorded; no unsupported fidelity assumptions. |
+| M47 | Fidelity criteria established; test inputs and expected outcomes traceable; failure classifications defined; no circular validation; human-dependent tests distinguished from automated tests. |
+| M48 | Relevant integration options identified; tooling requirements verified; important limitations documented; manual work identified; no integration approach selected without supporting evidence. |
+| M49 | Rust crate builds cleanly; unit tests pass; state transitions are deterministic; no Skyrim dependency required; repository artifact discipline preserved. |
+| M50 | Major ownership transitions tested; invalid transitions handled; state invariants enforced; behavior compared against available evidence; missing mechanics identified. |
+| M51 | Recovered formulas independently checked; resource conservation and update invariants tested; boundary conditions covered; unknown mechanics identified; cross-system interactions exercised. |
+| M52 | Army lifecycle demonstrated; battle state machine tested; reinforcement behavior covered; siege transitions represented; unresolved engine-dependent behavior isolated. |
+| M53 | Major political transitions tested; cross-system dependencies covered; victory prerequisites represented; known incomplete features identified; unsupported mechanics excluded. |
+| M54 | Equivalent states survive serialization; interrupted scenarios are tested; invalid states are detected; integration requirements documented; no claim of Skyrim persistence compatibility. |
+| M55 | Comparison scenarios documented; available comparisons executed; differences recorded; no missing original observations fabricated; fidelity assessed per scenario. |
+| M56 | High-priority gaps investigated; original source references recorded; previously unsupported assumptions corrected; remaining unknowns explicitly documented; findings incorporated into contracts. |
+| M57 | Confirmed discrepancies addressed; regression tests added; existing behavior preserved or intentionally corrected; no unsupported implementation changes; all applicable tests pass. |
+| M58 | Coverage matrix updated; fidelity evidence documented; important deviations identified; unknowns preserved; standalone reconstruction feasibility assessed. |
+| M59 | Integration boundaries documented; engine ownership distinguished from simulation ownership; manual dependencies identified; required APIs verified; unsupported mechanisms flagged. |
+| M60 | Integration builds or loads using selected mechanism; Skyrim-side event is received; reconstructed model updates; observable feedback produced; failure conditions documented; no original mod files modified; game execution verified where available. |
+| M61 | Save/load procedure documented; available runtime tests executed; state consistency assessed; important compatibility risks identified; unverified engine behavior clearly labeled. |
+| M62 | M45–M61 reviewed; technical results traceable; fidelity claims calibrated; integration evidence documented; manual work identified; remaining gaps prioritized; conclusions supported by experiments; final review completed; changes committed. |
