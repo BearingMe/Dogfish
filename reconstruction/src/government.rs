@@ -162,8 +162,15 @@ impl GovernmentManager {
         match sentence {
             JudicialSentence::Pardon => {}
             JudicialSentence::Fine(amt) => {
+                if amt < 0 {
+                    return Err(SimulationError::InvalidStateTransition(
+                        "Judicial court fine cannot be negative",
+                    ));
+                }
                 gold_collected = amt;
-                *treasury += amt;
+                *treasury = treasury.checked_add(amt).ok_or(
+                    SimulationError::InvalidStateTransition("Treasury overflow on court fine deposit"),
+                )?;
             }
             JudicialSentence::DungeonImprisonment { .. } => {
                 self.prisoners_in_dungeon += 1;

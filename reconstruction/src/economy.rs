@@ -50,14 +50,16 @@ pub fn calculate_gross_production(
 pub struct EconomyManager;
 
 impl EconomyManager {
-    /// Deposit gold into national treasury (FEAT-ECON-01).
+    /// Deposit gold into national treasury (FEAT-ECON-01, resolves DEF-TRANS-02).
     pub fn deposit_treasury(treasury: &mut i64, amount: i64) -> Result<()> {
         if amount < 0 {
             return Err(SimulationError::InvalidStateTransition(
                 "Deposit amount cannot be negative",
             ));
         }
-        *treasury += amount;
+        *treasury = treasury.checked_add(amount).ok_or(
+            SimulationError::InvalidStateTransition("Treasury overflow: deposit exceeds maximum capacity"),
+        )?;
         Ok(())
     }
 
@@ -74,7 +76,9 @@ impl EconomyManager {
                 available: *treasury,
             });
         }
-        *treasury -= amount;
+        *treasury = treasury.checked_sub(amount).ok_or(
+            SimulationError::InvalidStateTransition("Treasury underflow"),
+        )?;
         Ok(())
     }
 

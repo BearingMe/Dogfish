@@ -176,8 +176,7 @@ impl GameState {
             holdings.push(HoldingState::new(hid, owner));
         }
 
-        let mut events = Vec::new();
-        events.push(SimulationEvent::SimulationStarted { day: 1 });
+        let events = vec![SimulationEvent::SimulationStarted { day: 1 }];
 
         Self {
             time: SimulationTime::new(),
@@ -194,6 +193,17 @@ impl GameState {
         }
     }
 
+    /// Maximum number of events retained in memory log (resolves DEF-FIDEL-04).
+    pub const MAX_EVENT_LOG_CAPACITY: usize = 500;
+
+    /// Record an event in the memory log, ensuring bounded capacity.
+    pub fn record_event(&mut self, event: SimulationEvent) {
+        if self.events.len() >= Self::MAX_EVENT_LOG_CAPACITY {
+            self.events.remove(0);
+        }
+        self.events.push(event);
+    }
+
     /// Advance simulation by one hour. If day boundary crossed, executes daily tick.
     pub fn tick_hour(&mut self) -> bool {
         let new_day = self.time.advance_hour();
@@ -205,7 +215,7 @@ impl GameState {
 
     /// Execute the complete 24-hour daily economic, demographic, and diplomatic simulation cycle.
     pub fn tick_day(&mut self) {
-        self.events.push(SimulationEvent::DayAdvanced { day: self.time.day });
+        self.record_event(SimulationEvent::DayAdvanced { day: self.time.day });
         self.territory.advance_day();
         self.diplomacy.advance_day();
 
@@ -217,6 +227,8 @@ impl GameState {
         let mut total_docks_produced = 0i32;
 
         total_food_consumed += self.military.total_soldiers();
+
+        let mut holding_events = Vec::new();
 
         for holding in &mut self.holdings {
             if holding.owner == FactionId::Player {
@@ -268,12 +280,16 @@ impl GameState {
                 );
                 if pop_increase > 0 {
                     holding.population += pop_increase;
-                    self.events.push(SimulationEvent::PopulationGrown {
+                    holding_events.push(SimulationEvent::PopulationGrown {
                         holding_id: holding.id.0,
                         increase: pop_increase,
                     });
                 }
             }
+        }
+
+        for ev in holding_events {
+            self.record_event(ev);
         }
 
         let tax_mod_pct = self.faction.doctrine.tax_modifier_pct();
@@ -286,26 +302,37 @@ impl GameState {
         self.stockpile.trade_docks += total_docks_produced;
 
         if self.stockpile.food < 0 {
+            let mut unrest_events = Vec::new();
             for holding in &mut self.holdings {
                 if holding.owner == FactionId::Player {
                     holding.loyalty = (holding.loyalty - 10).max(0);
                     if holding.loyalty < 40 {
-                        self.events.push(SimulationEvent::UnrestTriggered {
+                        unrest_events.push(SimulationEvent::UnrestTriggered {
                             holding_id: holding.id.0,
                             loyalty: holding.loyalty,
                         });
                     }
                 }
             }
+            for ev in unrest_events {
+                self.record_event(ev);
+            }
+        } else {
+            // Benevolent recovery (cs_loyaltycheckscript.psc): when food is in surplus and taxes are reasonable, loyalty recovers +2 daily
+            for holding in &mut self.holdings {
+                if holding.owner == FactionId::Player && holding.tax_rate <= 1 {
+                    holding.loyalty = (holding.loyalty + 2).min(100);
+                }
+            }
         }
 
         if adjusted_tax > 0 {
-            self.events.push(SimulationEvent::TaxesCollected {
+            self.record_event(SimulationEvent::TaxesCollected {
                 total_gold: adjusted_tax,
             });
         }
 
-        self.events.push(SimulationEvent::FoodDistributed {
+        self.record_event(SimulationEvent::FoodDistributed {
             total_consumed: total_food_consumed,
             net_surplus: self.stockpile.food,
         });
@@ -332,6 +359,12 @@ impl GameState {
             return Err(SimulationError::InvalidHoldingId(holding_id.0));
         }
 
+        if self.holdings[idx].owner != FactionId::Player {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot upgrade facilities in foreign or unowned holdings",
+            ));
+        }
+
         EconomyManager::upgrade_facility(
             &mut self.holdings[idx],
             &mut self.treasury,
@@ -343,16 +376,16 @@ impl GameState {
     /// Conscript troops from holding's unemployed labor reserve.
     pub fn conscript_troops(&mut self, holding_id: HoldingId, percentage: f64) -> i32 {
         let idx = holding_id.0 as usize;
-        if idx >= self.holdings.len() {
+        if idx >= self.holdings.len() || self.holdings[idx].owner != FactionId::Player {
             return 0;
         }
 
         let doc_mod = self.faction.doctrine.conscription_modifier_pct() as f64 / 100.0;
-        let effective_pct = (percentage + doc_mod).max(0.0).min(1.0);
+        let effective_pct = (percentage + doc_mod).clamp(0.0, 1.0);
 
         let recruits = conscript_troops(&mut self.holdings[idx], effective_pct);
         if recruits > 0 {
-            self.events.push(SimulationEvent::TroopsRecruited {
+            self.record_event(SimulationEvent::TroopsRecruited {
                 holding_id: holding_id.0,
                 count: recruits,
             });
@@ -381,13 +414,19 @@ impl GameState {
         self.military.reinforce_division(div_id, count)
     }
 
-    /// Launch a siege operation against a target holding.
+    /// Launch a siege operation against a target holding (resolves DEF-INVAR-04).
     pub fn start_siege(
         &mut self,
         target_id: HoldingId,
         pincer: bool,
         artillery: bool,
     ) -> Result<()> {
+        if self.military.active_siege.is_some() {
+            return Err(SimulationError::InvalidStateTransition(
+                "A siege operation is already active; conclude or abandon it before launching another",
+            ));
+        }
+
         if !target_id.is_capital() {
             return Err(SimulationError::InvalidStateTransition(
                 "Siege operations can only target Hold Capitals",
@@ -403,15 +442,27 @@ impl GameState {
         Ok(())
     }
 
-    /// Advance active siege to next phase.
+    /// Advance active siege to next phase (resolves DEF-INVAR-03).
     pub fn advance_siege(&mut self) -> Result<SiegePhase> {
-        let siege = self.military.active_siege.as_mut().ok_or(
-            SimulationError::InvalidStateTransition("No active siege operation underway"),
-        )?;
+        // MILITARY PREREQUISITE CHECK (DEF-INVAR-03):
+        // Advancing a siege requires active participating troops in the player's military force!
+        if self.military.total_soldiers() == 0 {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot advance siege: no active soldiers remaining in field forces",
+            ));
+        }
 
-        let next_phase = siege.advance_phase()?;
-        if next_phase == SiegePhase::Capitulated {
+        let (next_phase, target) = {
+            let siege = self.military.active_siege.as_mut().ok_or(
+                SimulationError::InvalidStateTransition("No active siege operation underway"),
+            )?;
+            let next_phase = siege.advance_phase()?;
             let target = siege.target_holding;
+            (next_phase, target)
+        };
+
+        if next_phase == SiegePhase::Capitulated {
+            self.military.active_siege = None;
             self.transfer_holding(target, FactionId::Player, true)?;
         }
 
@@ -462,7 +513,7 @@ impl GameState {
             &mut self.rng,
         )?;
         if success {
-            self.events.push(SimulationEvent::TreatySigned {
+            self.record_event(SimulationEvent::TreatySigned {
                 other_faction: target_faction.name(),
                 duration_days: truce_days,
             });
@@ -500,7 +551,7 @@ impl GameState {
             has_staging_camp,
         )?;
 
-        self.events.push(SimulationEvent::HoldingCaptured {
+        self.record_event(SimulationEvent::HoldingCaptured {
             holding_id: target_id.0,
             new_owner: new_owner.name(),
         });
@@ -514,6 +565,17 @@ impl GameState {
         holding_id: HoldingId,
         governor_name: impl Into<String>,
     ) -> Result<()> {
+        let idx = holding_id.0 as usize;
+        if idx >= self.holdings.len() {
+            return Err(SimulationError::InvalidHoldingId(holding_id.0));
+        }
+
+        if self.holdings[idx].owner != FactionId::Player {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot appoint a governor to a foreign or unowned holding",
+            ));
+        }
+
         let day = self.time.day;
         self.territory.appoint_governor(holding_id, governor_name, day)
     }
@@ -530,6 +592,18 @@ impl GameState {
                 required: 0,
                 available: self.treasury,
             });
+        }
+        if self.military.divisions.len() != DivisionId::MAX_DIVISIONS {
+            return Err(SimulationError::InvalidStateTransition(
+                "Division count must equal exactly 10",
+            ));
+        }
+        for h in &self.holdings {
+            if h.population < 0 {
+                return Err(SimulationError::InvalidStateTransition(
+                    "Holding population cannot be negative",
+                ));
+            }
         }
         Ok(())
     }

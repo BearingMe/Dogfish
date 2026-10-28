@@ -63,6 +63,17 @@ impl DeterministicRng {
         Self { state }
     }
 
+    /// Expose internal state for deterministic persistence.
+    pub fn state(&self) -> u64 {
+        self.state
+    }
+
+    /// Restore exact internal state from persistence.
+    pub fn from_state(state: u64) -> Self {
+        let s = if state == 0 { 0x853c49e6748fea9b } else { state };
+        Self { state: s }
+    }
+
     /// Generate the next raw pseudo-random u64.
     pub fn next_u64(&mut self) -> u64 {
         let mut x = self.state;

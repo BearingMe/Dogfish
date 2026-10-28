@@ -17,7 +17,10 @@ pub mod territory;
 pub mod types;
 
 pub use core::{DeterministicRng, Result, SimulationError, SimulationEvent, SimulationTime};
-pub use diplomacy::{calculate_truce_acceptance_chance, DiplomacyManager, ForeignFactionRelation};
+pub use diplomacy::{
+    calculate_exact_papyrus_negotiation_chance, calculate_truce_acceptance_chance, DiplomacyManager,
+    ForeignFactionRelation,
+};
 pub use economy::{calculate_gross_production, EconomyManager, FacilityType};
 pub use faction::{BannerColor, FactionProfile, GovernmentDoctrine};
 pub use government::{CabinetMinister, CabinetRole, GovernmentManager, JudicialSentence, LegalOffense, MootOutcome};
@@ -162,8 +165,10 @@ mod tests {
         assert_eq!(state.faction.name, "The Free Holds");
         assert_eq!(state.faction.army_name, "Sons of the North");
         assert_eq!(state.faction.banner_color, BannerColor::Crimson);
-        assert_eq!(state.faction.doctrine.tax_modifier_pct(), 20);
-        assert_eq!(state.faction.doctrine.conscription_modifier_pct(), -15);
+        assert_eq!(state.faction.doctrine.tax_modifier_pct(), 0);
+        assert_eq!(state.faction.doctrine.conscription_modifier_pct(), 0);
+        assert_eq!(state.faction.doctrine.experimental_tax_modifier_pct(), 20);
+        assert_eq!(state.faction.doctrine.experimental_conscription_modifier_pct(), -15);
     }
 
     #[test]
@@ -280,6 +285,11 @@ mod tests {
     #[test]
     fn test_facility_upgrade_transaction() {
         let mut state = GameState::new(505);
+        // Player owns Whiterun and Falkreath
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, false).unwrap();
+
+        // Whiterun farm is already level 4 (max)
         let max_err = state.upgrade_facility(HoldingId::WHITERUN, FacilityType::Farm);
         assert!(max_err.is_err());
 
@@ -362,6 +372,7 @@ mod tests {
     #[test]
     fn test_siege_operation_phases_and_reinforcement_waves() {
         let mut state = GameState::new(909);
+        state.reinforce_division(DivisionId(0), 50).unwrap();
         assert!(state.start_siege(HoldingId::WINDHELM, true, true).is_ok());
 
         let siege = state.military.active_siege.as_mut().unwrap();
@@ -501,7 +512,7 @@ mod tests {
     #[test]
     fn test_invalid_savegame_rejection() {
         // Corrupted negative treasury
-        let corrupted_treasury_json = "{\"day\": 5, \"hour\": 12, \"treasury\": -5000}";
+        let corrupted_treasury_json = "{\"version\": 1, \"day\": 5, \"hour\": 12, \"treasury\": -5000}";
         let res1 = StatePersistence::deserialize(corrupted_treasury_json, 42);
         assert!(matches!(res1, Err(SimulationError::InsufficientFunds { .. })));
 
@@ -584,5 +595,246 @@ mod tests {
 
         // Desperate capital defense (down to 1 city and this is own capital) -> 100
         assert_eq!(calculate_hold_invasion_priority(true, 0, 0, 1, true, &mut rng), 100);
+    }
+
+    // --- MILESTONE M67 COMPLETE PERSISTENCE TEST ---
+
+    #[test]
+    fn test_complete_state_persistence_equivalence() {
+        let mut state = GameState::new(777);
+        state.treasury = 65000;
+        state.stockpile.food = 500;
+        state.stockpile.metal = 300;
+        state.stockpile.wood = 250;
+        state.stockpile.trade_docks = 50;
+
+        // Faction
+        state.faction.declare_faction(
+            "The Great North",
+            "Winter Legion",
+            BannerColor::EmeraldGreen,
+            GovernmentDoctrine::Feudalism,
+            state.time.day,
+        );
+
+        // Holdings & Governors
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.appoint_governor(HoldingId::WHITERUN, "Vignar Gray-Mane").unwrap();
+
+        // Divisions
+        state.reinforce_division(DivisionId(0), 40).unwrap();
+        state.assign_army_order(DivisionId(0), ArmyOrder::PatrolHold(HoldingId::WHITERUN)).unwrap();
+        state.military.divisions[0].commander_name = Some("General Sinmir".to_string());
+
+        // Active Siege
+        state.start_siege(HoldingId::FALKREATH, true, true).unwrap();
+        state.advance_siege().unwrap(); // OuterGateBreach
+        state.advance_siege().unwrap(); // UrbanStreetCombat
+
+        // Cabinet & Diplomacy
+        state.appoint_cabinet_minister(CabinetRole::Steward, "Proventus");
+        state.diplomacy.relations[0].stance = DiplomaticStance::Truce { days_remaining: 18 };
+
+        // Cooldowns & Crime
+        state.territory.camp_cooldowns[9] = 2;
+        state.territory.crime_gold[3] = 250;
+
+        // Round-trip serialization
+        let json_str = StatePersistence::serialize(&state);
+        let restored = StatePersistence::deserialize(&json_str, 777).unwrap();
+
+        // Comprehensive Assertions across all 7 previously omitted subsystems:
+        // 1. Active Siege
+        assert!(restored.military.active_siege.is_some());
+        let siege = restored.military.active_siege.as_ref().unwrap();
+        assert_eq!(siege.target_holding, HoldingId::FALKREATH);
+        assert_eq!(siege.phase, SiegePhase::UrbanStreetCombat);
+        assert!(siege.pincer_assault);
+        assert!(siege.artillery_enabled);
+
+        // 2. Divisions
+        assert_eq!(restored.military.divisions[0].troop_count, 40);
+        assert_eq!(restored.military.divisions[0].order, ArmyOrder::PatrolHold(HoldingId::WHITERUN));
+        assert_eq!(restored.military.divisions[0].commander_name, Some("General Sinmir".to_string()));
+
+        // 3. Governors
+        assert!(restored.territory.has_appointed_governor(HoldingId::WHITERUN));
+        assert_eq!(restored.territory.governors[0].as_ref().unwrap().name, "Vignar Gray-Mane");
+
+        // 4. Cabinet
+        assert!(restored.government.has_minister(CabinetRole::Steward));
+
+        // 5. Diplomacy
+        assert_eq!(restored.diplomacy.relations[0].stance, DiplomaticStance::Truce { days_remaining: 18 });
+
+        // 6. Cooldowns & Crime
+        assert_eq!(restored.territory.camp_cooldowns[9], 2);
+        assert_eq!(restored.territory.crime_gold[3], 250);
+
+        // 7. PRNG State Continuation
+        assert_eq!(restored.rng.state(), state.rng.state());
+    }
+
+    // --- MILESTONE M68 SERIALIZATION SAFETY TESTS ---
+
+    #[test]
+    fn test_json_unicode_and_escape_sequences() {
+        let json_input = r#"{"name": "Jarl Thórsteinn of Hjaalmarch", "escapes": "\"Line1\\Line2\n\tTab\""}"#;
+        let parsed = JsonParser::parse(json_input).unwrap();
+
+        assert_eq!(parsed.get("name").unwrap().as_str().unwrap(), "Jarl Thórsteinn of Hjaalmarch");
+        assert_eq!(parsed.get("escapes").unwrap().as_str().unwrap(), "\"Line1\\Line2\n\tTab\"");
+    }
+
+    #[test]
+    fn test_json_trailing_garbage_rejection() {
+        let json_with_garbage = r#"{"version": 1, "day": 1} trailing garbage"#;
+        assert!(JsonParser::parse(json_with_garbage).is_err());
+    }
+
+    #[test]
+    fn test_json_unsupported_version_rejection() {
+        let unsupported_json = r#"{"version": 99, "day": 1, "hour": 0, "treasury": 1000}"#;
+        let res = StatePersistence::deserialize(unsupported_json, 42);
+        assert!(matches!(res, Err(SimulationError::InvalidStateTransition(msg)) if msg.contains("Unsupported savegame version")));
+    }
+
+    #[test]
+    fn test_json_malformed_syntax_no_panic() {
+        // Must reject all malformed input cleanly without panicking
+        let malformed_inputs = [
+            "",
+            "   ",
+            "{",
+            "}",
+            "[",
+            "]",
+            "{\"unclosed\": ",
+            "{\"key\": }",
+            "{unquoted: 1}",
+            "{\"trailing_comma\": 1, }",
+            "{\"key\": \"unclosed string}",
+            "[1, 2, ]",
+            "null extra",
+            "123.456.789",
+        ];
+
+        for input in malformed_inputs {
+            let res = JsonParser::parse(input);
+            assert!(res.is_err(), "Input should be rejected: {}", input);
+        }
+    }
+
+    // --- MILESTONE M71 TIME & SIMULATION CONTINUATION TESTS ---
+
+    #[test]
+    fn test_long_running_simulation_memory_bounded() {
+        let mut state = GameState::new(1001);
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+
+        // Run 1,000 full days (24,000 ticks)
+        for _ in 0..(1000 * 24) {
+            state.tick_hour();
+        }
+
+        assert_eq!(state.time.day, 1001);
+        // Event log must remain bounded at MAX_EVENT_LOG_CAPACITY
+        assert!(state.events.len() <= GameState::MAX_EVENT_LOG_CAPACITY);
+        assert_eq!(state.events.len(), GameState::MAX_EVENT_LOG_CAPACITY);
+        assert!(state.check_invariants().is_ok());
+    }
+
+    #[test]
+    fn test_deterministic_prng_save_load_continuation() {
+        // Sim 1 runs 60 days straight
+        let mut sim1 = GameState::new(4242);
+        sim1.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        for _ in 0..(60 * 24) {
+            sim1.tick_hour();
+        }
+
+        // Sim 2 runs 30 days, saves, restores, then runs 30 days
+        let mut sim2 = GameState::new(4242);
+        sim2.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        for _ in 0..(30 * 24) {
+            sim2.tick_hour();
+        }
+
+        let saved_json = StatePersistence::serialize(&sim2);
+        let mut sim2_restored = StatePersistence::deserialize(&saved_json, 4242).unwrap();
+
+        for _ in 0..(30 * 24) {
+            sim2_restored.tick_hour();
+        }
+
+        // Verify exact continuation parity
+        assert_eq!(sim1.time.day, sim2_restored.time.day);
+        assert_eq!(sim1.time.hour, sim2_restored.time.hour);
+        assert_eq!(sim1.time.total_ticks, sim2_restored.time.total_ticks);
+        assert_eq!(sim1.treasury, sim2_restored.treasury);
+        assert_eq!(sim1.stockpile, sim2_restored.stockpile);
+        assert_eq!(sim1.rng.state(), sim2_restored.rng.state());
+    }
+
+    // --- MILESTONE M73 ECONOMIC & DEMOGRAPHIC FIDELITY TESTS ---
+
+    #[test]
+    fn test_loyalty_recovery_post_famine() {
+        let mut state = GameState::new(3003);
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.holdings[0].loyalty = 40;
+        state.holdings[0].tax_rate = 1; // Reasonable tax allows recovery
+        state.stockpile.food = 500; // Guaranteed food surplus
+
+        // Run 5 daily ticks (120 hours)
+        for _ in 0..120 {
+            state.tick_hour();
+        }
+
+        // Each day of food surplus recovers +2 loyalty: 40 + (5 * 2) = 50
+        assert_eq!(state.holdings[0].loyalty, 50);
+    }
+
+    #[test]
+    fn test_economic_boundary_conditions() {
+        let mut holding = HoldingState::new(HoldingId::WHITERUN, FactionId::Player);
+        holding.population = 0;
+        holding.guards = 0;
+        assert_eq!(holding.calculate_tax(), 0);
+        assert_eq!(holding.food_required(), 0);
+
+        // Conscription with 0 unemployed returns 0
+        holding.unemployed = 0;
+        assert_eq!(conscript_troops(&mut holding, 0.50), 0);
+
+        // Conscription with 1 unemployed returns ceil(0.10 * 1) = 1
+        holding.population = 10;
+        holding.unemployed = 1;
+        assert_eq!(conscript_troops(&mut holding, 0.10), 1);
+        assert_eq!(holding.unemployed, 0);
+        assert_eq!(holding.population, 9);
+    }
+
+    // --- MILESTONE M75 DIPLOMACY & PAPYRUS NEGOTIATION TESTS ---
+
+    #[test]
+    fn test_exact_papyrus_negotiation_math() {
+        // Vector 1: Peace Offer (1) + Stormcloak (+50) + Friendly (+25) + Military >= 100 (+25) + Base (25) = 125 -> clamped 95%
+        assert_eq!(
+            calculate_exact_papyrus_negotiation_chance(FactionId::Stormcloak, 1, 1, 1, 120),
+            95
+        );
+
+        // Vector 2: Peace Offer (1) + Imperial (-25) + Hostile (-25) + Military < 60 (-25) + Base (25) = -50 -> clamped 5%
+        assert_eq!(
+            calculate_exact_papyrus_negotiation_chance(FactionId::Imperial, -1, 1, 1, 40),
+            5
+        );
+
+        // Vector 3: Truce Offer (2, base +25) + Stormcloak + Neutral (0) + Commercial Argument (+25) + Base (25) = 75%
+        assert_eq!(
+            calculate_exact_papyrus_negotiation_chance(FactionId::Stormcloak, 0, 2, 3, 80),
+            75
+        );
     }
 }

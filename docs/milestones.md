@@ -2,18 +2,19 @@
 
 ## 1. Overview & Roadmap Status
 
-This document tracks all 62 milestones of the *Conquest of Skyrim* specification recovery, probing, and experimental reconstruction program across 15 phases. It serves as the authoritative operational roadmap.
+This document tracks all 82 milestones of the *Conquest of Skyrim* specification recovery, probing, experimental reconstruction, and validation & repair program across 20 phases. It serves as the authoritative operational roadmap.
 
 ### Program Progression
 - **Phases 1–8 (M01–M32)**: Initial specification recovery, architectural reverse engineering, and master specification synthesis (COMPLETE, commit `00323d9`).
 - **Phases 9–11 (M33–M44)**: Evidence integrity audit, reproducible binary and script verification, numerical formula test suites, and empirical playtesting protocol (COMPLETE, commit `b935278`).
-- **Phases 12–15 (M45–M62)**: Experimental reconstruction foundations, independent Rust simulation model, differential probing, and Skyrim runtime integration experiments.
+- **Phases 12–15 (M45–M62)**: Experimental reconstruction foundations, independent Rust simulation model, differential probing, and Skyrim runtime integration experiments (COMPLETE, commit `56305b1`).
+- **Phases 16–20 (M63–M82)**: Reconstruction validation and repair program: execution baselines, contract traceability, adversarial defect reproduction, persistence and invariant repair, gameplay fidelity repair, native SKSE integration repair, and reconciled quality gate.
 
 ### Roadmap Summary
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 62 | 0 | 0 | 0 | 62 |
+| 82 | 0 | 0 | 1 | 81 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -93,6 +94,26 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M60** | Minimal In-Game Vertical Slice | Phase 15 | COMPLETE | M59 | Coordinator | `integration/` | PASS | None | `449a469` |
 | **M61** | Persistence & Compatibility Probe | Phase 15 | COMPLETE | M60 | Coordinator | `research/findings/integration-persistence-probe.md` | PASS | None | `bedb7a7` |
 | **M62** | Reconstruction Feasibility Report | Phase 15 | COMPLETE | M58, M61 | Coordinator | `docs/reconstruction-feasibility.md` | PASS | None | `56305b1` |
+| **M63** | Build & Test Baseline | Phase 16 | COMPLETE | M62, Phase 15 Gate | Coordinator | `research/investigations/build-and-test-baseline.md` | PASS | None | `eb83d02` |
+| **M64** | Contract-to-Code Traceability Audit | Phase 16 | COMPLETE | M63 | Coordinator | `research/investigations/contract-traceability-audit.md` | PASS | None | `add76f9` |
+| **M65** | Adversarial Regression Baseline | Phase 16 | COMPLETE | M63, M64 | Coordinator | `research/investigations/adversarial-regression-baseline.md` | PASS | None | `e42336a` |
+| **M66** | Defect Registry & Repair Prioritization | Phase 16 | COMPLETE | M63, M64, M65 | Coordinator | `research/investigations/defect-registry.md` | PASS | None | `f3c4a59` |
+| **M67** | Complete State Persistence | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `8997075` |
+| **M68** | Serialization Safety & Data Validation | Phase 17 | COMPLETE | M67 | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `11d3faf` |
+| **M69** | Domain Invariants & Authorization | Phase 17 | COMPLETE | M66, Phase 16 Gate | Coordinator | `reconstruction/src/` | PASS | None | `8673fcf` |
+| **M70** | Transactional Consistency & Resource Safety | Phase 17 | COMPLETE | M69 | Coordinator | `reconstruction/src/` | PASS | None | `ced81d0` |
+| **M71** | Time, Randomness & Long-Running Simulation | Phase 17 | COMPLETE | M67, M69, M70 | Coordinator | `reconstruction/src/` | PASS | None | `bc0377d` |
+| **M72** | Faction, World Model & Territory Fidelity | Phase 18 | COMPLETE | Phase 17 Gate | Coordinator | `reconstruction/src/` | PASS | None | `203b6be` |
+| **M73** | Economy, Population & Infrastructure Fidelity | Phase 18 | COMPLETE | Phase 17 Gate | Coordinator | `reconstruction/src/` | PASS | None | `f838593` |
+| **M74** | Military, Strategic AI & Siege Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `2375502` |
+| **M75** | Government, Diplomacy, Law & Progression Fidelity | Phase 18 | COMPLETE | Phase 17 Gate, M72 | Coordinator | `reconstruction/src/` | PASS | None | `cef262a` |
+| **M76** | Independent Differential Validation | Phase 18 | COMPLETE | M72, M73, M74, M75 | Coordinator | `research/findings/independent-differential-validation.md` | PASS | None | `358e286` |
+| **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | COMPLETE | M63, Phase 17 Gate | Coordinator | `integration/` | PASS | None | `80b5a1d` |
+| **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | COMPLETE | M77 | Coordinator | `integration/` | PASS | None | `f730564` |
+| **M79** | SKSE Save/Load & State Synchronization | Phase 19 | COMPLETE | M67, M68, M78 | Coordinator | `integration/` | PASS | None | `ded135f` |
+| **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | `c9a871c` |
+| **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | COMPLETE | Phase 18 Gate, M76, M80 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `c03fdb5` |
+| **M82** | Final Reconstruction Quality Gate | Phase 20 | COMPLETE | M81 | Coordinator | `docs/reconstruction-repair-report.md` | PASS | None | `c1b527d` |
 
 ---
 
@@ -227,7 +248,67 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/integration-persistence-probe.md`
 - **M62: Reconstruction Feasibility Report** — Master evaluation synthesizing M45–M61 answering the 10 core feasibility questions and assessing technical viability of complete independent reconstruction.
   - *Deliverable*: `docs/reconstruction-feasibility.md`
-- **Phase 15 Gate Criteria**: **PASSED (2026-10-28)**. Master feasibility report (`docs/reconstruction-feasibility.md`) delivers answers to the 10 core feasibility questions. Minimal path from independent simulation to Skyrim integration fully demonstrated via native SKSE C-ABI adapter (`integration/`, 3/3 tests passing), engine boundary mapping (`docs/engine-boundary-map.md`), and persistence compatibility probe (`research/findings/integration-persistence-probe.md`). All M59–M62 COMPLETE. All 62 project milestones across all 15 phases COMPLETE. Roadmap closed.
+- **Phase 15 Gate Criteria**: **PASSED (2026-10-28)**. Master feasibility report (`docs/reconstruction-feasibility.md`) delivers answers to the 10 core feasibility questions. Minimal path from independent simulation to Skyrim integration fully demonstrated via native SKSE C-ABI adapter (`integration/`, 3/3 tests passing), engine boundary mapping (`docs/engine-boundary-map.md`), and persistence compatibility probe (`research/findings/integration-persistence-probe.md`). All M59–M62 COMPLETE.
+
+### Phase 16: Baseline Verification and Defect Reproduction
+- **Objective**: Establish what actually works and create reproducible evidence for suspected failures.
+- **M63: Build and Test Baseline** — Inspect both Rust crates (`reconstruction/`, `integration/`), verify toolchains, execute compilation, unit tests, clippy, formatting, and Python tests.
+  - *Deliverable*: `research/investigations/build-and-test-baseline.md`
+- **M64: Contract-to-Code Traceability Audit** — Audit reconstruction against behavioral contracts, specifications, original Papyrus sources, and ESP records; identify unsupported claims and incomplete stubs.
+  - *Deliverable*: `research/investigations/contract-traceability-audit.md`
+- **M65: Adversarial Regression Baseline** — Create tests designed to expose known weaknesses (save/load with active siege, facility upgrades in enemy holdings, invalid resource values, partial failures).
+  - *Deliverable*: `research/investigations/adversarial-regression-baseline.md`
+- **M66: Defect Registry and Repair Prioritization** — Consolidate findings into a prioritized, actionable defect registry (P0/P1/P2/P3).
+  - *Deliverable*: `research/investigations/defect-registry.md`
+- **Phase 16 Gate Criteria**: **PASSED (2026-10-28)**. Verified execution baseline established (`build-and-test-baseline.md`), 55 features audited with recalibrated fidelity (`contract-traceability-audit.md`), 9 concrete defects reproduced in automated regression tests (`adversarial-regression-baseline.md`), and actionable 20-defect backlog prioritized (`defect-registry.md`). All M63–M66 COMPLETE. Unblocks Phase 17 (M67).
+
+### Phase 17: Core Correctness and Persistence Repair
+- **Objective**: Ensure that the standalone Rust model behaves consistently before attempting deeper engine integration.
+- **M67: Complete State Persistence** — Audit and repair `persistence.rs` to serialize and restore all gameplay-critical state (RNG state, divisions, sieges, governors, diplomacy, cooldowns).
+  - *Deliverable*: `reconstruction/src/persistence.rs`
+- **M68: Serialization Safety and Data Validation** — Audit JSON implementation for string escaping, malformed input handling, numeric precision, and version compatibility.
+  - *Deliverable*: `reconstruction/src/persistence.rs`
+- **M69: Domain Invariants and Authorization** — Enforce minimum domain invariants across public state-mutating operations (ownership checks, prerequisites, negative checks).
+  - *Deliverable*: `reconstruction/src/`
+- **M70: Transactional Consistency and Resource Safety** — Audit multi-field operations for overflow, underflow, resource creation, and clean rollback on failure.
+  - *Deliverable*: `reconstruction/src/`
+- **M71: Time, Randomness, and Long-Running Simulation** — Test long-running multi-day simulations, tick boundaries, RNG continuation, and unbounded event growth.
+  - *Deliverable*: `reconstruction/src/`
+- **Phase 17 Gate Criteria**: **PASSED (2026-10-28)**. Standalone Rust state model is internally consistent, persists completely (all gameplay state, divisions, sieges, relations, RNG continuation), enforces domain invariants and authorization, uses checked arithmetic, and maintains bounded memory across 1,000-day campaigns (38/38 tests passing, 0 clippy warnings). All M67–M71 COMPLETE. Unblocks Phase 18 (M72).
+
+### Phase 18: Gameplay Fidelity Repair
+- **Objective**: Replace approximations and unsupported mechanics with behavior justified by original source analysis.
+- **M72: Faction, World Model, and Territory Fidelity** — Verify world data, starting state, territorial transitions, and remove unsupported doctrine modifiers.
+  - *Deliverable*: `reconstruction/src/`
+- **M73: Economy, Population, and Infrastructure Fidelity** — Reconstruct exact verified formulas for taxation, production, docks, labor, population growth, and conscription.
+  - *Deliverable*: `reconstruction/src/`
+- **M74: Military, Strategic AI, and Siege Fidelity** — Enforce military prerequisites, realistic siege battle progression, casualty formulas, and AI targeting.
+  - *Deliverable*: `reconstruction/src/`
+- **M75: Government, Diplomacy, Law, and Progression Fidelity** — Source-back political transitions, truce negotiation math, court penalties, and Moot prerequisites.
+  - *Deliverable*: `reconstruction/src/`
+- **M76: Independent Differential Validation** — Execute differential testing with source-supported test vectors and explicit provenance; document known deviations.
+  - *Deliverable*: `research/findings/independent-differential-validation.md`
+- **Phase 18 Gate Criteria**: **PASSED (2026-10-28)**. Major strategic systems are supported by independent test evidence with explicit source provenance (`independent-differential-validation.md`). Unjustified claims eliminated; true fidelity calibrated to 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%). All M72–M76 COMPLETE. Unblocks Phase 19 (M77).
+
+### Phase 19: Native Skyrim Integration Repair
+- **Objective**: Replace mock-tested integration claims with a correctly implemented and empirically tested engine bridge.
+- **M77: SKSE ABI and Plugin Loader Validation** — Verify native plugin interface layouts, calling conventions, and export compatibility against actual SKSE headers.
+  - *Deliverable*: `integration/`
+- **M78: Papyrus Native Bridge and Test Plugin** — Implement missing Papyrus-to-native registration, function binding, and author the actual test plugin and scripts.
+  - *Deliverable*: `integration/`
+- **M79: SKSE Save/Load and State Synchronization** — Implement actual `SKSESerializationInterface` callbacks (Save, Load, Revert) and state synchronization.
+  - *Deliverable*: `integration/`
+- **M80: Real Skyrim Vertical Slice** — Perform genuine runtime integration test where an isolated Skyrim-side action updates Rust state and produces observable feedback.
+  - *Deliverable*: `integration/`
+- **Phase 19 Gate Criteria**: **BLOCKED (Awaiting Human In-Game Execution)**. Native C-ABI plugin compiled, exported symbols verified, Papyrus script sources authored (`integration/scripts/source/`), and test plugin recipe specified (`integration/records/dogfish_test_recipe.md`). In strict compliance with Rule 1.4, actual Skyrim SE engine execution cannot be satisfied by mock tests and requires manual human playtest execution in-game. Zero runtime execution fabricated. Unblocks Phase 20 claims reconciliation (M81).
+
+### Phase 20: Final Validation and Documentation Repair
+- **Objective**: Reconcile all fidelity claims and deliver the final quality-gated repair report.
+- **M81: Fidelity, Coverage, and Claims Reconciliation** — Audit all reconstruction documentation; correct inflated claims; separate implemented, unit-tested, and runtime-tested coverage.
+  - *Deliverable*: `docs/reconstruction-coverage.md`, `docs/milestones.md`
+- **M82: Final Reconstruction Quality Gate** — Integrated review across M63–M81, executing all automated tests, attempting falsification, and authoring capstone repair report.
+  - *Deliverable*: `docs/reconstruction-repair-report.md`
+- **Phase 20 Gate Criteria**: **PASSED (2026-10-28)**. Capstone quality gate report (`docs/reconstruction-repair-report.md`) delivers evidence-backed answers to all 10 mandatory program questions. 19 of 20 defects resolved; M80 preserved as BLOCKED awaiting human in-engine playtesting in accordance with Rule 1.4; 62 automated tests passing with zero failures and zero clippy warnings; honest calibrated fidelity documented. All M81–M82 COMPLETE. Validation and Repair Program closed.
 
 ---
 
@@ -255,6 +336,31 @@ Phase 13 Gate ──> M55 ──> M56 ──> M57 ──> M58 ──> Phase 14 G
 PHASE 15: SKYRIM INTEGRATION PROBING
 
 M48 + Phase 14 Gate ──> M59 ──> M60 ──> M61 ──> M62 (Feasibility Report)
+
+PHASE 16: BASELINE VERIFICATION & DEFECT REPRODUCTION
+
+M62 + Phase 15 Gate ──> M63 ──┬──> M64 ──┬──> M66 ──> Phase 16 Gate
+                              └──> M65 ──┘
+
+PHASE 17: CORE CORRECTNESS & PERSISTENCE REPAIR
+
+Phase 16 Gate ──┬──> M67 ──> M68 ──┐
+                └──> M69 ──> M70 ──┼──> M71 ──> Phase 17 Gate
+
+PHASE 18: GAMEPLAY FIDELITY REPAIR
+
+Phase 17 Gate ──┬──> M72 ──┐
+                ├──> M73 ──┼──> M76 ──> Phase 18 Gate
+                ├──> M74 ──┤
+                └──> M75 ──┘
+
+PHASE 19: NATIVE SKYRIM INTEGRATION REPAIR
+
+M63 + Phase 17 Gate ──> M77 ──> M78 ──> M79 ──> M80 ──> Phase 19 Gate
+
+PHASE 20: FINAL VALIDATION & REPAIR GATE
+
+Phase 18 Gate + Phase 19 Gate ──> M81 ──> M82 (Capstone Report) ──> Phase 20 Gate
 ```
 
 ### Workstream Tracks & Parallel Execution Groups
@@ -264,18 +370,24 @@ M48 + Phase 14 Gate ──> M59 ──> M60 ──> M61 ──> M62 (Feasibility
 | **Track A: Reconstruction** | Independent Rust implementation, model unit tests, scenario execution, fidelity measurements. Works strictly from reviewed contracts. | `reconstruction/` |
 | **Track B: Probing** | Original source inspection, primary evidence recovery, gap investigation, contract clarification. Never passes raw code as instructions. | `research/findings/` |
 | **Track C: Integration** | Skyrim runtime interface investigation, SKSE/C++ bridge research, manual Creation Kit experiment procedures. | `docs/`, `integration/` |
+| **Track D: Validation & Repair** | Defect reproduction, adversarial regression tests, invariant auditing, differential verification, claims reconciliation. | `research/investigations/`, `tests/` |
 
 | Group | Milestones | Primary Focus | Coordination Notes |
 | :--- | :--- | :--- | :--- |
 | **Groups A–K** | M01–M44 | Historical Specification Recovery & Audits | Complete (`b935278`) |
-| **Group L** | M45, M46, M47, M48 | Reconstruction Foundations | M45 unblocks M46, M47, M48 in parallel |
-| **Group M** | M49, M50, M51, M52, M53, M54 | Independent System Reconstruction | Sequential domain modeling in Rust |
-| **Group N** | M55, M56, M57, M58 | Differential Probing & Gap Closure | Comparative testing and contract refinement |
-| **Group O** | M59, M60, M61, M62 | Skyrim Integration Probing & Feasibility | Vertical slice prototyping and final report |
+| **Group L** | M45, M46, M47, M48 | Reconstruction Foundations | Complete (`c5f7748`) |
+| **Group M** | M49, M50, M51, M52, M53, M54 | Independent System Reconstruction | Complete (`e127cb7`) |
+| **Group N** | M55, M56, M57, M58 | Differential Probing & Gap Closure | Complete (`877754b`) |
+| **Group O** | M59, M60, M61, M62 | Skyrim Integration Probing & Feasibility | Complete (`56305b1`) |
+| **Group P** | M63, M64, M65, M66 | Baseline Verification & Defect Reproduction | Independent audits (M63-M65) feed registry (M66) |
+| **Group Q** | M67, M68, M69, M70, M71 | Core Correctness & Persistence Repair | Persistence (M67-M68) & Invariants (M69-M71) |
+| **Group R** | M72, M73, M74, M75, M76 | Gameplay Fidelity Repair | Subsystem fidelity with exclusive file ownership |
+| **Group S** | M77, M78, M79, M80 | Native Skyrim Integration Repair | Sequential integration gates |
+| **Group T** | M81, M82 | Final Validation & Documentation Repair | Capstone audit and quality gate |
 
 ---
 
-## 5. Milestone Validation Gates (M01–M62)
+## 5. Milestone Validation Gates (M01–M82)
 
 | ID | Required validation before completion |
 | :--- | :--- |
@@ -341,3 +453,24 @@ M48 + Phase 14 Gate ──> M59 ──> M60 ──> M61 ──> M62 (Feasibility
 | M60 | Integration builds or loads using selected mechanism; Skyrim-side event is received; reconstructed model updates; observable feedback produced; failure conditions documented; no original mod files modified; game execution verified where available. |
 | M61 | Save/load procedure documented; available runtime tests executed; state consistency assessed; important compatibility risks identified; unverified engine behavior clearly labeled. |
 | M62 | M45–M61 reviewed; technical results traceable; fidelity claims calibrated; integration evidence documented; manual work identified; remaining gaps prioritized; conclusions supported by experiments; final review completed; changes committed. |
+| M63 | Commands recorded; actual results recorded; compiler warnings investigated; failed and skipped tests identified; environment limitations documented; no source changes necessary merely to make a report look clean. |
+| M64 | All reconstructed features mapped; unsupported claims identified; missing implementations distinguished from incomplete implementations; critical gaps prioritized; no fidelity percentage accepted without evidence. |
+| M65 | Critical suspected defects reproducible or explicitly inconclusive; regression tests committed; expected behavior independently justified; known failures retained as actionable work; no defective behavior silently normalized. |
+| M66 | All known critical problems registered; defects assigned to repair milestones; unconfirmed suspicions clearly labeled; repair dependencies established; no unnecessary architectural rewrite proposed. |
+| M67 | Full state equivalence demonstrated; active sieges survive save/load; RNG continuation is reproducible; no omitted gameplay-critical state; missing or incompatible save versions handled explicitly. |
+| M68 | Valid strings round-trip; malformed input rejected; large integers retain precision; numeric conversions checked; unsupported save versions handled; fuzz or property-based testing used where useful; no panics on ordinary malformed input. |
+| M69 | Enemy holdings cannot be managed without authorization; invalid operations do not mutate state; required prerequisites enforced; invariants exercised by negative tests; no unnecessary gameplay restrictions invented. |
+| M70 | Failed operations preserve prior state; resource balances remain valid; no unauthorized resource creation; overflow and underflow handled; multi-step operations tested. |
+| M71 | Deterministic replay established; time progression consistent; no duplicate daily updates; RNG state survives persistence; long-running simulations avoid overflow and uncontrolled memory growth; numerical behavior matches verified contracts where required. |
+| M72 | World data verified against primary sources; starting state justified; territorial transitions corrected; unsupported modifiers removed or isolated; previously missing territory types assessed; relevant tests updated. |
+| M73 | Major numerical formulas independently verified; relevant boundary conditions tested; cross-system resource flow checked; missing production mechanics documented; unsupported clamps or coefficients corrected; deterministic multi-day scenarios pass. |
+| M74 | Military prerequisites enforced; invalid orders rejected; siege phase transitions justified; casualties and reinforcement rules tested; strategic AI formulas compared against original source; no instant unsupported victory paths; engine-dependent behavior explicitly isolated. |
+| M75 | Major political paths tested; numerical diplomacy claims source-backed; Moot prerequisites verified; negative financial operations rejected; missing government mechanics identified; no unsupported political behavior classified EXACT. |
+| M76 | Representative contracts compared; test vectors have explicit provenance; known deviations recorded; critical mismatches corrected; results reproducible; no unjustified EXACT classifications. |
+| M77 | ABI checked against actual SKSE headers; Windows DLL produced using a supported toolchain; exports verified; loader compatibility assessed; unsupported runtime versions rejected appropriately; no in-game claims made from mock tests. |
+| M78 | Papyrus registration implemented; native function signatures verified; required test records created or explicitly awaiting manual authoring; scripts compile where tooling exists; callback path tested to the available level; actual game execution remains a separate gate. |
+| M79 | Callbacks implemented; state serialization integrated; save/load/revert behavior tested where possible; unsupported engine paths documented; no claims of guaranteed clean uninstallation; runtime-dependent results remain pending until tested. |
+| M80 | Actual Skyrim runtime execution demonstrated; event received by the native implementation; state mutation confirmed; visible result confirmed; failure cases exercised; save/load behavior recorded separately. |
+| M81 | Numerical coverage reproducible; unsupported claims corrected; documentation matches actual code; validation levels distinguished; remaining gaps prioritized; no historical records silently erased. |
+| M82 | Critical defects addressed or explicitly blocked; all applicable automated tests pass; major fidelity claims traceable; persistence verified; native status accurately represented; runtime evidence supplied where required; documentation reconciled; final review performed; intended changes committed. |
+

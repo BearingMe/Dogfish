@@ -123,6 +123,7 @@ pub fn run_outlaw_to_high_king_campaign(seed: u64) -> Result<ScenarioReport> {
 pub fn run_mid_siege_interruption_scenario(seed: u64) -> Result<bool> {
     let mut state = GameState::new(seed);
     state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true)?;
+    state.reinforce_division(DivisionId(0), 40)?;
 
     // Launch siege on Falkreath
     state.start_siege(HoldingId::FALKREATH, true, true)?;

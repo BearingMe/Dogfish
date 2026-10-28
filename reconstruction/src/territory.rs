@@ -27,23 +27,37 @@ pub fn are_capitals_adjacent(a: HoldingId, b: HoldingId) -> bool {
     // 6: Morthal borders 0 (Whiterun), 2 (Solitude), 4 (Dawnstar)
     // 7: Markarth borders 0 (Whiterun), 1 (Falkreath)
     // 8: Winterhold borders 3 (Windhelm), 4 (Dawnstar)
-    match (a.0, b.0) {
-        (0, 1) | (1, 0) => true,
-        (0, 3) | (3, 0) => true,
-        (0, 4) | (4, 0) => true,
-        (0, 5) | (5, 0) => true,
-        (0, 6) | (6, 0) => true,
-        (0, 7) | (7, 0) => true,
-        (1, 5) | (5, 1) => true,
-        (1, 7) | (7, 1) => true,
-        (2, 6) | (6, 2) => true,
-        (3, 4) | (4, 3) => true,
-        (3, 5) | (5, 3) => true,
-        (3, 8) | (8, 3) => true,
-        (4, 6) | (6, 4) => true,
-        (4, 8) | (8, 4) => true,
-        _ => false,
-    }
+    matches!(
+        (a.0, b.0),
+        (0, 1)
+            | (1, 0)
+            | (0, 3)
+            | (3, 0)
+            | (0, 4)
+            | (4, 0)
+            | (0, 5)
+            | (5, 0)
+            | (0, 6)
+            | (6, 0)
+            | (0, 7)
+            | (7, 0)
+            | (1, 5)
+            | (5, 1)
+            | (1, 7)
+            | (7, 1)
+            | (2, 6)
+            | (6, 2)
+            | (3, 4)
+            | (4, 3)
+            | (3, 5)
+            | (5, 3)
+            | (3, 8)
+            | (8, 3)
+            | (4, 6)
+            | (6, 4)
+            | (4, 8)
+            | (8, 4)
+    )
 }
 
 /// Appointed provincial governor / Jarl for a conquered hold capital.

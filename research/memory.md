@@ -372,6 +372,95 @@
 - **Evidence**: `docs/reconstruction-feasibility.md`, `docs/milestones.md`
 - **Related**: M62, M01–M61
 
+## Build & Test Baseline Verification (Validation & Repair Program)
+- **Status**: CONFIRMED
+- **Finding**: Baseline execution audit (`research/investigations/build-and-test-baseline.md`) captures hard toolchain and diagnostic facts on `x86_64-pc-windows-msvc` (rustc 1.98.1, Python 3.13.3): (1) Unit tests pass 100% (31/31 in `reconstruction/`, 3/3 in `integration/`, 16/16 in `tests/`); (2) Clippy audit reveals 8 warnings in `reconstruction/` (`manual_clamp`, `useless_format`, etc.) and 3 errors in `integration/` (`clippy::not_unsafe_ptr_arg_deref` in `SKSEPlugin_Query` raw pointer dereference); (3) `dogfish_integration.dll` PE export table confirms 7 C symbols; (4) Strictly separates validation levels: confirms STATIC, UNIT, SCENARIO, and NATIVE ABI validation are achieved, while RUNTIME execution in an actual Skyrim SE game client is explicitly PENDING / NOT ACHIEVED.
+- **Evidence**: `research/investigations/build-and-test-baseline.md`
+- **Related**: M63, M60, M62, M64, M65, M66
+
+## Contract-to-Code Traceability Audit & Fidelity Recalibration
+- **Status**: CONFIRMED
+- **Finding**: Critical traceability audit (`research/investigations/contract-traceability-audit.md`) maps all 55 features to code and uncovers significant fidelity overstatements in prior reports: (1) 14 features labeled EXACT actually contain only boolean flags (`pincer_assault`, `artillery_enabled`), integer counters (`prisoners_in_dungeon`), or simplified abstractions (`power_level` instead of 71 perks); (2) Uncovers invented mechanics: `GovernmentDoctrine` modifiers (+15%/-15%) in `faction.rs` have no source basis in Papyrus; (3) Uncovers critical persistence omissions: `persistence.rs` completely omits active sieges, divisions, governors, relations, cooldowns, and RNG state; (4) Uncovers missing invariants: `upgrade_facility` and `appoint_governor` lack ownership checks, and `advance_siege` allows instant victory without troops; (5) Recalibrates honest fidelity breakdown across N = 55 features: 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%).
+- **Evidence**: `research/investigations/contract-traceability-audit.md`, `reconstruction/src/`
+- **Related**: M64, M63, M65, M66, M67, M69, M72, M74
+
+## Adversarial Regression Baseline & Defect Reproduction
+- **Status**: CONFIRMED
+- **Finding**: Automated adversarial test suite in `reconstruction/tests/adversarial_regressions.rs` executes 12 failure scenarios against current code, reproducing 9 concrete defects (3 passed, 9 failed): (1) Active sieges lost on save/load; (2) Army divisions and appointed governors lost on save/load; (3) Quotes/backslashes in strings break unescaped JSON parser; (4) Facilities in enemy holdings can be upgraded by player; (5) Governors in enemy capitals can be appointed by player; (6) Starting second siege silently overwrites active siege; (7) Sieges advance to capitulation with 0 soldiers; (8) Negative judicial fines corrupt treasury; (9) Treasury additions cause unhandled integer overflow panic. All 9 failures preserved as actionable work for Phase 17–19 repairs.
+- **Evidence**: `reconstruction/tests/adversarial_regressions.rs`, `research/investigations/adversarial-regression-baseline.md`
+- **Related**: M65, M64, M66, M67, M68, M69, M70, M74
+
+## Master Defect Registry & Prioritization (Phase 16 Gate Closure)
+- **Status**: CONFIRMED
+- **Finding**: Consolidated defect registry (`research/investigations/defect-registry.md`) catalogs 20 actionable defects across M63–M65: (1) 7 Priority P0 defects invalidating core correctness/integration claims (omitted sieges/divisions/governors in serialization, JSON quote injection, unsafe raw pointer dereferences, missing SKSE co-save registration); (2) 7 Priority P1 defects covering domain invariants and behavioral fidelity (unauthorized enemy upgrades/appointments, instant siege conquest, negative fines, overflow panics, invented doctrine modifiers); (3) 4 Priority P2 defects covering code hygiene and memory bounds (clippy warnings, unbounded event growth); (4) 2 Priority P3 defects covering fidelity claims reconciliation. Formally closes Phase 16 Gate with a verified execution baseline and reproducible repair backlog.
+- **Evidence**: `research/investigations/defect-registry.md`, `docs/milestones.md`
+- **Related**: M66, M63, M64, M65, M67–M82
+
+## Complete State Persistence & Serialization Repair
+- **Status**: CONFIRMED
+- **Finding**: Persistence engine (`reconstruction/src/persistence.rs`) completely repaired, resolving DEF-PERS-01, DEF-PERS-02, DEF-PERS-03, and DEF-PERS-04 (32/32 tests passing): (1) Active sieges (`active_siege`) with tactical phases, casualties, and reinforcement waves survive save/load; (2) All 10 army divisions with names, commanders, troop counts, power levels, and typed `ArmyOrder` survive save/load; (3) Appointed governors across all 15 holdings survive save/load; (4) Foreign diplomatic relations, truce timers, and POW counts survive save/load; (5) Wilderness camp cooldowns and crime gold arrays survive save/load; (6) `DeterministicRng` seed/state is persisted, ensuring bit-for-bit PRNG continuation after reload; (7) String escaping (`escape_json_str`) handles quotes and backslashes without JSON syntax corruption. Validated via `test_complete_state_persistence_equivalence` and adversarial regression cases 01, 02, and 03.
+- **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/core.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M67, M65, M66, M68, M54
+
+## Serialization Safety, Unicode & Malformed Input Hardening
+- **Status**: CONFIRMED
+- **Finding**: Data validation and serialization safety hardened in `reconstruction/src/persistence.rs` (36/36 tests passing): (1) Strict version gating rejects unsupported savegame versions (`version != 1`); (2) Trailing garbage detector rejects characters following valid JSON root; (3) Unicode hex escape sequence parsing (`\uXXXX`) handles international/Nordic character sets without corruption; (4) Malformed input test harness proves 14 distinct syntax errors (unquoted keys, missing delimiters, unclosed strings, invalid numbers) reject cleanly with `Err` without panicking.
+- **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/lib.rs`
+- **Related**: M68, M67, M65, M66, M69
+
+## Domain Invariants & Authorization Enforcement
+- **Status**: CONFIRMED
+- **Finding**: Domain authorization checks enforced across public state-mutating operations in `reconstruction/src/state.rs` (36/36 tests passing): (1) `upgrade_facility` strictly verifies holding ownership, rejecting unauthorized player upgrades in enemy-held cities (resolves DEF-INVAR-01, adversarial case 04 PASS); (2) `appoint_governor` strictly verifies holding ownership, rejecting unauthorized Jarl appointments in foreign capitals (resolves DEF-INVAR-02, adversarial case 05 PASS); (3) `conscript_troops` gated to player-owned holdings; (4) `GameState::check_invariants()` expanded to assert division count (10) and non-negative populations across all holdings.
+- **Evidence**: `reconstruction/src/state.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M69, M65, M66, M70, M50, M51
+
+## Transactional Consistency & Checked Arithmetic Safety
+- **Status**: CONFIRMED
+- **Finding**: Resource arithmetic and multi-step transaction safety hardened across domain modules (36/36 lib tests, 10/12 adversarial tests passing): (1) `deposit_treasury` and `withdraw_treasury` in `economy.rs` use `checked_add` and `checked_sub`, eliminating unhandled arithmetic overflow panics on large balances (resolves DEF-TRANS-02, adversarial case 09 PASS); (2) `judge_case` in `government.rs` strictly rejects negative court fines, preventing unauthorized treasury deductions (resolves DEF-TRANS-01, adversarial case 08 PASS); (3) `ransom_pows` in `diplomacy.rs` rejects negative ransom amounts and guards against integer multiplication overflow; (4) Verified multi-step atomic failure safety in `upgrade_facility` where insufficient wood preserves treasury gold without partial deductions.
+- **Evidence**: `reconstruction/src/economy.rs`, `reconstruction/src/government.rs`, `reconstruction/src/diplomacy.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M70, M65, M66, M69, M71, M51, M53
+
+## Simulation Time, Bounded Memory & Phase 17 Gate Closure
+- **Status**: CONFIRMED
+- **Finding**: Long-running simulation stability and PRNG continuation hardened in `reconstruction/` (38/38 tests passing): (1) Implemented bounded event log retention policy (`MAX_EVENT_LOG_CAPACITY = 500`) with `record_event()`, resolving DEF-FIDEL-04 and preventing memory growth across 1,000+ day campaigns; (2) Fixed 64-bit integer precision in JSON parser via `SimpleJson::Unsigned` and `SimpleJson::Integer`, guaranteeing bit-for-bit PRNG continuation across save/reload cycles (`test_deterministic_prng_save_load_continuation` PASS); (3) Eliminated all 8 Clippy linter warnings across `reconstruction/` (resolves DEF-CODE-01). Formally closes Phase 17 Gate: the standalone Rust model is internally consistent, persists completely, and rejects invalid operations.
+- **Evidence**: `reconstruction/src/state.rs`, `reconstruction/src/persistence.rs`, `reconstruction/src/lib.rs`
+- **Related**: M71, M67, M68, M69, M70, M72, M74
+
+## Faction & Doctrine Fidelity Repair (Isolation of Non-Canonical Modifiers)
+- **Status**: CONFIRMED
+- **Finding**: Faction governance module repaired in `reconstruction/src/faction.rs` (38/38 tests passing): (1) Resolved DEF-FIDEL-01 by removing invented percentage multipliers (+15%/-15%) from canonical simulation execution, ensuring baseline economy operates strictly on verified Papyrus tiered formulas; (2) Isolated experimental doctrine modifiers (`experimental_tax_modifier_pct`, `experimental_conscription_modifier_pct`) with explicit documentation labeling them as non-canonical extensions; (3) Verified initial world data, 15-holding endowments, and 9-hold capital alignments against primary sources.
+- **Evidence**: `reconstruction/src/faction.rs`, `cs_factiongovernmentscript.psc`
+- **Related**: M72, M71, M66, M50, M73, M74
+
+## Economy, Population & Municipal Infrastructure Fidelity Repair
+- **Status**: CONFIRMED
+- **Finding**: Economic and demographic simulation calibrated in `reconstruction/src/state.rs` (40/40 tests passing): (1) Verified daily update ordering (Taxation &rarr; Labor allocation &rarr; Gross production &rarr; Food consumption &rarr; Stability check &rarr; Population growth); (2) Implemented benevolent loyalty recovery (+2 loyalty daily up to 100) when food is in surplus and taxes are reasonable (`tax_rate <= 1`) based on `cs_loyaltycheckscript.psc`; (3) Verified boundary conditions (0 population holdings, 0/1 unemployed conscription drafts); (4) Proved cross-system resource flow resilience in `test_loyalty_recovery_post_famine`.
+- **Evidence**: `reconstruction/src/state.rs`, `reconstruction/src/lib.rs`
+- **Related**: M73, M72, M71, M66, M51, M74, M76
+
+## Military, Siege & Strategic AI Fidelity Repair (12/12 Adversarial Regressions Passing)
+- **Status**: CONFIRMED
+- **Finding**: Siege and strategic warfare models hardened in `reconstruction/src/military.rs` and `reconstruction/src/state.rs` (40/40 lib tests, 12/12 adversarial tests passing): (1) Resolved DEF-INVAR-04: `start_siege` rejects concurrent siege launches while an active siege is underway (adversarial case 06 PASS); (2) Resolved DEF-INVAR-03: `advance_siege` strictly requires living soldiers in field forces, eliminating the instant 0-troop siege victory exploit (adversarial case 07 PASS); (3) Resolved DEF-FIDEL-03: implemented tactical casualty scaling for `artillery_enabled` (50% gate casualty reduction) and `pincer_assault` (25% flanking damage bonus); (4) Successfully brought the entire adversarial regression test suite in `adversarial_regressions.rs` to 100% passing (all 12 failure scenarios now resolved).
+- **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/state.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M74, M65, M66, M69, M70, M52, M76
+
+## Diplomacy, Treaty Probability & Judicial Fidelity Repair
+- **Status**: CONFIRMED
+- **Finding**: Bilateral treaty negotiation logic audited and repaired in `reconstruction/src/diplomacy.rs` (41/41 lib tests, 12/12 adversarial tests passing): (1) Transcribed exact Papyrus negotiation equation from `cs_negotiationscript.psc:120-170` into `calculate_exact_papyrus_negotiation_chance()`, properly distinguishing vanilla foreign faction alignment (`GovSons` +50% peace bonus vs `GovImperial` -25% penalty) from player doctrine; (2) Preserved troop leverage thresholds (< 60: -25%, >= 100: +25%) and argument explanations (Military, Ideological, Commercial); (3) Verified negative court fine rejection and checked arithmetic in judicial throne hearings.
+- **Evidence**: `reconstruction/src/diplomacy.rs`, `cs_negotiationscript.psc`, `reconstruction/src/lib.rs`
+- **Related**: M75, M74, M66, M53, M76
+
+## Independent Differential Validation & Phase 18 Gate Closure
+- **Status**: CONFIRMED
+- **Finding**: Comprehensive differential evaluation (`research/findings/independent-differential-validation.md`) compares the repaired Rust simulation against independently derived test vectors with explicit script provenance: (1) 0.00% variance verified across all mathematical formulas (tiered taxation, gross production with maritime docks, labor allocation waterfall, conscription drafts, off-screen combat casualties, strategic AI division sizing, aggressiveness bounds, invasion priority weights, and bilateral negotiation probability); (2) Recalibrates honest fidelity breakdown across N = 55 features: 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%); (3) Explicitly documents intentional architectural improvements (split-brain desync elimination, Moot deadlock prevention, decoupled persistence); (4) Labels all engine-dependent behaviors as PENDING (IN ENGINE). Formally closes Phase 18 Gate with all 5 gameplay fidelity milestones (M72–M76) complete.
+- **Evidence**: `research/findings/independent-differential-validation.md`, `reconstruction/src/lib.rs`
+- **Related**: M76, M72, M73, M74, M75, M81, M82
+
+## SKSE C-ABI Alignment & Loader Interface Validation
+- **Status**: CONFIRMED
+- **Finding**: Native integration adapter (`integration/src/lib.rs`) audited and aligned against primary SKSE header `references/sources/skse64/skse64/PluginAPI.h` (3/3 tests passing, 0 clippy warnings): (1) Resolved DEF-INTEG-01 by declaring `SKSEPlugin_Query` and `SKSEPlugin_Load` as `pub unsafe extern "C" fn` with complete safety documentation, eliminating all clippy raw pointer errors; (2) Reconciled `SKSEInterface` memory layout with 64-bit offsets and interface constants (`INTERFACE_PAPYRUS`, `INTERFACE_SERIALIZATION`); (3) Implemented runtime version verification rejecting zero or uninitialized runtime versions; (4) Strictly maintains NATIVE ABI validation level without conflating it with RUNTIME game execution.
+- **Evidence**: `integration/src/lib.rs`, `references/sources/skse64/skse64/PluginAPI.h`
+- **Related**: M77, M63, M66, M78, M79, M80
 
 
 
@@ -387,3 +476,49 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Papyrus Native Function Bridge & Test Plugin Recipe
+- **Status**: CONFIRMED
+- **Finding**: Papyrus-to-native communication layer implemented in `integration/` (4/4 tests passing, 0 clippy warnings): (1) Authored physical uncompiled Papyrus sources in `integration/scripts/source/` (`DogfishNativeBridge.psc` declaring native global bindings, `DogfishClaimBannerScript.psc` handling `OnActivate` and UI feedback); (2) Implemented `SKSEPapyrusInterface` registration structures and `RegisterPapyrusFunctions()` callback; (3) Authored isolated test plugin recipe (`integration/records/dogfish_test_recipe.md`) defining `dogfish_test.esp` (ESL-flagged Form Version 44), `DogfishTestCell` (interior space based on `qasmoke`), `DogfishClaimBannerActi`, and `DogfishAnchorQuest`.
+- **Evidence**: `integration/scripts/source/`, `integration/records/dogfish_test_recipe.md`, `integration/src/lib.rs`
+- **Related**: M78, M77, M66, M60, M79, M80
+
+## SKSE Co-Save Registration & State Persistence Integration
+- **Status**: CONFIRMED (NATIVE ABI Verified; RUNTIME In-Engine Pending)
+- **Finding**: Actual SKSE co-save persistence hooks implemented in `integration/src/lib.rs` (5/5 tests passing, 0 clippy warnings): (1) Resolved DEF-INTEG-02 by declaring `SKSESerializationInterface` matching `skse64/PluginAPI.h` and querying `INTERFACE_SERIALIZATION` in `SKSEPlugin_Load()`; (2) Implemented `Dogfish_RevertCallback` resetting in-memory native state on pre-load/new-game; (3) Implemented `Dogfish_SaveCallback` writing tagged `STAT` record chunks with serialized JSON state; (4) Implemented `Dogfish_LoadCallback` reading `STAT` record chunks and restoring `GameState` via `StatePersistence::deserialize()`; (5) Validated via `test_skse_serialization_lifecycle`.
+- **Evidence**: `integration/src/lib.rs`, `references/sources/skse64/PluginAPI.h`
+- **Related**: M79, M78, M77, M67, M68, M80
+
+## Real Skyrim Vertical Slice Status (Phase 19 Gate Blocked)
+- **Status**: BLOCKED (Awaiting Human In-Game Execution)
+- **Finding**: In strict compliance with Rule 1.4 of the Validation and Repair Program, Milestone M80 and Phase 19 Gate are formally recorded as BLOCKED: (1) Native Windows DLL (`dogfish_integration.dll`), Papyrus script sources, and test plugin recipe (`dogfish_test.esp`) are complete and verified at the NATIVE ABI level; (2) In-engine game execution requires manual human playtesting (loading `SkyrimSE.exe` via `skse64_loader.exe`, teleporting to `DogfishTestCell`, and activating the banner); (3) Zero in-engine execution is fabricated.
+- **Evidence**: `integration/target/release/dogfish_integration.dll`, `integration/scripts/source/`, `integration/records/dogfish_test_recipe.md`
+- **Related**: M80, M78, M79, M77, M81, M82
+
+## Fidelity, Coverage & Claims Reconciliation (Phase 20 Audit)
+- **Status**: CONFIRMED
+- **Finding**: Master documentation reconciled in `docs/reconstruction-coverage.md` and `docs/reconstruction-feasibility.md`: (1) Corrected earlier fidelity inflation down to audited reality across N = 55 features: 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%); (2) Delineated coverage by verification level: STATIC (100%), UNIT (92.7%), SCENARIO (92.7%), DIFFERENTIAL (45.5%), NATIVE (100%), RUNTIME (0.0% PENDING / BLOCKED); (3) Corrected unverified claims regarding guaranteed clean uninstallation and full in-engine integration; (4) Preserved all historical milestone records and commits intact without erasure.
+- **Evidence**: `docs/reconstruction-coverage.md`, `docs/reconstruction-feasibility.md`
+- **Related**: M81, M64, M76, M80, M82
+
+## Final Reconstruction Quality Gate Report (Phase 20 Gate Passed)
+- **Status**: CONFIRMED (Quality Gate Passed; M80 Preserved as Blocked)
+- **Finding**: Capstone quality gate report (`docs/reconstruction-repair-report.md`) delivers answers to all 10 mandatory program questions, closing Phase 20 Gate: (1) 19 of 20 defects corrected across persistence, domain invariants, checked arithmetic, and strategic AI; (2) In-engine execution preserved as BLOCKED (M80) in accordance with Rule 1.4; (3) 62 automated tests passing with 0 failures and 0 clippy warnings (41 Rust lib tests, 12 adversarial regression tests, 5 integration tests, 16 Python tests); (4) Fidelity calibrated to 10 EXACT (18.2%), 15 COMPATIBLE (27.3%), 26 APPROXIMATE / STUB (47.3%), 4 ENGINE-TIED (7.3%), 0 CONTRADICTED (0.0%); (5) Clean-room compliance, zero code copying, and complete state persistence verified. Formally completes the 82-milestone Validation and Repair Program.
+- **Evidence**: `docs/reconstruction-repair-report.md`, `docs/milestones.md`
+- **Related**: M82, M01–M81

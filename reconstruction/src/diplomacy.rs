@@ -44,7 +44,87 @@ pub fn calculate_truce_acceptance_chance(
         }
     }
 
-    chance.max(5).min(95) as u32
+    chance.clamp(5, 95) as u32
+}
+
+/// Exact bilateral treaty acceptance calculation from primary Papyrus code (cs_negotiationscript.psc:120-170).
+///
+/// Factors:
+/// - Base chance: 25%
+/// - Jarl relationship rank: > 0 gives +25%, < 0 gives -25%
+/// - Offer type 1 (Peace):
+///   - Stormcloak: +50%, Imperial: -25%
+///   - Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
+///   - Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
+///   - Argument 3 (Commercial): Imperial gives -25%
+/// - Offer type 2 (Truce):
+///   - Base offer: +25%
+///   - Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
+///   - Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
+///   - Argument 3 (Commercial): Stormcloak gives +25%, Imperial gives -25%
+/// - Clamped between 5% and 95%.
+pub fn calculate_exact_papyrus_negotiation_chance(
+    target_faction: FactionId,
+    relationship_rank: i32,
+    offer_type: u8,
+    argument: u8,
+    total_troops: i32,
+) -> u32 {
+    let mut chance = 25i32;
+
+    if relationship_rank > 0 {
+        chance += 25;
+    } else if relationship_rank < 0 {
+        chance -= 25;
+    }
+
+    if offer_type == 1 {
+        if target_faction == FactionId::Stormcloak {
+            chance += 50;
+        } else if target_faction == FactionId::Imperial {
+            chance -= 25;
+        }
+
+        if argument == 1 {
+            if total_troops < 60 {
+                chance -= 25;
+            } else if total_troops >= 100 {
+                chance += 25;
+            }
+        } else if argument == 2 {
+            if target_faction == FactionId::Stormcloak {
+                chance -= 25;
+            } else if target_faction == FactionId::Imperial {
+                chance += 25;
+            }
+        } else if argument == 3 && target_faction == FactionId::Imperial {
+            chance -= 25;
+        }
+    } else if offer_type == 2 {
+        chance += 25;
+
+        if argument == 1 {
+            if total_troops < 60 {
+                chance -= 25;
+            } else if total_troops >= 100 {
+                chance += 25;
+            }
+        } else if argument == 2 {
+            if target_faction == FactionId::Stormcloak {
+                chance -= 25;
+            } else if target_faction == FactionId::Imperial {
+                chance += 25;
+            }
+        } else if argument == 3 {
+            if target_faction == FactionId::Stormcloak {
+                chance += 25;
+            } else if target_faction == FactionId::Imperial {
+                chance -= 25;
+            }
+        }
+    }
+
+    chance.clamp(5, 95) as u32
 }
 
 /// Bilateral diplomatic relationship between Player and a foreign faction.
@@ -150,13 +230,23 @@ impl DiplomacyManager {
                 "Target faction not found for POW ransom",
             ))?;
 
+        if gold_per_pow < 0 {
+            return Err(SimulationError::InvalidStateTransition(
+                "Ransom payment cannot be negative",
+            ));
+        }
+
         if rel.held_pow_count == 0 {
             return Ok(0);
         }
 
         let ransomed = rel.held_pow_count;
-        let total_ransom = ransomed as i64 * gold_per_pow;
-        *treasury += total_ransom;
+        let total_ransom = (ransomed as i64)
+            .checked_mul(gold_per_pow)
+            .ok_or(SimulationError::InvalidStateTransition("Ransom gold overflow"))?;
+        *treasury = treasury
+            .checked_add(total_ransom)
+            .ok_or(SimulationError::InvalidStateTransition("Treasury overflow on ransom deposit"))?;
         rel.held_pow_count = 0;
 
         Ok(ransomed)
