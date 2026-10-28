@@ -91,7 +91,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M58** | Fidelity & Coverage Audit | Phase 14 | COMPLETE | M57 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `877754b` |
 | **M59** | Engine Boundary Mapping | Phase 15 | COMPLETE | M48, Phase 14 Gate | Coordinator | `docs/engine-boundary-map.md` | PASS | None | `dbba8a7` |
 | **M60** | Minimal In-Game Vertical Slice | Phase 15 | COMPLETE | M59 | Coordinator | `integration/` | PASS | None | `449a469` |
-| **M61** | Persistence & Compatibility Probe | Phase 15 | COMPLETE | M60 | Coordinator | `research/findings/integration-persistence-probe.md` | PASS | None | Pending |
+| **M61** | Persistence & Compatibility Probe | Phase 15 | COMPLETE | M60 | Coordinator | `research/findings/integration-persistence-probe.md` | PASS | None | `bedb7a7` |
 | **M62** | Reconstruction Feasibility Report | Phase 15 | NOT STARTED | M58, M61 | Unassigned | `docs/reconstruction-feasibility.md` | Pending | None | — |
 
 ---
