@@ -96,7 +96,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M62** | Reconstruction Feasibility Report | Phase 15 | COMPLETE | M58, M61 | Coordinator | `docs/reconstruction-feasibility.md` | PASS | None | `56305b1` |
 | **M63** | Build & Test Baseline | Phase 16 | COMPLETE | M62, Phase 15 Gate | Coordinator | `research/investigations/build-and-test-baseline.md` | PASS | None | `eb83d02` |
 | **M64** | Contract-to-Code Traceability Audit | Phase 16 | COMPLETE | M63 | Coordinator | `research/investigations/contract-traceability-audit.md` | PASS | None | `add76f9` |
-| **M65** | Adversarial Regression Baseline | Phase 16 | COMPLETE | M63, M64 | Coordinator | `research/investigations/adversarial-regression-baseline.md` | PASS | None | Pending |
+| **M65** | Adversarial Regression Baseline | Phase 16 | COMPLETE | M63, M64 | Coordinator | `research/investigations/adversarial-regression-baseline.md` | PASS | None | `e42336a` |
 | **M66** | Defect Registry & Repair Prioritization | Phase 16 | NOT STARTED | M63, M64, M65 | Unassigned | `research/investigations/defect-registry.md` | Pending | None | — |
 | **M67** | Complete State Persistence | Phase 17 | NOT STARTED | M66, Phase 16 Gate | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
 | **M68** | Serialization Safety & Data Validation | Phase 17 | NOT STARTED | M67 | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
