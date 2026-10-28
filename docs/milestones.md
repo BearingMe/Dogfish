@@ -86,7 +86,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M53** | Government & Diplomacy Reconstruction | Phase 13 | COMPLETE | M50, M51, M52 | Coordinator | `reconstruction/` | PASS | None | `176b593` |
 | **M54** | Persistence & Scenario Execution | Phase 13 | COMPLETE | M49–M53 | Coordinator | `reconstruction/` | PASS | None | `e127cb7` |
 | **M55** | Differential Behavior Testing | Phase 14 | COMPLETE | M54, Phase 13 Gate | Coordinator | `research/findings/differential-testing.md` | PASS | None | `090ed46` |
-| **M56** | Targeted Source Probing | Phase 14 | COMPLETE | M55 | Coordinator | `research/findings/targeted-source-probing.md` | PASS | None | Pending |
+| **M56** | Targeted Source Probing | Phase 14 | COMPLETE | M55 | Coordinator | `research/findings/targeted-source-probing.md` | PASS | None | `a2ca099` |
 | **M57** | Reconstruction Corrections | Phase 14 | NOT STARTED | M56 | Unassigned | `reconstruction/` | Pending | None | — |
 | **M58** | Fidelity & Coverage Audit | Phase 14 | NOT STARTED | M57 | Unassigned | `docs/reconstruction-coverage.md` | Pending | None | — |
 | **M59** | Engine Boundary Mapping | Phase 15 | NOT STARTED | M48, Phase 14 Gate | Unassigned | `docs/engine-boundary-map.md` | Pending | None | — |
