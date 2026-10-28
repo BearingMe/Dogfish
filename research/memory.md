@@ -221,3 +221,9 @@
 - **Finding**: Automated verification using persistent script `scripts/verify_structure.py` and unit test suite `tests/test_structure.py` (6/6 tests passing) independently reproduces 100% of the structural claims from M05–M08 with zero discrepancies: 3,779 files (521.93 MB), 1,539 compiled `.pex` scripts matching 1,539 source `.psc` scripts 1:1, `conquerskyrim.esp` Form Version 44 with 22,690 records, 5 official DLC masters in strict order, 47 top-level GRUP types, and exactly 83 overridden vanilla records from `Skyrim.esm` (including `CWCampaignObj` `0x00026F45`, Tullius, Ulfric, and 57 `LCTN` locations).
 - **Evidence**: `research/findings/verified-structure.md`, `tests/test_structure.py`
 - **Related**: M37, M05, M06, M07, M27, M38
+
+## Reproducible Papyrus Symbol & Behavior Verification
+- **Status**: CONFIRMED
+- **Finding**: Programmatic audit via `scripts/verify_papyrus.py` and unit test suite `tests/test_papyrus.py` (3/3 tests, 11 subtests passing) independently verifies class inheritance, properties, and function signatures across all 11 core controller scripts. Verifies the Task Barrel proxy architecture (`cs_patrolholdscript.psc`), confirms the Moot deadlock mechanism in `GetJarls()` (strict non-null appointed Jarl requirement), and verifies battle throttling (`CS_BattleSize` and `CS_BattleSpeed` attrition scaling).
+- **Evidence**: `research/findings/verified-papyrus-behavior.md`, `tests/test_papyrus.py`
+- **Related**: M38, M07, M08, M10, M11, M14, M15, M39

@@ -26,6 +26,14 @@ Scripts in this directory automate technical tasks, such as:
 - **Dependencies**: Python standard library (`hashlib`, `struct`, `pathlib`, `json`).
 - **Relevant Milestone**: M05, M06, M37.
 
+### `verify_papyrus.py`
+- **Purpose**: Programmatically audits Papyrus script class inheritance, property bindings, event handlers, and function signatures across the 11 core controller scripts.
+- **Required Inputs**: Path to uncompiled script source directory (`--source-dir`, defaults to `references/local/conquest-of-skyrim/Data/scripts/source`).
+- **Invocation**: `python -I scripts/verify_papyrus.py [--output artifacts/papyrus-audit.json]`
+- **Generated Outputs**: Formatted console verification and optional JSON report.
+- **Dependencies**: Python standard library (`re`, `json`, `pathlib`).
+- **Relevant Milestone**: M07, M08, M38.
+
 ### `script_name.ext` *(Template)*
 - **Purpose**: Short description of what the script does.
 - **Required Inputs**: Arguments, files, or environment parameters needed.

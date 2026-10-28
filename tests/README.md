@@ -25,3 +25,9 @@ Automated checks help maintain consistency across long-running research mileston
 - **Dependencies**: Python standard library (`unittest`, `pathlib`), `scripts/verify_structure.py`.
 - **Relevant Milestone**: M37.
 
+### `test_papyrus.py`
+- **Purpose**: Programmatically asserts inheritance, properties, function signatures, and Task Barrel proxy structures across core Papyrus source scripts (`cs_govscriptfunctions`, `cs_transferownershipscript`, `cs_attackcityscript`, `cs_meetingscript`, `cs_coronationscript`, `cs_negotiationscript`, `cs_holdingeconomyupdaterscript`, `cs_troopupgradescript`, `cs_bountyscript`, `cs_checkversion`, `cs_patrolholdscript`).
+- **Invocation**: `python -I tests/test_papyrus.py`
+- **Dependencies**: Python standard library (`unittest`, `pathlib`), `scripts/verify_papyrus.py`.
+- **Relevant Milestone**: M38.
+
