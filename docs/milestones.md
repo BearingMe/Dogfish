@@ -8,7 +8,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 32 | 28 | 0 | 0 | 4 |
+| 32 | 24 | 0 | 0 | 8 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Research has not yet begun.
@@ -22,7 +22,7 @@ This document tracks all 32 milestones of the *Conquest of Skyrim* specification
 
 Dependencies below are conservative planning inputs, not blanket prerequisites for starting independent research. M01–M04 public-documentation work can run concurrently; integrate their results before closing the Phase 1 gate. Later milestones may begin when their specific evidence/prerequisites are available; record deviations and do not impose artificial waits on unrelated human playtesting. Shared roadmap/reference changes remain coordinator-owned.
 
-Phase 1 (External Reconnaissance) is COMPLETE (M01–M04 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Original mod files remain MISSING and `guardrails.md` is a placeholder: Phase 2 technical investigations requiring local mod files await user-supplied files in `references/local/conquest-of-skyrim/Data/` and guardrail establishment.
+Phase 1 (External Reconnaissance) and Phase 2 (Technical Reconnaissance) are COMPLETE (M01–M08 validated). Target version is confirmed as v0.3.9 (March 23, 2023 release by galvatron304). Local mod files are verified as AVAILABLE in `references/local/conquest-of-skyrim/Data/` and clean-room guardrails are established in `guardrails.md`. Phase 3 Core Gameplay Specification is unlocked.
 
 The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked; Pending means no validation has run. COMPLETE follows `docs/execution-discipline.md`, including review/commit and explicit handling of limitations. Planned deliverable paths below are intentionally absent until their milestone begins.
 
@@ -32,10 +32,10 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M02** | Documentation Recovery | Phase 1 | COMPLETE | None | Coordinator | `research/findings/documentation-inventory.md` | PASS | None | `288d005` |
 | **M03** | Comprehensive Feature Inventory | Phase 1 | COMPLETE | M01, M02 | Coordinator | `research/findings/feature-inventory.md` | PASS | None | `2670636` |
 | **M04** | Issues & Compatibility Inventory | Phase 1 | COMPLETE | M01, M02 | Coordinator | `research/findings/known-issues.md` | PASS | None | `8a5462c` |
-| **M05** | Distribution & Dependency Analysis | Phase 2 | NOT STARTED | Phase 1 Gate | Unassigned | `research/findings/file-inventory.md` | Pending | None | — |
-| **M06** | Creation Engine Integration | Phase 2 | NOT STARTED | M05 | Unassigned | `research/findings/skyrim-integration.md` | Pending | None | — |
-| **M07** | Static Structure Recovery | Phase 2 | NOT STARTED | M05, M06 | Unassigned | `research/findings/static-structure.md` | Pending | None | — |
-| **M08** | Initialization & Runtime Lifecycle | Phase 2 | NOT STARTED | M05, M06 | Unassigned | `research/findings/runtime-lifecycle.md` | Pending | None | — |
+| **M05** | Distribution & Dependency Analysis | Phase 2 | COMPLETE | Phase 1 Gate | Coordinator | `research/findings/file-inventory.md` | PASS | None | `606b2e7` |
+| **M06** | Creation Engine Integration | Phase 2 | COMPLETE | M05 | Coordinator | `research/findings/skyrim-integration.md` | PASS | None | `660fb67` |
+| **M07** | Static Structure Recovery | Phase 2 | COMPLETE | M05, M06 | Coordinator | `research/findings/static-structure.md` | PASS | None | `ef03ca4` |
+| **M08** | Initialization & Runtime Lifecycle | Phase 2 | COMPLETE | M05, M06 | Coordinator | `research/findings/runtime-lifecycle.md` | PASS | None | `90c2f86` |
 | **M09** | Faction Creation | Phase 3 | NOT STARTED | Phase 2 Gate | Unassigned | `research/findings/faction-creation.md` | Pending | None | — |
 | **M10** | Territory & Ownership | Phase 3 | NOT STARTED | M09 | Unassigned | `research/findings/territory.md` | Pending | None | — |
 | **M11** | Progression & Victory | Phase 3 | NOT STARTED | M09, M10 | Unassigned | `research/findings/progression.md` | Pending | None | — |
@@ -85,7 +85,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/static-structure.md`
 - **M08: Initialization and Runtime Lifecycle** — Quest startup, background updates, save/load behavior, shutdown, recovery.
   - *Deliverable*: `research/findings/runtime-lifecycle.md`
-- **Phase 2 Gate Criteria**: Technical surface sufficiently mapped to support focused subsystem investigation.
+- **Phase 2 Gate Criteria**: **PASSED (2026-10-27)**. Technical surface sufficiently mapped across distribution, engine integration, static controller architecture, and runtime lifecycle. Subsystem investigation unlocked.
 
 ### Phase 3: Core Gameplay Specification
 - **M09: Faction Creation** — Workflow, prerequisites, initial resources, customization, failure behavior, persistence.
