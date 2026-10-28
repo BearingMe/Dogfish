@@ -342,6 +342,13 @@
 - **Evidence**: `reconstruction/src/military.rs`, `reconstruction/src/lib.rs`
 - **Related**: M57, M56, M55, M52, M46, M58
 
+## Reconstruction Coverage & Fidelity Audit (Phase 14 Gate Closure)
+- **Status**: CONFIRMED
+- **Finding**: Master coverage audit (`docs/reconstruction-coverage.md`) evaluates all N = 55 features across 18 strategic domains: (1) Reconstructed in standalone Rust simulation: 49/55 features (89.1%); (2) Engine-tied integration layer: 4/55 features (7.3%: 935 dialogue scripts, SkyUI MCM, banner mesh spawning, drum animation sync); (3) Preserved incomplete stubs: 2/55 features (3.6%: doctrine yield multipliers, civil tech perk tree). Among reconstructed features, fidelity is 73.5% EXACT (36/49) and 26.5% COMPATIBLE (13/49), with 0.0% CONTRADICTED. Audits major architectural fixes (atomic territory transfer resolving split-brain, Moot prerequisite check resolving Jarl deadlock, decoupled persistence resolving Havok mid-siege barricade desync). Formally closes Phase 14 Gate with all 4 milestones (M55–M58) complete.
+- **Evidence**: `docs/reconstruction-coverage.md`, `reconstruction/src/lib.rs`
+- **Related**: M58, M55, M56, M57, M46, M59, M62
+
+
 
 
 
