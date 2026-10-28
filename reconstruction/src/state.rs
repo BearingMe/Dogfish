@@ -332,6 +332,12 @@ impl GameState {
             return Err(SimulationError::InvalidHoldingId(holding_id.0));
         }
 
+        if self.holdings[idx].owner != FactionId::Player {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot upgrade facilities in foreign or unowned holdings",
+            ));
+        }
+
         EconomyManager::upgrade_facility(
             &mut self.holdings[idx],
             &mut self.treasury,
@@ -343,7 +349,7 @@ impl GameState {
     /// Conscript troops from holding's unemployed labor reserve.
     pub fn conscript_troops(&mut self, holding_id: HoldingId, percentage: f64) -> i32 {
         let idx = holding_id.0 as usize;
-        if idx >= self.holdings.len() {
+        if idx >= self.holdings.len() || self.holdings[idx].owner != FactionId::Player {
             return 0;
         }
 
@@ -514,6 +520,17 @@ impl GameState {
         holding_id: HoldingId,
         governor_name: impl Into<String>,
     ) -> Result<()> {
+        let idx = holding_id.0 as usize;
+        if idx >= self.holdings.len() {
+            return Err(SimulationError::InvalidHoldingId(holding_id.0));
+        }
+
+        if self.holdings[idx].owner != FactionId::Player {
+            return Err(SimulationError::InvalidStateTransition(
+                "Cannot appoint a governor to a foreign or unowned holding",
+            ));
+        }
+
         let day = self.time.day;
         self.territory.appoint_governor(holding_id, governor_name, day)
     }
@@ -530,6 +547,18 @@ impl GameState {
                 required: 0,
                 available: self.treasury,
             });
+        }
+        if self.military.divisions.len() != DivisionId::MAX_DIVISIONS {
+            return Err(SimulationError::InvalidStateTransition(
+                "Division count must equal exactly 10",
+            ));
+        }
+        for h in &self.holdings {
+            if h.population < 0 {
+                return Err(SimulationError::InvalidStateTransition(
+                    "Holding population cannot be negative",
+                ));
+            }
         }
         Ok(())
     }

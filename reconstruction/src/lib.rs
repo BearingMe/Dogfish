@@ -280,6 +280,11 @@ mod tests {
     #[test]
     fn test_facility_upgrade_transaction() {
         let mut state = GameState::new(505);
+        // Player owns Whiterun and Falkreath
+        state.transfer_holding(HoldingId::WHITERUN, FactionId::Player, true).unwrap();
+        state.transfer_holding(HoldingId::FALKREATH, FactionId::Player, false).unwrap();
+
+        // Whiterun farm is already level 4 (max)
         let max_err = state.upgrade_facility(HoldingId::WHITERUN, FacilityType::Farm);
         assert!(max_err.is_err());
 

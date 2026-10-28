@@ -408,6 +408,13 @@
 - **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/src/lib.rs`
 - **Related**: M68, M67, M65, M66, M69
 
+## Domain Invariants & Authorization Enforcement
+- **Status**: CONFIRMED
+- **Finding**: Domain authorization checks enforced across public state-mutating operations in `reconstruction/src/state.rs` (36/36 tests passing): (1) `upgrade_facility` strictly verifies holding ownership, rejecting unauthorized player upgrades in enemy-held cities (resolves DEF-INVAR-01, adversarial case 04 PASS); (2) `appoint_governor` strictly verifies holding ownership, rejecting unauthorized Jarl appointments in foreign capitals (resolves DEF-INVAR-02, adversarial case 05 PASS); (3) `conscript_troops` gated to player-owned holdings; (4) `GameState::check_invariants()` expanded to assert division count (10) and non-negative populations across all holdings.
+- **Evidence**: `reconstruction/src/state.rs`, `reconstruction/tests/adversarial_regressions.rs`
+- **Related**: M69, M65, M66, M70, M50, M51
+
+
 
 
 
