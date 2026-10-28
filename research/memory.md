@@ -107,3 +107,9 @@
 - **Finding**: Population is tracked abstractly via location keywords (`Population`, `Unemployed`, `FoodRequired`, `CS_RecruitablePercentage`). Food requirement scales as `FoodRequired = Population + CS_NumGuards`. Conscription draws directly from the labor reserve (`RecruitableTroops = ceiling(RecruitablePercentage * Unemployed)`), deducting from both `Population` and `Unemployed`. Daily tax revenue scales with population and tier: Major Capitals yield `500*Pop + 250*Pop*TaxRate`, Minor Cities yield `300*Pop + 150*Pop*TaxRate`, and Villages yield `200*Pop + 100*Pop*TaxRate`. Local holdings store up to 5 surplus resource units before pooling into the national stockpile.
 - **Evidence**: `research/findings/population.md`
 - **Related**: M18, M13, M17, M19, M24
+
+## Infrastructure Architecture & Construction Mechanics
+- **Status**: CONFIRMED
+- **Finding**: Holdings support 4-tier facility upgrades across 5 types: Farms (`FarmLevel`), Mines (`MineLevel`), Lumber Mills (`LumberMillLevel`), Docks (`DocksLevel`), and Barracks (`BarracksLevel`). Upgrades cost Treasury gold (`UpgradeCost`) and Wood reserves (`UpgradeCostWood`). Upgrading invokes `AddJobs()`, which immediately expands open jobs by the holding's base rate (`FoodChange`, `WoodChange`, `MetalChange`), raising the `MaxJobs` employment ceiling and driving subsequent population growth. Supported locations include all 9 hold capitals (`citynum 0..8`) and 6 major villages (`villagenum 9..14`: Riverwood, Rorikstead, Dragon Bridge, Ivarstead, Shor's Stone, Karthwasten).
+- **Evidence**: `research/findings/infrastructure.md`
+- **Related**: M19, M17, M18, M20
