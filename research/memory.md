@@ -354,6 +354,13 @@
 - **Evidence**: `docs/engine-boundary-map.md`, `references/sources/skse64/PluginAPI.h`
 - **Related**: M59, M48, M58, M60, M61, M62
 
+## Minimal In-Game Vertical Slice Architecture
+- **Status**: CONFIRMED
+- **Finding**: Functional native runtime adapter implemented in `integration/` (`dogfish-integration` v0.1.0) as both `cdylib` and `rlib` (3/3 tests passing). Implements: (1) Standard SKSE plugin entry points (`SKSEPlugin_Query` and `SKSEPlugin_Load`) exposing C-ABI compatibility for Skyrim SE; (2) Inward event receiver `Dogfish_ClaimLocation()` simulating in-world banner activation, updating holding ownership atomically in the simulation core and zeroing crime bounties; (3) Observable feedback functions `Dogfish_GetHoldingOwner()`, `Dogfish_GetTreasuryGold()`, `Dogfish_DepositGold()`, and `Dogfish_AdvanceDay()`; (4) Isolated test plugin specification (`dogfish_test.esp`) in `integration/README.md` defining `DogfishTestCell` (interior space cloned from `qasmoke`), `DogfishClaimBanner` activator, and `DogfishAnchorQuest`. Proves complete end-to-end integration path from engine event to independent simulation model.
+- **Evidence**: `integration/src/lib.rs`, `integration/README.md`, `integration/Cargo.toml`
+- **Related**: M60, M59, M48, M50, M61, M62
+
+
 
 
 
