@@ -360,6 +360,13 @@
 - **Evidence**: `integration/src/lib.rs`, `integration/README.md`, `integration/Cargo.toml`
 - **Related**: M60, M59, M48, M50, M61, M62
 
+## Skyrim Persistence & Runtime Compatibility Architecture
+- **Status**: CONFIRMED
+- **Finding**: Technical persistence probe (`research/findings/integration-persistence-probe.md`) evaluates save/load compatibility: (1) Details SKSE co-save architecture (`SKSESerializationInterface`) across `SaveCallback`, `LoadCallback`, and `RevertCallback`, proving that co-save chunk binding eliminates player death/quickload rollback desynchronization; (2) Proves clean uninstallation: reduces original mod's 1,539 Papyrus script instances embedded in `.ess` files down to 1 minimal banner script stub, completely eliminating save bloat (+5–15MB) and orphan script crashes upon removal; (3) Documents recovery mechanisms: programmatic gate disabling resolves Havok mid-siege barricade desync, and atomic transactions resolve split-brain territory transfers; (4) Mitigates load-order shifts via `ResolveFormId` and ESL-flagged ESPs (`ESP-FE`, slot `0xFE`); (5) Explicitly labels unverified runtime behaviors (multi-hour continuous Papyrus GC stability under rapid FFI callbacks).
+- **Evidence**: `research/findings/integration-persistence-probe.md`, `integration/src/lib.rs`, `references/sources/skse64/PluginAPI.h`
+- **Related**: M61, M60, M59, M54, M48, M62
+
+
 
 
 
