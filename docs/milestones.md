@@ -84,7 +84,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M51** | Economy & Population Reconstruction | Phase 13 | COMPLETE | M49, M50 | Coordinator | `reconstruction/` | PASS | None | `e889494` |
 | **M52** | Military & Warfare Reconstruction | Phase 13 | COMPLETE | M49, M50 | Coordinator | `reconstruction/` | PASS | None | `a055c1c` |
 | **M53** | Government & Diplomacy Reconstruction | Phase 13 | COMPLETE | M50, M51, M52 | Coordinator | `reconstruction/` | PASS | None | `176b593` |
-| **M54** | Persistence & Scenario Execution | Phase 13 | COMPLETE | M49–M53 | Coordinator | `reconstruction/` | PASS | None | Pending |
+| **M54** | Persistence & Scenario Execution | Phase 13 | COMPLETE | M49–M53 | Coordinator | `reconstruction/` | PASS | None | `e127cb7` |
 | **M55** | Differential Behavior Testing | Phase 14 | NOT STARTED | M54, Phase 13 Gate | Unassigned | `research/findings/differential-testing.md` | Pending | None | — |
 | **M56** | Targeted Source Probing | Phase 14 | NOT STARTED | M55 | Unassigned | `research/findings/targeted-source-probing.md` | Pending | None | — |
 | **M57** | Reconstruction Corrections | Phase 14 | NOT STARTED | M56 | Unassigned | `reconstruction/` | Pending | None | — |
