@@ -269,3 +269,9 @@
 - **Finding**: Project policy transitioned from pure specification recovery into experimental reconstruction, probing, and Skyrim runtime integration (Phases 12–15, M45–M62) in `guardrails.md` and `AGENTS.md`. Explicitly authorizes independent behavioral reference modeling (preferring Rust under `reconstruction/`), minimal engine integration adapters, and controlled technical experiments while strictly maintaining IP protections (no verbatim code copying, no asset redistribution, read-only reference isolation). Codifies mandatory 8-step source querying protocol against `references/local/conquest-of-skyrim/Data/` and clean-room separation between Researcher and Implementer responsibilities.
 - **Evidence**: `guardrails.md`, `AGENTS.md`, `docs/milestones.md`
 - **Related**: M45, M46, M47, M48, M49
+
+## Behavioral Contract Inventory & Feature Discrepancy Resolution
+- **Status**: CONFIRMED
+- **Finding**: Reconciles the historical 51 vs 55 feature discrepancy: mathematically proves the actual inventory contains exactly 55 unique features across 18 domains (historical "51" was an off-by-4 counting artifact prior to adding respawn timers, settlement garrisons, and coronation ceremony sub-entries). M46 maps all 55 features into a formal reconstruction matrix in `docs/behavioral-contracts.md` with primary sources, inputs/outputs, difficulty ratings, and integration dependencies. Establishes that 48 features are directly reconstructible in standalone Rust simulation (`reconstruction/`), 3 are incomplete/unknown stubs, and 4 are engine-tied UI/visual elements.
+- **Evidence**: `docs/behavioral-contracts.md`
+- **Related**: M46, M03, M45, M47, M49, M50-M54
