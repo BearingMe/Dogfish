@@ -47,3 +47,9 @@
 - **Finding**: Faction founding triggers via `CS_ReadStartBook.OnRead()` -> `CS_StartFactionMenu.MenuStart()` -> `SetStage(0)` on `GovQuest`. Background economy runs on 24-game-hour cycles (`RegisterForUpdateGameTime(24)`). On save reload, `CS_CheckVersion` executes internal version migrations (up to v0.3009, with a commented-out v0.4000 Jarl loyalty stub), and `CS_UpdateGovOutfitsOnLoadGame` refreshes appointed official outfits. Mid-game uninstallation corrupts hold ownership and leaves orphaned Papyrus threads.
 - **Evidence**: `research/findings/runtime-lifecycle.md`
 - **Related**: M08, M09, M17, M26, M28
+
+## Faction Initialization Workflow & State Architecture
+- **Status**: CONFIRMED
+- **Finding**: Faction creation executes at `GovQuest` Stage 0: grants `BannerSpell` & `SettingsMenu`, opens Scaleform `UIlib_1` text prompts via `CS_SelectName` to rename proxy containers (`FactionNameChestObject` & `ChestObject`), teleports player to `BannerRoomTeleport` to swap 3D banners at scale 1.53 via `CS_ChangeBanners`, and initializes Skyrim holdings to Imperial (11) or Stormcloak (12) via `SetUpFactionOwners()`. Treasury starts at 0; player must recruit a Steward (free for friends, 100g/day for neutral NPCs), Second-in-Command (ASIC), and Blacksmith.
+- **Evidence**: `research/findings/faction-creation.md`
+- **Related**: M09, M10, M12, M13, M21
