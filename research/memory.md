@@ -227,3 +227,9 @@
 - **Finding**: Programmatic audit via `scripts/verify_papyrus.py` and unit test suite `tests/test_papyrus.py` (3/3 tests, 11 subtests passing) independently verifies class inheritance, properties, and function signatures across all 11 core controller scripts. Verifies the Task Barrel proxy architecture (`cs_patrolholdscript.psc`), confirms the Moot deadlock mechanism in `GetJarls()` (strict non-null appointed Jarl requirement), and verifies battle throttling (`CS_BattleSize` and `CS_BattleSpeed` attrition scaling).
 - **Evidence**: `research/findings/verified-papyrus-behavior.md`, `tests/test_papyrus.py`
 - **Related**: M38, M07, M08, M10, M11, M14, M15, M39
+
+## Reproducible Numerical Mechanics & Formula Verification
+- **Status**: CONFIRMED
+- **Finding**: Automated formula execution via `scripts/verify_formulas.py` and unit test suite `tests/test_formulas.py` (7/7 tests passing) independently verifies 8 exact mathematical systems: (1) Tiered taxation (Major: `500*Pop + 250*Pop*Tax`, Minor: `300*Pop + 150*Pop*Tax`, Villages: `200*Pop + 100*Pop*Tax`); (2) Facility capacity (`Level * Change`); (3) Dynamic population growth (`random(0.3*Deficit, 0.5*Deficit)`); (4) Military conscription (`ceil(Percentage * Unemployed)`); (5) Gross production with maritime dock bonuses (`3*(Change*Level + floor(0.3*DocksChange*DocksLevel) - JobsOpen)`); (6) Linear tech upgrade costs (`5000 + 10000(L-1)` Gold, `50 + 100(L-1)` Metal); (7) Treaty acceptance probability; and (8) Off-screen detachment casualty simulation in `cs_bountyscript.psc`. General AI vs AI off-screen battle math remains UNKNOWN.
+- **Evidence**: `research/findings/verified-mechanics.md`, `tests/test_formulas.py`
+- **Related**: M39, M17, M18, M20, M23, M24, M40

@@ -34,6 +34,14 @@ Scripts in this directory automate technical tasks, such as:
 - **Dependencies**: Python standard library (`re`, `json`, `pathlib`).
 - **Relevant Milestone**: M07, M08, M38.
 
+### `verify_formulas.py`
+- **Purpose**: Implements and calculates representative test cases for all mathematical formulas recovered from Papyrus sources (taxation, facility production, population growth, conscription, technology upgrade costs, treaty acceptance probability, and off-screen detachment casualties).
+- **Required Inputs**: None (self-contained verification utility).
+- **Invocation**: `python -I scripts/verify_formulas.py`
+- **Generated Outputs**: Formatted console metrics and assertion verifications.
+- **Dependencies**: Python standard library (`math`).
+- **Relevant Milestone**: M17, M18, M20, M23, M24, M39.
+
 ### `script_name.ext` *(Template)*
 - **Purpose**: Short description of what the script does.
 - **Required Inputs**: Arguments, files, or environment parameters needed.

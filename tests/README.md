@@ -31,3 +31,9 @@ Automated checks help maintain consistency across long-running research mileston
 - **Dependencies**: Python standard library (`unittest`, `pathlib`), `scripts/verify_papyrus.py`.
 - **Relevant Milestone**: M38.
 
+### `test_formulas.py`
+- **Purpose**: Programmatically asserts numerical accuracy across 7 test suites covering tiered taxation, facility capacity, dynamic population growth bounds, conscription ceilings, linear technology costs, gross resource production with dock multipliers, treaty acceptance probabilities, and off-screen detachment casualties.
+- **Invocation**: `python -I tests/test_formulas.py`
+- **Dependencies**: Python standard library (`unittest`, `pathlib`, `math`), `scripts/verify_formulas.py`.
+- **Relevant Milestone**: M39.
+
