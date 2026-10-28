@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 20 | 0 | 0 | 62 |
+| 82 | 19 | 0 | 0 | 63 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -94,7 +94,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M60** | Minimal In-Game Vertical Slice | Phase 15 | COMPLETE | M59 | Coordinator | `integration/` | PASS | None | `449a469` |
 | **M61** | Persistence & Compatibility Probe | Phase 15 | COMPLETE | M60 | Coordinator | `research/findings/integration-persistence-probe.md` | PASS | None | `bedb7a7` |
 | **M62** | Reconstruction Feasibility Report | Phase 15 | COMPLETE | M58, M61 | Coordinator | `docs/reconstruction-feasibility.md` | PASS | None | `56305b1` |
-| **M63** | Build & Test Baseline | Phase 16 | NOT STARTED | M62, Phase 15 Gate | Unassigned | `research/investigations/build-and-test-baseline.md` | Pending | None | — |
+| **M63** | Build & Test Baseline | Phase 16 | COMPLETE | M62, Phase 15 Gate | Coordinator | `research/investigations/build-and-test-baseline.md` | PASS | None | Pending |
 | **M64** | Contract-to-Code Traceability Audit | Phase 16 | NOT STARTED | M63 | Unassigned | `research/investigations/contract-traceability-audit.md` | Pending | None | — |
 | **M65** | Adversarial Regression Baseline | Phase 16 | NOT STARTED | M63, M64 | Unassigned | `research/investigations/adversarial-regression-baseline.md` | Pending | None | — |
 | **M66** | Defect Registry & Repair Prioritization | Phase 16 | NOT STARTED | M63, M64, M65 | Unassigned | `research/investigations/defect-registry.md` | Pending | None | — |

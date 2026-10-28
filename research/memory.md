@@ -372,6 +372,13 @@
 - **Evidence**: `docs/reconstruction-feasibility.md`, `docs/milestones.md`
 - **Related**: M62, M01–M61
 
+## Build & Test Baseline Verification (Validation & Repair Program)
+- **Status**: CONFIRMED
+- **Finding**: Baseline execution audit (`research/investigations/build-and-test-baseline.md`) captures hard toolchain and diagnostic facts on `x86_64-pc-windows-msvc` (rustc 1.98.1, Python 3.13.3): (1) Unit tests pass 100% (31/31 in `reconstruction/`, 3/3 in `integration/`, 16/16 in `tests/`); (2) Clippy audit reveals 8 warnings in `reconstruction/` (`manual_clamp`, `useless_format`, etc.) and 3 errors in `integration/` (`clippy::not_unsafe_ptr_arg_deref` in `SKSEPlugin_Query` raw pointer dereference); (3) `dogfish_integration.dll` PE export table confirms 7 C symbols; (4) Strictly separates validation levels: confirms STATIC, UNIT, SCENARIO, and NATIVE ABI validation are achieved, while RUNTIME execution in an actual Skyrim SE game client is explicitly PENDING / NOT ACHIEVED.
+- **Evidence**: `research/investigations/build-and-test-baseline.md`
+- **Related**: M63, M60, M62, M64, M65, M66
+
+
 
 
 
