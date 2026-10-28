@@ -14,7 +14,7 @@ This document tracks all 82 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 17 | 0 | 0 | 65 |
+| 82 | 16 | 0 | 0 | 66 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -97,7 +97,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M63** | Build & Test Baseline | Phase 16 | COMPLETE | M62, Phase 15 Gate | Coordinator | `research/investigations/build-and-test-baseline.md` | PASS | None | `eb83d02` |
 | **M64** | Contract-to-Code Traceability Audit | Phase 16 | COMPLETE | M63 | Coordinator | `research/investigations/contract-traceability-audit.md` | PASS | None | `add76f9` |
 | **M65** | Adversarial Regression Baseline | Phase 16 | COMPLETE | M63, M64 | Coordinator | `research/investigations/adversarial-regression-baseline.md` | PASS | None | `e42336a` |
-| **M66** | Defect Registry & Repair Prioritization | Phase 16 | NOT STARTED | M63, M64, M65 | Unassigned | `research/investigations/defect-registry.md` | Pending | None | — |
+| **M66** | Defect Registry & Repair Prioritization | Phase 16 | COMPLETE | M63, M64, M65 | Coordinator | `research/investigations/defect-registry.md` | PASS | None | Pending |
 | **M67** | Complete State Persistence | Phase 17 | NOT STARTED | M66, Phase 16 Gate | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
 | **M68** | Serialization Safety & Data Validation | Phase 17 | NOT STARTED | M67 | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
 | **M69** | Domain Invariants & Authorization | Phase 17 | NOT STARTED | M66, Phase 16 Gate | Unassigned | `reconstruction/src/` | Pending | None | — |
@@ -260,7 +260,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/investigations/adversarial-regression-baseline.md`
 - **M66: Defect Registry and Repair Prioritization** — Consolidate findings into a prioritized, actionable defect registry (P0/P1/P2/P3).
   - *Deliverable*: `research/investigations/defect-registry.md`
-- **Phase 16 Gate Criteria**: Pass when the existing reconstruction has a verified execution baseline and a concrete, reproducible repair backlog.
+- **Phase 16 Gate Criteria**: **PASSED (2026-10-28)**. Verified execution baseline established (`build-and-test-baseline.md`), 55 features audited with recalibrated fidelity (`contract-traceability-audit.md`), 9 concrete defects reproduced in automated regression tests (`adversarial-regression-baseline.md`), and actionable 20-defect backlog prioritized (`defect-registry.md`). All M63–M66 COMPLETE. Unblocks Phase 17 (M67).
 
 ### Phase 17: Core Correctness and Persistence Repair
 - **Objective**: Ensure that the standalone Rust model behaves consistently before attempting deeper engine integration.

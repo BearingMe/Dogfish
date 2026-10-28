@@ -390,6 +390,13 @@
 - **Evidence**: `reconstruction/tests/adversarial_regressions.rs`, `research/investigations/adversarial-regression-baseline.md`
 - **Related**: M65, M64, M66, M67, M68, M69, M70, M74
 
+## Master Defect Registry & Prioritization (Phase 16 Gate Closure)
+- **Status**: CONFIRMED
+- **Finding**: Consolidated defect registry (`research/investigations/defect-registry.md`) catalogs 20 actionable defects across M63–M65: (1) 7 Priority P0 defects invalidating core correctness/integration claims (omitted sieges/divisions/governors in serialization, JSON quote injection, unsafe raw pointer dereferences, missing SKSE co-save registration); (2) 7 Priority P1 defects covering domain invariants and behavioral fidelity (unauthorized enemy upgrades/appointments, instant siege conquest, negative fines, overflow panics, invented doctrine modifiers); (3) 4 Priority P2 defects covering code hygiene and memory bounds (clippy warnings, unbounded event growth); (4) 2 Priority P3 defects covering fidelity claims reconciliation. Formally closes Phase 16 Gate with a verified execution baseline and reproducible repair backlog.
+- **Evidence**: `research/investigations/defect-registry.md`, `docs/milestones.md`
+- **Related**: M66, M63, M64, M65, M67–M82
+
+
 
 
 
