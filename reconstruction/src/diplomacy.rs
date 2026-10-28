@@ -53,16 +53,16 @@ pub fn calculate_truce_acceptance_chance(
 /// - Base chance: 25%
 /// - Jarl relationship rank: > 0 gives +25%, < 0 gives -25%
 /// - Offer type 1 (Peace):
-///     Stormcloak: +50%, Imperial: -25%
-///     Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
-///     Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
-///     Argument 3 (Commercial): Imperial gives -25%
+///   - Stormcloak: +50%, Imperial: -25%
+///   - Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
+///   - Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
+///   - Argument 3 (Commercial): Imperial gives -25%
 /// - Offer type 2 (Truce):
-///     Base offer: +25%
-///     Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
-///     Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
-///     Argument 3 (Commercial): Stormcloak gives +25%, Imperial gives -25%
-/// Clamped between 5% and 95%.
+///   - Base offer: +25%
+///   - Argument 1 (Military): Troops < 60 gives -25%, >= 100 gives +25%
+///   - Argument 2 (Ideological): Stormcloak gives -25%, Imperial gives +25%
+///   - Argument 3 (Commercial): Stormcloak gives +25%, Imperial gives -25%
+/// - Clamped between 5% and 95%.
 pub fn calculate_exact_papyrus_negotiation_chance(
     target_faction: FactionId,
     relationship_rank: i32,
