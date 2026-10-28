@@ -41,3 +41,9 @@
 - **Finding**: Static system structure is governed by 5 central quest controllers: `CS_GovScriptFunctions` (civil cabinet, thrones, executions), `CS_AttackPlanningNewScript` (invasion logistics, hold contiguity check), `CS_BattleTrackerScript` (boolean ownership arrays for cities, forts, camps), `CS_TransferOwnershipScript` (atomic marker/crime swapping across `AllHoldings`), and `CS_AttackCityScript` (siege lifecycle). Papyrus scripts consist primarily of 935 `TopicInfo` dialogue responses and 254 `Quest` state managers.
 - **Evidence**: `research/findings/static-structure.md`
 - **Related**: M07, M08, M09, M10, M14, M16
+
+## Runtime Lifecycle & State Persistence
+- **Status**: CONFIRMED
+- **Finding**: Faction founding triggers via `CS_ReadStartBook.OnRead()` -> `CS_StartFactionMenu.MenuStart()` -> `SetStage(0)` on `GovQuest`. Background economy runs on 24-game-hour cycles (`RegisterForUpdateGameTime(24)`). On save reload, `CS_CheckVersion` executes internal version migrations (up to v0.3009, with a commented-out v0.4000 Jarl loyalty stub), and `CS_UpdateGovOutfitsOnLoadGame` refreshes appointed official outfits. Mid-game uninstallation corrupts hold ownership and leaves orphaned Papyrus threads.
+- **Evidence**: `research/findings/runtime-lifecycle.md`
+- **Related**: M08, M09, M17, M26, M28
