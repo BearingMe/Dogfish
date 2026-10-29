@@ -558,3 +558,9 @@
 - **Finding**: Test package staged and documented in `integration/deploy/README.md` and `integration/tools/package_test_slice.py`: (1) Verified 64-bit release DLL binary `dogfish_integration.dll` (215,040 bytes, SHA256 `d9f64ac8...`) with 12 exported C symbols; (2) Staged Papyrus sources (`DogfishNativeBridge.psc`, `DogfishClaimBannerScript.psc`) into standard `Data/Source/Scripts/` hierarchy; (3) Provided exact CLI flags for `PapyrusCompiler.exe` and xEdit recipe for `dogfish_test.esp`; (4) Documented in-game testing sequence in `DogfishTestCell` (`coc DogfishTestCell`), log inspection locations, and clean uninstallation procedures; (5) Explicitly preserved unproduced game files (`.pex`, `.esp`) as awaiting manual compilation without fabricating binaries.
 - **Evidence**: `integration/deploy/README.md`, `integration/tools/package_test_slice.py`
 - **Related**: M96, M78, M92, M97, M98
+
+## In-Game Runtime Validation Protocol Status (M97 Blocked)
+- **Status**: BLOCKED (Awaiting Human In-Game Execution)
+- **Finding**: In strict compliance with Rule 1.4 of the Validation and Repair Program, Milestone M97 is formally recorded as BLOCKED: (1) 15-step empirical runtime verification protocol codified in `research/playtesting/dogfish-runtime-validation.md`; (2) Standardized log extraction and screenshot reporting schema established; (3) Live engine testing requires launching `SkyrimSE.exe` with `skse64_loader.exe` on a gaming workstation; (4) Zero in-engine runtime execution is fabricated in the headless development environment.
+- **Evidence**: `research/playtesting/dogfish-runtime-validation.md`
+- **Related**: M97, M96, M80, M98
