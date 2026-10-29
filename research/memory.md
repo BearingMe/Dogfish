@@ -546,3 +546,9 @@
 - **Finding**: Real SKSE co-save streaming lifecycle verified via mock serialization interface in `integration/tests/cosave_lifecycle.rs` (14/14 tests passing, 0 clippy warnings): (1) Enforced maximum record length bound (`MAX_COSAVE_RECORD_LEN = 10MB`) in `Dogfish_LoadCallback` preventing OOM DOS on corrupted saves; (2) Verified complete write -> revert -> read byte stream round-trip restoring mutated state (Whiterun ownership); (3) Proved safe rejection of corrupt JSON payloads and unsupported record versions without panicking; (4) Formally resolves and completes reopened Milestone M79; (5) Closes Phase 24 Gate: native integration layer is structurally sound with genuine function registration and verified co-save streaming.
 - **Evidence**: `integration/tests/cosave_lifecycle.rs`, `integration/src/lib.rs`
 - **Related**: M94, M79, M91, M92, M93, M95
+
+## Persistence Parser Hardening & Save Integrity Verification
+- **Status**: CONFIRMED
+- **Finding**: Standalone persistence implementation hardened against malformed data in `reconstruction/src/persistence.rs` (58/58 tests passing in `reconstruction/`, 0 clippy warnings): (1) `parse_null()` and `parse_bool()` strictly validate literal characters, eliminating pseudo-literal acceptance; (2) Enforced duplicate object key rejection in `parse_object()`; (3) Integer helper methods (`as_u8`, `as_i32`, `as_u32`) enforce checked bounds, eliminating silent narrowing truncation, and reject fractional values; (4) Hardened unicode escape sequences (`\uXXXX`), rejecting non-hex digits; (5) Validated via dedicated regression suite `reconstruction/tests/persistence_hardening.rs` (5/5 PASS).
+- **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/tests/persistence_hardening.rs`
+- **Related**: M95, M67, M68, M94, M96
