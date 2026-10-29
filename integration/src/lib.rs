@@ -103,6 +103,9 @@ pub struct SKSESerializationInterface {
 pub const DOGFISH_UID: u32 = 0x44474648; // 'DGFH'
 pub const RECORD_STATE: u32 = 0x53544154; // 'STAT'
 
+/// Maximum allowed record length for co-save chunks (10 MB) to prevent OOM DOS from corrupted saves (M94).
+pub const MAX_COSAVE_RECORD_LEN: u32 = 10 * 1024 * 1024;
+
 /// Callback invoked by SKSE before loading a save or starting a new game.
 ///
 /// # Safety
@@ -158,7 +161,7 @@ pub unsafe extern "C" fn Dogfish_LoadCallback(intfc: *mut SKSESerializationInter
         if !get_info(&mut rec_type, &mut rec_ver, &mut rec_len) {
             break;
         }
-        if rec_type == RECORD_STATE && rec_len > 0 {
+        if rec_type == RECORD_STATE && rec_ver == 1 && rec_len > 0 && rec_len <= MAX_COSAVE_RECORD_LEN {
             let mut buf = vec![0u8; rec_len as usize];
             if let Some(read_data) = (*intfc).read_record_data {
                 let bytes_read = read_data(buf.as_mut_ptr() as *mut std::ffi::c_void, rec_len);

@@ -16,7 +16,7 @@ This document tracks all 98 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 98 | 13 | 1 | 1 | 83 |
+| 98 | 12 | 0 | 1 | 85 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -112,7 +112,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M76** | Independent Differential Validation | Phase 18 | COMPLETE | M72, M73, M74, M75 | Coordinator | `research/findings/independent-differential-validation.md` | PASS | None | `358e286` |
 | **M77** | SKSE ABI & Plugin Loader Validation | Phase 19 | COMPLETE | M63, Phase 17 Gate | Coordinator | `integration/` | PASS | None | `80b5a1d` |
 | **M78** | Papyrus Native Bridge & Test Plugin | Phase 19 | COMPLETE | M77 | Coordinator | `integration/` | PASS | None | `f730564` |
-| **M79** | SKSE Save/Load & State Synchronization | Phase 19 | IN PROGRESS | M67, M68, M78 | Coordinator | `integration/` | In Progress | Reopened: Co-save streaming unverified; mock only | `ded135f` |
+| **M79** | SKSE Save/Load & State Synchronization | Phase 19 | COMPLETE | M67, M68, M78 | Coordinator | `integration/` | PASS | None | `ded135f` |
 | **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | `c9a871c` |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | COMPLETE | Phase 18 Gate, M76, M80 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `c03fdb5` |
 | **M82** | Final Reconstruction Quality Gate | Phase 20 | COMPLETE | M81 | Coordinator | `docs/reconstruction-repair-report.md` | PASS | None | `c1b527d` |
@@ -127,7 +127,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M91** | Integration Defect Reproduction | Phase 24 | COMPLETE | M82, Phase 20 Gate | Coordinator | `research/investigations/native-integration-audit.md` | PASS | None | `55fecd4` |
 | **M92** | Real Papyrus Native Function Registration | Phase 24 | COMPLETE | M91 | Coordinator | `integration/` | PASS | None | `e6aeb22` |
 | **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `research/findings/native-abi-validation.md` | PASS | None | `165cbb0` |
-| **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `integration/` | Pending | None | — |
+| **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `integration/` | PASS | None | Pending |
 | **M95** | Persistence Parser & Save Integrity Repair | Phase 25 | NOT STARTED | Phase 24 Gate | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
 | **M96** | Reproducible Skyrim Test Package | Phase 25 | NOT STARTED | M92, M94, M95 | Unassigned | `integration/` | Pending | None | — |
 | **M97** | In-Game Runtime Validation | Phase 25 | NOT STARTED | M96 | Unassigned | `research/playtesting/dogfish-runtime-validation.md` | Pending | Awaiting Human Execution | — |
@@ -366,7 +366,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `research/findings/native-abi-validation.md`
 - **M94: SKSE Co-Save Lifecycle Verification** — Implement mock serialization stream verifying real save, load, revert, and corrupted data handling across chunk boundaries.
   - *Deliverable*: `integration/`
-- **Phase 24 Gate Criteria**: Pass when the native integration layer is structurally correct, functions are genuinely registered, and callbacks survive meaningful automated tests (without claiming in-game execution).
+- **Phase 24 Gate Criteria**: **PASSED (2026-10-28)**. Native integration layer is structurally correct, all 5 declared Papyrus functions are genuinely bound via `RegisterPapyrusFunctions` and C++ bridge, FFI panic boundaries verified, and SKSE co-save streaming verified across byte read/write cycles (14/14 integration tests passing, 0 clippy warnings). Reopened M78 and M79 resolved and COMPLETE. All M91–M94 COMPLETE. Unblocks Phase 25 (M95).
 
 ### Phase 25: Persistence Hardening and Real Runtime Validation
 - **Objective**: Resolve persistence parser vulnerabilities, produce reproducible test packages, and execute or block in-game testing.

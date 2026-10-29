@@ -540,3 +540,9 @@
 - **Finding**: Native ABI boundaries audited and verified against `skse64/PluginAPI.h` in `research/findings/native-abi-validation.md` (10/10 integration tests passing): (1) Confirmed 64-bit struct layouts matching MSVC offsets for `PluginInfo`, `SKSEInterface`, `SKSEPapyrusInterface`, and `SKSESerializationInterface`; (2) Guarded all exported native functions with `std::panic::catch_unwind`, eliminating process aborts from unhandled Rust panics crossing into foreign C++ callers; (3) Reconciled 32-bit Papyrus `Int` types with Rust `i64`/`u8` types via clamped FFI adapters (`Dogfish_*_C`), preventing stack register corruption; (4) Enforced runtime version gating in `SKSEPlugin_Query` supporting 1.5.97, 1.6.640, and 1.6.1170 while rejecting unknown binaries; (5) Verified 12 exported symbols in `dogfish_integration.dll`.
 - **Evidence**: `research/findings/native-abi-validation.md`, `integration/src/lib.rs`
 - **Related**: M93, M77, M91, M92, M94
+
+## Real SKSE Co-Save Streaming Lifecycle & Phase 24 Gate Closure
+- **Status**: CONFIRMED (NATIVE Level Verified)
+- **Finding**: Real SKSE co-save streaming lifecycle verified via mock serialization interface in `integration/tests/cosave_lifecycle.rs` (14/14 tests passing, 0 clippy warnings): (1) Enforced maximum record length bound (`MAX_COSAVE_RECORD_LEN = 10MB`) in `Dogfish_LoadCallback` preventing OOM DOS on corrupted saves; (2) Verified complete write -> revert -> read byte stream round-trip restoring mutated state (Whiterun ownership); (3) Proved safe rejection of corrupt JSON payloads and unsupported record versions without panicking; (4) Formally resolves and completes reopened Milestone M79; (5) Closes Phase 24 Gate: native integration layer is structurally sound with genuine function registration and verified co-save streaming.
+- **Evidence**: `integration/tests/cosave_lifecycle.rs`, `integration/src/lib.rs`
+- **Related**: M94, M79, M91, M92, M93, M95
