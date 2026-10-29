@@ -16,7 +16,7 @@ This document tracks all 98 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 98 | 11 | 0 | 1 | 86 |
+| 98 | 10 | 0 | 1 | 87 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -129,7 +129,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `research/findings/native-abi-validation.md` | PASS | None | `165cbb0` |
 | **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `integration/` | PASS | None | `d953d61` |
 | **M95** | Persistence Parser & Save Integrity Repair | Phase 25 | COMPLETE | Phase 24 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `ec8ad16` |
-| **M96** | Reproducible Skyrim Test Package | Phase 25 | NOT STARTED | M92, M94, M95 | Unassigned | `integration/` | Pending | None | — |
+| **M96** | Reproducible Skyrim Test Package | Phase 25 | COMPLETE | M92, M94, M95 | Coordinator | `integration/` | PASS | None | Pending |
 | **M97** | In-Game Runtime Validation | Phase 25 | NOT STARTED | M96 | Unassigned | `research/playtesting/dogfish-runtime-validation.md` | Pending | Awaiting Human Execution | — |
 | **M98** | Final Integration Quality & Harness Audit | Phase 25 | NOT STARTED | M97 | Unassigned | `docs/integration-validation-report.md` | Pending | None | — |
 

@@ -552,3 +552,9 @@
 - **Finding**: Standalone persistence implementation hardened against malformed data in `reconstruction/src/persistence.rs` (58/58 tests passing in `reconstruction/`, 0 clippy warnings): (1) `parse_null()` and `parse_bool()` strictly validate literal characters, eliminating pseudo-literal acceptance; (2) Enforced duplicate object key rejection in `parse_object()`; (3) Integer helper methods (`as_u8`, `as_i32`, `as_u32`) enforce checked bounds, eliminating silent narrowing truncation, and reject fractional values; (4) Hardened unicode escape sequences (`\uXXXX`), rejecting non-hex digits; (5) Validated via dedicated regression suite `reconstruction/tests/persistence_hardening.rs` (5/5 PASS).
 - **Evidence**: `reconstruction/src/persistence.rs`, `reconstruction/tests/persistence_hardening.rs`
 - **Related**: M95, M67, M68, M94, M96
+
+## Reproducible Skyrim Test Package & Staging Architecture
+- **Status**: CONFIRMED (Release Binary Verified; Game Files Staged)
+- **Finding**: Test package staged and documented in `integration/deploy/README.md` and `integration/tools/package_test_slice.py`: (1) Verified 64-bit release DLL binary `dogfish_integration.dll` (215,040 bytes, SHA256 `d9f64ac8...`) with 12 exported C symbols; (2) Staged Papyrus sources (`DogfishNativeBridge.psc`, `DogfishClaimBannerScript.psc`) into standard `Data/Source/Scripts/` hierarchy; (3) Provided exact CLI flags for `PapyrusCompiler.exe` and xEdit recipe for `dogfish_test.esp`; (4) Documented in-game testing sequence in `DogfishTestCell` (`coc DogfishTestCell`), log inspection locations, and clean uninstallation procedures; (5) Explicitly preserved unproduced game files (`.pex`, `.esp`) as awaiting manual compilation without fabricating binaries.
+- **Evidence**: `integration/deploy/README.md`, `integration/tools/package_test_slice.py`
+- **Related**: M96, M78, M92, M97, M98
