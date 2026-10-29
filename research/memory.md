@@ -564,3 +564,9 @@
 - **Finding**: In strict compliance with Rule 1.4 of the Validation and Repair Program, Milestone M97 is formally recorded as BLOCKED: (1) 15-step empirical runtime verification protocol codified in `research/playtesting/dogfish-runtime-validation.md`; (2) Standardized log extraction and screenshot reporting schema established; (3) Live engine testing requires launching `SkyrimSE.exe` with `skse64_loader.exe` on a gaming workstation; (4) Zero in-engine runtime execution is fabricated in the headless development environment.
 - **Evidence**: `research/playtesting/dogfish-runtime-validation.md`
 - **Related**: M97, M96, M80, M98
+
+## Master Integration Quality & Harness Audit (Phase 25 Gate Closure)
+- **Status**: CONFIRMED (Quality Gate Passed with Limitations; M80 & M97 Preserved as Blocked)
+- **Finding**: Master integration audit (`docs/integration-validation-report.md`) closes Phase 25 Gate: (1) Reconciles authoritative test count to exactly 88 automated tests passing (16 Python, 58 reconstruction, 14 integration, 0 clippy warnings); (2) Confirms resolution and completion of reopened M78 (real Papyrus VM binding via C++ bridge) and reopened M79 (real co-save record chunk streaming); (3) Formally preserves M80 and M97 as BLOCKED in accordance with Rule 1.4 (*No False Completion*); (4) Establishes continuous integration pipeline `.github/workflows/ci.yml` for Windows builds; (5) Reconciles `AGENTS.md`, `README.md`, and `docs/milestones.md` to the 98-milestone roadmap across 25 phases.
+- **Evidence**: `docs/integration-validation-report.md`, `.github/workflows/ci.yml`
+- **Related**: M98, M97, M96, M95, M94, M93, M92, M91, M80, M79, M78

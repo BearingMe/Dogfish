@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Run Python Invariant Tests
+        run: |
+          python -I tests/test_structure.py
+          python -I tests/test_papyrus.py
+          python -I tests/test_formulas.py
+
+      - name: Check & Test Reconstruction Crate
+        run: |
+          cargo check --manifest-path reconstruction/Cargo.toml
+          cargo test --manifest-path reconstruction/Cargo.toml
+          cargo clippy --manifest-path reconstruction/Cargo.toml -- -D warnings
+
+      - name: Check & Test Integration Crate
+        run: |
+          cargo check --manifest-path integration/Cargo.toml
+          cargo test --manifest-path integration/Cargo.toml
+          cargo clippy --manifest-path integration/Cargo.toml -- -D warnings
