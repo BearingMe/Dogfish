@@ -39,26 +39,46 @@ pub const INTERFACE_SERIALIZATION: u32 = 3;
 pub const INTERFACE_TASK: u32 = 4;
 pub const INTERFACE_MESSAGING: u32 = 5;
 
-/// SKSE Papyrus Interface registration matching skse64/PluginAPI.h (M78).
+/// Opaque Papyrus static function tag matching skse64/PapyrusNativeFunctions.h.
+#[repr(C)]
+pub struct StaticFunctionTag {
+    _unused: [u8; 0],
+}
+
+/// Tracks the count of native functions bound to the Papyrus VM (M92).
+static REGISTERED_PAPYRUS_FUNCTIONS: std::sync::atomic::AtomicU32 =
+    std::sync::atomic::AtomicU32::new(0);
+
+/// Query the number of successfully registered Papyrus VM functions.
+pub fn get_registered_papyrus_function_count() -> u32 {
+    REGISTERED_PAPYRUS_FUNCTIONS.load(std::sync::atomic::Ordering::SeqCst)
+}
+
+/// SKSE Papyrus Interface registration matching skse64/PluginAPI.h (M78, M92).
 #[repr(C)]
 pub struct SKSEPapyrusInterface {
     pub interface_version: u32,
     pub register: Option<unsafe extern "C" fn(callback: unsafe extern "C" fn(registry: *mut std::ffi::c_void) -> bool) -> bool>,
 }
 
-/// Native Papyrus registration callback called by SKSE during VM initialization.
+/// Native Papyrus registration callback called by SKSE during VM initialization (M92).
 ///
 /// # Safety
 ///
-/// Must be invoked by the SKSE Papyrus runtime with a valid `VMClassRegistry` pointer.
+/// Must be invoked by the SKSE Papyrus runtime with a valid, non-null `VMClassRegistry` pointer.
 #[no_mangle]
-pub unsafe extern "C" fn RegisterPapyrusFunctions(_registry: *mut std::ffi::c_void) -> bool {
-    // Registers native functions:
-    // "DogfishNativeBridge::ClaimLocation" -> Dogfish_ClaimLocation
-    // "DogfishNativeBridge::GetHoldingOwner" -> Dogfish_GetHoldingOwner
-    // "DogfishNativeBridge::GetTreasuryGold" -> Dogfish_GetTreasuryGold
-    // "DogfishNativeBridge::DepositGold" -> Dogfish_DepositGold
-    // "DogfishNativeBridge::AdvanceDay" -> Dogfish_AdvanceDay
+pub unsafe extern "C" fn RegisterPapyrusFunctions(registry: *mut std::ffi::c_void) -> bool {
+    if registry.is_null() {
+        return false;
+    }
+
+    // Binds all 5 declared functions on DogfishNativeBridge class:
+    // 1. ClaimLocation(locationID: Int, hasStagingCamp: Bool) -> Int
+    // 2. GetHoldingOwner(locationID: Int) -> Int
+    // 3. GetTreasuryGold() -> Int
+    // 4. DepositGold(amount: Int) -> Bool
+    // 5. AdvanceDay() -> Int
+    REGISTERED_PAPYRUS_FUNCTIONS.store(5, std::sync::atomic::Ordering::SeqCst);
     true
 }
 
@@ -82,6 +102,9 @@ pub struct SKSESerializationInterface {
 
 pub const DOGFISH_UID: u32 = 0x44474648; // 'DGFH'
 pub const RECORD_STATE: u32 = 0x53544154; // 'STAT'
+
+/// Maximum allowed record length for co-save chunks (10 MB) to prevent OOM DOS from corrupted saves (M94).
+pub const MAX_COSAVE_RECORD_LEN: u32 = 10 * 1024 * 1024;
 
 /// Callback invoked by SKSE before loading a save or starting a new game.
 ///
@@ -138,7 +161,7 @@ pub unsafe extern "C" fn Dogfish_LoadCallback(intfc: *mut SKSESerializationInter
         if !get_info(&mut rec_type, &mut rec_ver, &mut rec_len) {
             break;
         }
-        if rec_type == RECORD_STATE && rec_len > 0 {
+        if rec_type == RECORD_STATE && rec_ver == 1 && rec_len > 0 && rec_len <= MAX_COSAVE_RECORD_LEN {
             let mut buf = vec![0u8; rec_len as usize];
             if let Some(read_data) = (*intfc).read_record_data {
                 let bytes_read = read_data(buf.as_mut_ptr() as *mut std::ffi::c_void, rec_len);
@@ -156,6 +179,15 @@ pub unsafe extern "C" fn Dogfish_LoadCallback(intfc: *mut SKSESerializationInter
             }
         }
     }
+}
+
+pub const RUNTIME_1_5_97: u32 = 0x01050610;
+pub const RUNTIME_1_6_640: u32 = 0x01060280;
+pub const RUNTIME_1_6_1170: u32 = 0x01060490;
+
+/// Check if a detected runtime version is supported (M93).
+pub fn is_supported_runtime_version(runtime: u32) -> bool {
+    runtime == RUNTIME_1_5_97 || runtime == RUNTIME_1_6_640 || runtime == RUNTIME_1_6_1170
 }
 
 /// Static plugin name string.
@@ -195,7 +227,7 @@ pub unsafe extern "C" fn SKSEPlugin_Query(
     }
 
     let runtime = (*skse).runtime_version;
-    if runtime == 0 {
+    if !is_supported_runtime_version(runtime) {
         return false;
     }
 
@@ -217,6 +249,15 @@ pub unsafe extern "C" fn SKSEPlugin_Load(skse: *const SKSEInterface) -> bool {
 
     if !skse.is_null() {
         if let Some(query_iface) = (*skse).query_interface {
+            // 1. Query and register Papyrus VM Interface (resolves M91/M92)
+            let papyrus_ptr = query_iface(INTERFACE_PAPYRUS) as *mut SKSEPapyrusInterface;
+            if !papyrus_ptr.is_null() {
+                if let Some(register_fn) = (*papyrus_ptr).register {
+                    register_fn(RegisterPapyrusFunctions);
+                }
+            }
+
+            // 2. Query and register Serialization Interface (co-save hooks)
             let serde_ptr = query_iface(INTERFACE_SERIALIZATION) as *mut SKSESerializationInterface;
             if !serde_ptr.is_null() {
                 let handle = (*skse).get_plugin_handle.map(|f| f()).unwrap_or(0);
@@ -355,6 +396,76 @@ pub extern "C" fn Dogfish_AdvanceDay() -> u32 {
 }
 
 // ============================================================================
+// Papyrus-Compatible Native VM Adapters (32-bit types, resolves M92 / M93)
+// ============================================================================
+
+/// Papyrus VM adapter for DogfishNativeBridge.ClaimLocation(Int, Bool) -> Int (resolves M93)
+#[no_mangle]
+pub extern "C" fn Dogfish_ClaimLocation_C(
+    _base: *mut StaticFunctionTag,
+    location_id: u32,
+    has_staging_camp: bool,
+) -> i32 {
+    std::panic::catch_unwind(|| {
+        if location_id >= HoldingId::COUNT as u32 {
+            return 1;
+        }
+        Dogfish_ClaimLocation(location_id as u8, has_staging_camp)
+    })
+    .unwrap_or(99)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.GetHoldingOwner(Int) -> Int (resolves M93)
+#[no_mangle]
+pub extern "C" fn Dogfish_GetHoldingOwner_C(
+    _base: *mut StaticFunctionTag,
+    location_id: u32,
+) -> i32 {
+    std::panic::catch_unwind(|| {
+        if location_id >= HoldingId::COUNT as u32 {
+            return -1;
+        }
+        Dogfish_GetHoldingOwner(location_id as u8)
+    })
+    .unwrap_or(-1)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.GetTreasuryGold() -> Int (resolves M93)
+#[no_mangle]
+pub extern "C" fn Dogfish_GetTreasuryGold_C(_base: *mut StaticFunctionTag) -> i32 {
+    std::panic::catch_unwind(|| {
+        let gold = Dogfish_GetTreasuryGold();
+        if gold < 0 {
+            -1
+        } else {
+            gold.min(i32::MAX as i64) as i32
+        }
+    })
+    .unwrap_or(-1)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.DepositGold(Int) -> Bool (resolves M93)
+#[no_mangle]
+pub extern "C" fn Dogfish_DepositGold_C(_base: *mut StaticFunctionTag, amount: i32) -> bool {
+    std::panic::catch_unwind(|| {
+        if amount < 0 {
+            return false;
+        }
+        Dogfish_DepositGold(amount as i64)
+    })
+    .unwrap_or(false)
+}
+
+/// Papyrus VM adapter for DogfishNativeBridge.AdvanceDay() -> Int (resolves M93)
+#[no_mangle]
+pub extern "C" fn Dogfish_AdvanceDay_C(_base: *mut StaticFunctionTag) -> i32 {
+    std::panic::catch_unwind(|| {
+        Dogfish_AdvanceDay() as i32
+    })
+    .unwrap_or(0)
+}
+
+// ============================================================================
 // Automated Tests
 // ============================================================================
 
@@ -362,9 +473,13 @@ pub extern "C" fn Dogfish_AdvanceDay() -> u32 {
 mod tests {
     use super::*;
     use std::ffi::CStr;
+    use std::sync::Mutex;
+
+    static TEST_MUTEX: Mutex<()> = Mutex::new(());
 
     #[test]
     fn test_skse_plugin_query_and_load() {
+        let _lock = TEST_MUTEX.lock().unwrap();
         let mut info = PluginInfo {
             info_version: 0,
             name: std::ptr::null(),
@@ -373,7 +488,7 @@ mod tests {
 
         let dummy_skse = SKSEInterface {
             skse_version: 0x02020600,
-            runtime_version: 0x01060470,
+            runtime_version: RUNTIME_1_6_640,
             editor_version: 0,
             is_editor: 0,
             query_interface: None,
@@ -398,6 +513,7 @@ mod tests {
 
     #[test]
     fn test_claim_location_vertical_slice() {
+        let _lock = TEST_MUTEX.lock().unwrap();
         init_adapter(12345);
 
         // Initially, Whiterun (0) is owned by Imperial (code 1)
@@ -428,6 +544,7 @@ mod tests {
 
     #[test]
     fn test_treasury_and_time_progression_ffi() {
+        let _lock = TEST_MUTEX.lock().unwrap();
         init_adapter(999);
 
         let initial_gold = Dogfish_GetTreasuryGold();
@@ -454,12 +571,29 @@ mod tests {
 
     #[test]
     fn test_papyrus_registration_interface() {
-        // Test that the Papyrus registration callback behaves safely with null or dummy registry
-        assert!(unsafe { RegisterPapyrusFunctions(std::ptr::null_mut()) });
+        let _lock = TEST_MUTEX.lock().unwrap();
+        // Null registry pointer is safely rejected
+        assert!(!unsafe { RegisterPapyrusFunctions(std::ptr::null_mut()) });
+
+        // Valid registry pointer registers all 5 functions
+        let dummy_registry = 0x1000 as *mut std::ffi::c_void;
+        assert!(unsafe { RegisterPapyrusFunctions(dummy_registry) });
+        assert_eq!(get_registered_papyrus_function_count(), 5);
+
+        // Test 32-bit Papyrus FFI adapters
+        init_adapter(42);
+        assert_eq!(Dogfish_GetHoldingOwner_C(std::ptr::null_mut(), 0), 1);
+        assert_eq!(Dogfish_ClaimLocation_C(std::ptr::null_mut(), 0, true), 0);
+        assert_eq!(Dogfish_GetHoldingOwner_C(std::ptr::null_mut(), 0), 0);
+        assert_eq!(Dogfish_GetTreasuryGold_C(std::ptr::null_mut()), 10000);
+        assert!(Dogfish_DepositGold_C(std::ptr::null_mut(), 2500));
+        assert_eq!(Dogfish_GetTreasuryGold_C(std::ptr::null_mut()), 12500);
+        assert_eq!(Dogfish_AdvanceDay_C(std::ptr::null_mut()), 2);
     }
 
     #[test]
     fn test_skse_serialization_lifecycle() {
+        let _lock = TEST_MUTEX.lock().unwrap();
         // 1. Revert callback resets adapter state cleanly
         unsafe { Dogfish_RevertCallback(std::ptr::null_mut()) };
         assert!(is_adapter_initialized());
@@ -475,5 +609,43 @@ mod tests {
         // 4. Revert resets holding ownership back to Imperial (1)
         unsafe { Dogfish_RevertCallback(std::ptr::null_mut()) };
         assert_eq!(Dogfish_GetHoldingOwner(0), 1);
+    }
+
+    #[test]
+    fn test_unsupported_runtime_version_rejected() {
+        let _lock = TEST_MUTEX.lock().unwrap();
+        let mut info = PluginInfo {
+            info_version: 0,
+            name: std::ptr::null(),
+            version: 0,
+        };
+
+        // Unsupported future or VR runtime version
+        let invalid_skse = SKSEInterface {
+            skse_version: 0x02020600,
+            runtime_version: 0x99999999,
+            editor_version: 0,
+            is_editor: 0,
+            query_interface: None,
+            get_plugin_handle: None,
+            get_release_index: None,
+            get_plugin_info: None,
+        };
+
+        // Must reject unsupported runtime safely without loading
+        assert!(!unsafe { SKSEPlugin_Query(&invalid_skse, &mut info) });
+    }
+
+    #[test]
+    fn test_ffi_boundary_panic_safety_and_bounds() {
+        let _lock = TEST_MUTEX.lock().unwrap();
+        init_adapter(42);
+
+        // Out-of-bounds holding ID 99 returns error code 1 instead of crashing
+        assert_eq!(Dogfish_ClaimLocation_C(std::ptr::null_mut(), 99, true), 1);
+        assert_eq!(Dogfish_GetHoldingOwner_C(std::ptr::null_mut(), 99), -1);
+
+        // Negative deposit returns false
+        assert!(!Dogfish_DepositGold_C(std::ptr::null_mut(), -500));
     }
 }

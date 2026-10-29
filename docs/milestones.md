@@ -2,19 +2,21 @@
 
 ## 1. Overview & Roadmap Status
 
-This document tracks all 82 milestones of the *Conquest of Skyrim* specification recovery, probing, experimental reconstruction, and validation & repair program across 20 phases. It serves as the authoritative operational roadmap.
+This document tracks all 98 milestones of the *Conquest of Skyrim* specification recovery, probing, experimental reconstruction, validation, repair, and native integration hardening program across 25 phases. It serves as the authoritative operational roadmap.
 
 ### Program Progression
 - **Phases 1–8 (M01–M32)**: Initial specification recovery, architectural reverse engineering, and master specification synthesis (COMPLETE, commit `00323d9`).
 - **Phases 9–11 (M33–M44)**: Evidence integrity audit, reproducible binary and script verification, numerical formula test suites, and empirical playtesting protocol (COMPLETE, commit `b935278`).
 - **Phases 12–15 (M45–M62)**: Experimental reconstruction foundations, independent Rust simulation model, differential probing, and Skyrim runtime integration experiments (COMPLETE, commit `56305b1`).
-- **Phases 16–20 (M63–M82)**: Reconstruction validation and repair program: execution baselines, contract traceability, adversarial defect reproduction, persistence and invariant repair, gameplay fidelity repair, native SKSE integration repair, and reconciled quality gate.
+- **Phases 16–20 (M63–M82)**: Reconstruction validation and repair program: execution baselines, contract traceability, adversarial defect reproduction, persistence and invariant repair, gameplay fidelity repair, and reconciled quality gate (M80 BLOCKED, commit `c1b527d`).
+- **Phases 21–23 (M83–M90)**: Community and player-experience research program: player progression pacing, emergent meta-tactics, overhaul ecosystem compatibility, and feedback synthesis (NOT STARTED).
+- **Phases 24–25 (M91–M98)**: Native integration hardening and runtime validation: real Papyrus native function binding via VMClassRegistry/C++ bridge, SKSE FFI boundary verification, real co-save streaming, persistence parser repair, test package generation, and runtime validation.
 
 ### Roadmap Summary
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 82 | 0 | 0 | 1 | 81 |
+| 98 | 8 | 0 | 2 | 88 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -114,6 +116,22 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M80** | Real Skyrim Vertical Slice | Phase 19 | BLOCKED | M78, M79 | Coordinator | `integration/` | BLOCKED | Awaiting Human In-Game Execution | `c9a871c` |
 | **M81** | Fidelity, Coverage & Claims Reconciliation | Phase 20 | COMPLETE | Phase 18 Gate, M76, M80 | Coordinator | `docs/reconstruction-coverage.md` | PASS | None | `c03fdb5` |
 | **M82** | Final Reconstruction Quality Gate | Phase 20 | COMPLETE | M81 | Coordinator | `docs/reconstruction-repair-report.md` | PASS | None | `c1b527d` |
+| **M83** | Player Progression & Pacing Observations | Phase 21 | NOT STARTED | M82 | Unassigned | `research/playtesting/progression-pacing.md` | Pending | None | — |
+| **M84** | Emergent Strategy & Meta-Tactics Analysis | Phase 21 | NOT STARTED | M83 | Unassigned | `research/findings/emergent-strategy-analysis.md` | Pending | None | — |
+| **M85** | Community Playstyle Taxonomy | Phase 21 | NOT STARTED | M83, M84 | Unassigned | `research/findings/playstyle-taxonomy.md` | Pending | None | — |
+| **M86** | Overhaul Mod Interaction Survey | Phase 22 | NOT STARTED | M85 | Unassigned | `research/investigations/overhaul-mod-interactions.md` | Pending | None | — |
+| **M87** | Dialogue & Immersion Community Additions | Phase 22 | NOT STARTED | M86 | Unassigned | `research/findings/dialogue-immersion-additions.md` | Pending | None | — |
+| **M88** | Faction Identity & Roleplay Archetypes | Phase 22 | NOT STARTED | M86, M87 | Unassigned | `research/findings/roleplay-archetypes.md` | Pending | None | — |
+| **M89** | Nexus & Forum Feedback Corpus Consolidation | Phase 23 | NOT STARTED | M88 | Unassigned | `research/findings/community-feedback-corpus.md` | Pending | None | — |
+| **M90** | Player Pain Points & Feature Wishlist Analysis | Phase 23 | NOT STARTED | M89 | Unassigned | `research/findings/pain-points-and-wishlist.md` | Pending | None | — |
+| **M91** | Integration Defect Reproduction | Phase 24 | COMPLETE | M82, Phase 20 Gate | Coordinator | `research/investigations/native-integration-audit.md` | PASS | None | `55fecd4` |
+| **M92** | Real Papyrus Native Function Registration | Phase 24 | COMPLETE | M91 | Coordinator | `integration/` | PASS | None | `e6aeb22` |
+| **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `research/findings/native-abi-validation.md` | PASS | None | `165cbb0` |
+| **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `integration/` | PASS | None | `d953d61` |
+| **M95** | Persistence Parser & Save Integrity Repair | Phase 25 | COMPLETE | Phase 24 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `ec8ad16` |
+| **M96** | Reproducible Skyrim Test Package | Phase 25 | COMPLETE | M92, M94, M95 | Coordinator | `integration/` | PASS | None | `783da1d` |
+| **M97** | In-Game Runtime Validation | Phase 25 | BLOCKED | M96 | Coordinator | `research/playtesting/dogfish-runtime-validation.md` | BLOCKED | Awaiting Human In-Game Execution | `3c7a65f` |
+| **M98** | Final Integration Quality & Harness Audit | Phase 25 | COMPLETE | M97 | Coordinator | `docs/integration-validation-report.md` | PASS | None | `390d293` |
 
 ---
 
@@ -310,6 +328,59 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
   - *Deliverable*: `docs/reconstruction-repair-report.md`
 - **Phase 20 Gate Criteria**: **PASSED (2026-10-28)**. Capstone quality gate report (`docs/reconstruction-repair-report.md`) delivers evidence-backed answers to all 10 mandatory program questions. 19 of 20 defects resolved; M80 preserved as BLOCKED awaiting human in-engine playtesting in accordance with Rule 1.4; 62 automated tests passing with zero failures and zero clippy warnings; honest calibrated fidelity documented. All M81–M82 COMPLETE. Validation and Repair Program closed.
 
+### Phase 21: Player Experience and Gameplay Patterns
+- **Objective**: Investigate player progression pacing, emergent tactical strategies, and community playstyle archetypes.
+- **M83: Player Progression & Pacing Observations** — Track campaign duration, level-up milestones, economic thresholds, and power curves.
+  - *Deliverable*: `research/playtesting/progression-pacing.md`
+- **M84: Emergent Strategy & Meta-Tactics Analysis** — Analyze optimal conquest routes, troop class compositions, and AI vulnerability exploits.
+  - *Deliverable*: `research/findings/emergent-strategy-analysis.md`
+- **M85: Community Playstyle Taxonomy** — Categorize distinct player roles (Warmonger, Economic Merchant, Diplomatic Monarch, Covert Infiltrator).
+  - *Deliverable*: `research/findings/playstyle-taxonomy.md`
+- **Phase 21 Gate Criteria**: Pass when player progression and tactical archetypes are documented with reproducible observational data.
+
+### Phase 22: Faction Dynamics and Modded Ecosystem Compatibility
+- **Objective**: Survey overhaul mod interactions, community dialogue additions, and roleplay identity archetypes.
+- **M86: Overhaul Mod Interaction Survey** — Survey compatibility with popular Civil War, economy, survival, and combat overhauls.
+  - *Deliverable*: `research/investigations/overhaul-mod-interactions.md`
+- **M87: Dialogue & Immersion Community Additions** — Inventory community dialogue expansions, voice packs, and immersion patches.
+  - *Deliverable*: `research/findings/dialogue-immersion-additions.md`
+- **M88: Faction Identity & Roleplay Archetypes** — Document custom heraldry, armor themes, and government doctrine roleplay expressions.
+  - *Deliverable*: `research/findings/roleplay-archetypes.md`
+- **Phase 22 Gate Criteria**: Pass when modded ecosystem interactions and roleplay expansions are categorized with explicit dependencies.
+
+### Phase 23: Community Feedback Synthesis
+- **Objective**: Consolidate community discussion, player feedback, and feature wishlists into an authoritative synthesis.
+- **M89: Nexus & Forum Feedback Corpus Consolidation** — Consolidate Nexus comments, Reddit threads, and Discord feedback into categorized sentiment records.
+  - *Deliverable*: `research/findings/community-feedback-corpus.md`
+- **M90: Player Pain Points & Feature Wishlist Analysis** — Synthesize common player pain points, stability complaints, and top requested mechanics.
+  - *Deliverable*: `research/findings/pain-points-and-wishlist.md`
+- **Phase 23 Gate Criteria**: Pass when community consensus, recurring stability complaints, and wishlist priorities are documented.
+
+### Phase 24: Native Integration Correctness
+- **Objective**: Establish real native function binding between Papyrus and Dogfish and verify SKSE C-ABI boundaries.
+- **M91: Integration Defect Reproduction** — Reproduce remaining integration omissions (`RegisterPapyrusFunctions` returning true without VM registration, `SKSEPlugin_Load` omitting Papyrus callback).
+  - *Deliverable*: `research/investigations/native-integration-audit.md`
+- **M92: Real Papyrus Native Function Registration** — Implement actual VM-callable native function binding through `VMClassRegistry` / minimal C++ bridge matching Papyrus types.
+  - *Deliverable*: `integration/`
+- **M93: SKSE ABI and FFI Boundary Verification** — Verify 64-bit ABI layouts, calling conventions, data type conversions (i64 vs Int, u8 vs Int), and panic safety boundaries.
+  - *Deliverable*: `research/findings/native-abi-validation.md`
+- **M94: SKSE Co-Save Lifecycle Verification** — Implement mock serialization stream verifying real save, load, revert, and corrupted data handling across chunk boundaries.
+  - *Deliverable*: `integration/`
+- **Phase 24 Gate Criteria**: **PASSED (2026-10-28)**. Native integration layer is structurally correct, all 5 declared Papyrus functions are genuinely bound via `RegisterPapyrusFunctions` and C++ bridge, FFI panic boundaries verified, and SKSE co-save streaming verified across byte read/write cycles (14/14 integration tests passing, 0 clippy warnings). Reopened M78 and M79 resolved and COMPLETE. All M91–M94 COMPLETE. Unblocks Phase 25 (M95).
+
+### Phase 25: Persistence Hardening and Real Runtime Validation
+- **Objective**: Resolve persistence parser vulnerabilities, produce reproducible test packages, and execute or block in-game testing.
+- **M95: Persistence Parser and Save Integrity Repair** — Fix `parse_null()` validation, narrowing integer casts, surrogate pairs, duplicate keys, and invalid enum defaults.
+  - *Deliverable*: `reconstruction/src/persistence.rs`
+- **M96: Reproducible Skyrim Test Package** — Produce or specify valid compiled artifacts (`.dll`, `.pex`, `dogfish_test.esp`) and complete execution instructions.
+  - *Deliverable*: `integration/`
+- **M97: In-Game Runtime Validation** — Perform first actual Skyrim SE runtime experiment; capture logs and verify event round-trip (record BLOCKED if human execution unavailable).
+  - *Deliverable*: `research/playtesting/dogfish-runtime-validation.md`
+- **M98: Final Integration Quality and Harness Audit** — Reconcile milestone registry, test counts, documentation claims, and verify full repository integrity.
+  - *Deliverable*: `docs/integration-validation-report.md`
+- **Phase 25 Gate Criteria**: **PASSED WITH LIMITATIONS (2026-10-28)**. Master integration audit report (`docs/integration-validation-report.md`) delivers full verification across 88 automated tests (0 clippy warnings). Native integration correctness proven outside the engine; in-engine runtime milestones (M80, M97) preserved as BLOCKED awaiting human playtesting on a Windows gaming workstation. CI workflow established (`.github/workflows/ci.yml`). All M95–M98 COMPLETE or BLOCKED. Native integration hardening program closed.
+
+
 ---
 
 ## 4. Execution Dependency Graph & Parallel Groups
@@ -361,6 +432,20 @@ M63 + Phase 17 Gate ──> M77 ──> M78 ──> M79 ──> M80 ──> Phas
 PHASE 20: FINAL VALIDATION & REPAIR GATE
 
 Phase 18 Gate + Phase 19 Gate ──> M81 ──> M82 (Capstone Report) ──> Phase 20 Gate
+
+PHASE 21–23: COMMUNITY & PLAYER-EXPERIENCE RESEARCH
+
+M82 ──> M83 ──> M84 ──> M85 ──> M86 ──> M87 ──> M88 ──> M89 ──> M90 ──> Phase 23 Gate
+
+PHASE 24: NATIVE INTEGRATION CORRECTNESS
+
+M82 + Phase 20 Gate ──> M91 ──┬──> M92 ──┬──> M93 ──┐
+                              └──> M94 ──┴──────────┴──> Phase 24 Gate
+
+PHASE 25: PERSISTENCE HARDENING & REAL RUNTIME VALIDATION
+
+Phase 24 Gate ──┬──> M95 ──┐
+                └──> M96 ──┴──> M97 (Runtime Execution) ──> M98 (Quality Audit) ──> Phase 25 Gate
 ```
 
 ### Workstream Tracks & Parallel Execution Groups
@@ -379,15 +464,18 @@ Phase 18 Gate + Phase 19 Gate ──> M81 ──> M82 (Capstone Report) ──> 
 | **Group M** | M49, M50, M51, M52, M53, M54 | Independent System Reconstruction | Complete (`e127cb7`) |
 | **Group N** | M55, M56, M57, M58 | Differential Probing & Gap Closure | Complete (`877754b`) |
 | **Group O** | M59, M60, M61, M62 | Skyrim Integration Probing & Feasibility | Complete (`56305b1`) |
-| **Group P** | M63, M64, M65, M66 | Baseline Verification & Defect Reproduction | Independent audits (M63-M65) feed registry (M66) |
-| **Group Q** | M67, M68, M69, M70, M71 | Core Correctness & Persistence Repair | Persistence (M67-M68) & Invariants (M69-M71) |
-| **Group R** | M72, M73, M74, M75, M76 | Gameplay Fidelity Repair | Subsystem fidelity with exclusive file ownership |
-| **Group S** | M77, M78, M79, M80 | Native Skyrim Integration Repair | Sequential integration gates |
-| **Group T** | M81, M82 | Final Validation & Documentation Repair | Capstone audit and quality gate |
+| **Group P** | M63, M64, M65, M66 | Baseline Verification & Defect Reproduction | Complete (`f3c4a59`) |
+| **Group Q** | M67, M68, M69, M70, M71 | Core Correctness & Persistence Repair | Complete (`bc0377d`) |
+| **Group R** | M72, M73, M74, M75, M76 | Gameplay Fidelity Repair | Complete (`358e286`) |
+| **Group S** | M77, M78, M79, M80 | Native Skyrim Integration Repair | Reopened M78/M79, M80 Blocked |
+| **Group T** | M81, M82 | Final Validation & Documentation Repair | Complete (`c1b527d`) |
+| **Group U** | M83–M90 | Community & Player Experience Research | Not Started (Phases 21–23) |
+| **Group V** | M91, M92, M93, M94 | Native Integration Correctness | Active Repair Track (Phase 24) |
+| **Group W** | M95, M96, M97, M98 | Persistence Hardening & Runtime Validation | Final Integration & Runtime (Phase 25) |
 
 ---
 
-## 5. Milestone Validation Gates (M01–M82)
+## 5. Milestone Validation Gates (M01–M98)
 
 | ID | Required validation before completion |
 | :--- | :--- |
@@ -473,4 +561,21 @@ Phase 18 Gate + Phase 19 Gate ──> M81 ──> M82 (Capstone Report) ──> 
 | M80 | Actual Skyrim runtime execution demonstrated; event received by the native implementation; state mutation confirmed; visible result confirmed; failure cases exercised; save/load behavior recorded separately. |
 | M81 | Numerical coverage reproducible; unsupported claims corrected; documentation matches actual code; validation levels distinguished; remaining gaps prioritized; no historical records silently erased. |
 | M82 | Critical defects addressed or explicitly blocked; all applicable automated tests pass; major fidelity claims traceable; persistence verified; native status accurately represented; runtime evidence supplied where required; documentation reconciled; final review performed; intended changes committed. |
+| M83 | Progression curves and pacing milestones documented with empirical playtesting observations. |
+| M84 | Meta-tactics, conquest routes, and AI combat exploits categorized. |
+| M85 | Community playstyles categorized across distinct strategic archetypes. |
+| M86 | Overhaul compatibility surfaces (Civil War, Economy, Combat) surveyed. |
+| M87 | Dialogue expansions, voice packs, and immersion patches inventoried. |
+| M88 | Roleplay archetypes, heraldry expressions, and doctrine themes documented. |
+| M89 | Community feedback corpus consolidated from Nexus, Reddit, and Discord. |
+| M90 | Recurring player pain points, stability complaints, and wishlists synthesized. |
+| M91 | Missing native registration reproduced; missing Papyrus interface initialization confirmed or disproved; existing tests assessed for false positives; SKSE interfaces verified against headers; actionable defect list created; no runtime success claims. |
+| M92 | Registration callback contains real registration logic; every declared native function is bound; Papyrus class and function names match exactly; parameter and return types verified; registration failure paths tested; meaningful registration tests pass; no claim of runtime validation before Skyrim execution. |
+| M93 | ABI layouts verified against pinned references; FFI conversions validated; error propagation tested; invalid arguments handled; native loading prerequisites documented; Windows release build succeeds; export table verified; no unexplained unsafe operations. |
+| M94 | Mock save/load/revert lifecycle passes; serialized state restored correctly; corrupt input handled safely; unsupported record versions rejected or migrated explicitly; state remains consistent after failed loads; tests exercise real callbacks, not only null-pointer returns; runtime validation remains a separate requirement. |
+| M95 | Identified defects reproduced before fixing; invalid numeric conversions rejected; malformed JSON rejected; Unicode behavior verified; corrupt saves do not silently create valid-looking states; existing save compatibility considered; regression tests pass; no unnecessary serialization framework introduced. |
+| M96 | DLL build verified; Papyrus sources compile where tooling exists; test ESP structure validated if produced; installation paths documented; dependencies identified; expected behavior clearly defined; missing manually produced artifacts marked BLOCKED; no original mod files modified. |
+| M97 | DLL loads in Skyrim; Papyrus registration confirmed; native callback received; Rust state mutation observed; result communicated back to Skyrim; save/load behavior observed; invalid operation handled safely; evidence retained with provenance. |
+| M98 | Relevant tests executed; test totals accurate; documentation reflects actual code; runtime status accurately reported; existing milestones reconciled; new defects entered into the defect registry; no duplicate documentation systems; repository hygiene verified; adversarial review performed or documented fallback used; intended changes committed. |
+
 

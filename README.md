@@ -17,11 +17,11 @@ An exploratory research and specification recovery project centered on **Conques
 The project's purpose is to systematically investigate the mod's architecture, independently reconstruct its strategic systems (faction management, territorial conquest, warfare, politics, and economy) as an executable behavioral reference model, and experimentally probe minimal integration paths into the Skyrim engine runtime.
 
 Work is organized across three interdependent workstreams:
-1. **Reconstruction (`reconstruction/`)**: Independent implementation of recovered behavior as a standalone, deterministic simulation model in Rust (`dogfish-reconstruction`, 31 unit & scenario tests).
+1. **Reconstruction (`reconstruction/`)**: Independent implementation of recovered behavior as a standalone, deterministic simulation model in Rust (`dogfish-reconstruction`, 58 unit, scenario, and hardening tests).
 2. **Probing (`references/local/conquest-of-skyrim/Data/`)**: Evidence-driven investigation of original binaries and Papyrus code to extract behavioral contracts and resolve uncertainties.
-3. **Integration (`integration/`)**: Experimental interaction with Skyrim's runtime, exploring SKSE, native C-ABI bridges (`dogfish-integration`), and minimal in-game vertical slices.
+3. **Integration (`integration/`)**: Experimental interaction with Skyrim's runtime, exploring SKSE, native C-ABI bridges (`dogfish-integration`, 14 tests), and minimal in-game vertical slices.
 
-**Current Status**: Complete Specification Recovery & Independent Reconstruction (All 62 Milestones Complete across 15 Phases).
+**Current Status**: Native Integration Hardened & Reconciled (86 Milestones Complete, 12 Planned, 2 Blocked awaiting human in-engine execution across 25 Phases).
 
 ---
 

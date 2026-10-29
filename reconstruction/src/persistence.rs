@@ -63,29 +63,61 @@ impl SimpleJson {
     pub fn as_i64(&self) -> Option<i64> {
         match self {
             SimpleJson::Integer(i) => Some(*i),
-            SimpleJson::Unsigned(u) => Some(*u as i64),
-            SimpleJson::Number(n) => Some(*n as i64),
+            SimpleJson::Unsigned(u) => {
+                if *u <= i64::MAX as u64 {
+                    Some(*u as i64)
+                } else {
+                    None
+                }
+            }
+            SimpleJson::Number(n) => {
+                if n.is_finite() && n.fract() == 0.0 && *n >= i64::MIN as f64 && *n <= i64::MAX as f64 {
+                    Some(*n as i64)
+                } else {
+                    None
+                }
+            }
             _ => None,
         }
     }
 
     pub fn as_i32(&self) -> Option<i32> {
-        self.as_i64().map(|n| n as i32)
+        self.as_i64().and_then(|n| {
+            if n >= i32::MIN as i64 && n <= i32::MAX as i64 {
+                Some(n as i32)
+            } else {
+                None
+            }
+        })
     }
 
     pub fn as_u32(&self) -> Option<u32> {
-        self.as_u64().map(|n| n as u32)
+        self.as_u64().and_then(|n| {
+            if n <= u32::MAX as u64 {
+                Some(n as u32)
+            } else {
+                None
+            }
+        })
     }
 
     pub fn as_u8(&self) -> Option<u8> {
-        self.as_u64().map(|n| n as u8)
+        self.as_u64().and_then(|n| {
+            if n <= u8::MAX as u64 {
+                Some(n as u8)
+            } else {
+                None
+            }
+        })
     }
 
     pub fn as_u64(&self) -> Option<u64> {
         match self {
             SimpleJson::Unsigned(u) => Some(*u),
             SimpleJson::Integer(i) if *i >= 0 => Some(*i as u64),
-            SimpleJson::Number(n) if *n >= 0.0 => Some(*n as u64),
+            SimpleJson::Number(n) if n.is_finite() && n.fract() == 0.0 && *n >= 0.0 && *n <= u64::MAX as f64 => {
+                Some(*n as u64)
+            }
             _ => None,
         }
     }
@@ -186,6 +218,11 @@ impl<'a> JsonParser<'a> {
             }
 
             let value = self.parse_value()?;
+            if map.contains_key(&key) {
+                return Err(SimulationError::InvalidStateTransition(
+                    "Duplicate key in JSON object",
+                ));
+            }
             map.insert(key, value);
 
             self.skip_whitespace();
@@ -244,15 +281,22 @@ impl<'a> JsonParser<'a> {
                         'u' => {
                             let mut hex = String::with_capacity(4);
                             for _ in 0..4 {
-                                if let Some(h) = self.chars.next() {
-                                    hex.push(h);
+                                match self.chars.next() {
+                                    Some(h) if h.is_ascii_hexdigit() => hex.push(h),
+                                    _ => {
+                                        return Err(SimulationError::InvalidStateTransition(
+                                            "Malformed unicode escape sequence in string",
+                                        ))
+                                    }
                                 }
                             }
-                            if let Ok(code) = u32::from_str_radix(&hex, 16) {
-                                if let Some(ch) = char::from_u32(code) {
-                                    s.push(ch);
-                                }
-                            }
+                            let code = u32::from_str_radix(&hex, 16).map_err(|_| {
+                                SimulationError::InvalidStateTransition("Invalid unicode hex value")
+                            })?;
+                            let ch = char::from_u32(code).ok_or(
+                                SimulationError::InvalidStateTransition("Invalid unicode scalar value"),
+                            )?;
+                            s.push(ch);
                         }
                         _ => s.push(esc),
                     }
@@ -287,26 +331,38 @@ impl<'a> JsonParser<'a> {
     }
 
     fn parse_bool(&mut self) -> Result<SimpleJson> {
-        let mut s = String::new();
-        while let Some(&c) = self.chars.peek() {
-            if c.is_ascii_alphabetic() {
-                s.push(self.chars.next().unwrap());
-            } else {
-                break;
+        match self.chars.peek() {
+            Some('t') => {
+                for &exp in &['t', 'r', 'u', 'e'] {
+                    if self.chars.next() != Some(exp) {
+                        return Err(SimulationError::InvalidStateTransition(
+                            "Malformed true literal in JSON",
+                        ));
+                    }
+                }
+                Ok(SimpleJson::Bool(true))
             }
-        }
-        if s == "true" {
-            Ok(SimpleJson::Bool(true))
-        } else if s == "false" {
-            Ok(SimpleJson::Bool(false))
-        } else {
-            Err(SimulationError::InvalidStateTransition("Invalid boolean literal"))
+            Some('f') => {
+                for &exp in &['f', 'a', 'l', 's', 'e'] {
+                    if self.chars.next() != Some(exp) {
+                        return Err(SimulationError::InvalidStateTransition(
+                            "Malformed false literal in JSON",
+                        ));
+                    }
+                }
+                Ok(SimpleJson::Bool(false))
+            }
+            _ => Err(SimulationError::InvalidStateTransition("Invalid boolean literal")),
         }
     }
 
     fn parse_null(&mut self) -> Result<SimpleJson> {
-        for _ in 0..4 {
-            self.chars.next();
+        for &exp in &['n', 'u', 'l', 'l'] {
+            if self.chars.next() != Some(exp) {
+                return Err(SimulationError::InvalidStateTransition(
+                    "Malformed null literal in JSON",
+                ));
+            }
         }
         Ok(SimpleJson::Null)
     }

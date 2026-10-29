@@ -28,7 +28,7 @@ The project's purpose is to systematically investigate the mod's architecture, i
 │   ├── sources/            # Pinned reference repositories (skyui-community, skse64)
 │   └── local/              # User-supplied local references (conquest-of-skyrim)
 ├── docs/
-│   ├── milestones.md           # Research roadmap, milestone registry, and phase gates (62 milestones)
+│   ├── milestones.md           # Research roadmap, milestone registry, and phase gates (98 milestones)
 │   ├── execution-discipline.md # Core execution, memory, and validation discipline
 │   ├── testing.md              # Testing, script, and artifact management rules
 │   ├── logging.md              # Logging standards, formats, and evidence capture
@@ -61,7 +61,7 @@ Research is divided into two streams that feed into consolidated findings:
 
 All agents must follow the full workflow defined in [`docs/execution-discipline.md`](./docs/execution-discipline.md). Key requirements:
 
-- **Milestone Tracking**: Maintain all 62 milestones in [`docs/milestones.md`](./docs/milestones.md) through the `NOT STARTED`, `IN PROGRESS`, `BLOCKED`, `COMPLETE` lifecycle.
+- **Milestone Tracking**: Maintain all 98 milestones in [`docs/milestones.md`](./docs/milestones.md) through the `NOT STARTED`, `IN PROGRESS`, `BLOCKED`, `COMPLETE` lifecycle.
 - **Capability Fallbacks**: Probe environment before use; apply documented fallbacks if optional tools (AgentMemory, Checkpoints, Orca, `@adversary`) are absent.
 - **Separate Knowledge & Progress**: Store nonredundant durable facts in AgentMemory or `research/memory.md` when needed; keep execution state in native checkpoints or `research/checkpoints/`. The repository remains authoritative.
 - **Delegation & Concurrency**: Maintain explicit task boundaries and strict file ownership per worker.
