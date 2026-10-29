@@ -131,7 +131,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M95** | Persistence Parser & Save Integrity Repair | Phase 25 | COMPLETE | Phase 24 Gate | Coordinator | `reconstruction/src/persistence.rs` | PASS | None | `ec8ad16` |
 | **M96** | Reproducible Skyrim Test Package | Phase 25 | COMPLETE | M92, M94, M95 | Coordinator | `integration/` | PASS | None | `783da1d` |
 | **M97** | In-Game Runtime Validation | Phase 25 | BLOCKED | M96 | Coordinator | `research/playtesting/dogfish-runtime-validation.md` | BLOCKED | Awaiting Human In-Game Execution | `3c7a65f` |
-| **M98** | Final Integration Quality & Harness Audit | Phase 25 | COMPLETE | M97 | Coordinator | `docs/integration-validation-report.md` | PASS | None | Pending |
+| **M98** | Final Integration Quality & Harness Audit | Phase 25 | COMPLETE | M97 | Coordinator | `docs/integration-validation-report.md` | PASS | None | `390d293` |
 
 ---
 
