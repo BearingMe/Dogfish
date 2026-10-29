@@ -16,7 +16,7 @@ This document tracks all 98 milestones of the *Conquest of Skyrim* specification
 
 | Total Milestones | NOT STARTED | IN PROGRESS | BLOCKED | COMPLETE |
 | :---: | :---: | :---: | :---: | :---: |
-| 98 | 14 | 1 | 1 | 82 |
+| 98 | 13 | 1 | 1 | 83 |
 
 ### Allowed Status Values
 - **NOT STARTED**: Task has not yet begun.
@@ -126,7 +126,7 @@ The validation column records PASS, FAIL, BLOCKED, or INCONCLUSIVE once checked;
 | **M90** | Player Pain Points & Feature Wishlist Analysis | Phase 23 | NOT STARTED | M89 | Unassigned | `research/findings/pain-points-and-wishlist.md` | Pending | None | — |
 | **M91** | Integration Defect Reproduction | Phase 24 | COMPLETE | M82, Phase 20 Gate | Coordinator | `research/investigations/native-integration-audit.md` | PASS | None | `55fecd4` |
 | **M92** | Real Papyrus Native Function Registration | Phase 24 | COMPLETE | M91 | Coordinator | `integration/` | PASS | None | `e6aeb22` |
-| **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `research/findings/native-abi-validation.md` | Pending | None | — |
+| **M93** | SKSE ABI and FFI Boundary Verification | Phase 24 | COMPLETE | M91, M92 | Coordinator | `research/findings/native-abi-validation.md` | PASS | None | Pending |
 | **M94** | SKSE Co-Save Lifecycle Verification | Phase 24 | NOT STARTED | M91, M92 | Unassigned | `integration/` | Pending | None | — |
 | **M95** | Persistence Parser & Save Integrity Repair | Phase 25 | NOT STARTED | Phase 24 Gate | Unassigned | `reconstruction/src/persistence.rs` | Pending | None | — |
 | **M96** | Reproducible Skyrim Test Package | Phase 25 | NOT STARTED | M92, M94, M95 | Unassigned | `integration/` | Pending | None | — |

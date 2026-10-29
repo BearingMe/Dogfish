@@ -59,7 +59,7 @@ fn test_papyrus_interface_registration_lifecycle() {
 
     let mock_skse = SKSEInterface {
         skse_version: 0x02020600,
-        runtime_version: 0x01060470,
+        runtime_version: 0x01060280,
         editor_version: 0,
         is_editor: 0,
         query_interface: Some(mock_query_interface),
